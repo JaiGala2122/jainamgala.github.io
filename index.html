@@ -43,6 +43,7 @@
             font-weight: 500;
             transition: color 0.3s;
             position: relative;
+            cursor: pointer;
         }
 
         nav a:hover {
@@ -62,6 +63,136 @@
 
         nav a:hover::after {
             width: 100%;
+        }
+
+        /* Resume Modal */
+        .resume-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .resume-modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .resume-container {
+            background: white;
+            width: 90%;
+            max-width: 900px;
+            height: 90vh;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .resume-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .resume-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .resume-header h2::after {
+            display: none;
+        }
+
+        .close-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg);
+            background: #f0f0f0;
+        }
+
+        .resume-content {
+            padding: 2rem;
+            height: calc(90vh - 80px);
+            overflow-y: auto;
+        }
+
+        .resume-section {
+            margin-bottom: 2rem;
+        }
+
+        .resume-section h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .resume-item {
+            margin-bottom: 1.5rem;
+        }
+
+        .resume-item h4 {
+            color: #333;
+            margin-bottom: 0.3rem;
+        }
+
+        .resume-item .meta {
+            color: #666;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+
+        .resume-item ul {
+            margin-left: 1.5rem;
+            color: #555;
+        }
+
+        .resume-item ul li {
+            margin-bottom: 0.3rem;
         }
 
         /* Hero Section */
@@ -367,10 +498,140 @@
             .about-content {
                 flex-direction: column;
             }
+
+            .resume-container {
+                width: 95%;
+                height: 95vh;
+            }
+
+            .resume-content {
+                padding: 1rem;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Resume Modal -->
+    <div id="resumeModal" class="resume-modal">
+        <div class="resume-container">
+            <div class="resume-header">
+                <h2>📄 My Resume</h2>
+                <button class="close-btn" onclick="closeResume()">×</button>
+            </div>
+            <div class="resume-content">
+                <div class="resume-section">
+                    <h3>Summary</h3>
+                    <p>Data-driven Financial and Business Analyst with strong experience in machine learning, financial modeling, and data engineering. Demonstrated expertise in developing scalable data pipelines, predictive models, and KPI dashboards for enhanced decision-making. Experienced in financial variance analysis, forecasting, and reporting. Proficient in Python, SQL, Excel, Power BI, and Tableau, with an MBA in Business Analytics and a foundation in engineering. Known for improving efficiency, accuracy, and strategic insights.</p>
+                </div>
+
+                <div class="resume-section">
+                    <h3>Education</h3>
+                    <div class="resume-item">
+                        <h4>Masters of Business Administration (MBA)</h4>
+                        <p class="meta">Pace University, Lubin School of Business | December 2024</p>
+                        <p>Concentration: Business Analytics (STEM) | CGPA: 3.75</p>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Bachelor of Engineering (B.E.)</h4>
+                        <p class="meta">Dwarkadas J Sanghvi College of Engineering, Mumbai | July 2022</p>
+                        <p>Concentration: Production Engineering | CGPA: 3.2</p>
+                    </div>
+                </div>
+
+                <div class="resume-section">
+                    <h3>Technical Skills</h3>
+                    <div class="resume-item">
+                        <ul>
+                            <li><strong>Programming Languages:</strong> Python, R, C++</li>
+                            <li><strong>Databases:</strong> MySQL, MongoDB</li>
+                            <li><strong>Analytics:</strong> Pandas, NumPy</li>
+                            <li><strong>Machine Learning:</strong> XGBoost, TensorFlow, PyTorch</li>
+                            <li><strong>Visualization:</strong> Tableau, Power BI</li>
+                            <li><strong>Tools:</strong> Excel (advanced), Power Query, SQL</li>
+                            <li><strong>Financial:</strong> Financial Modeling, Forecasting, Variance Analysis, KPI Dashboards</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="resume-section">
+                    <h3>Professional Experience</h3>
+                    <div class="resume-item">
+                        <h4>Business Analyst</h4>
+                        <p class="meta">HL Gada LLC, Jersey City, NJ | February 2025 – Present</p>
+                        <ul>
+                            <li>Analyzed internal financial statements including balance sheets, income statements, and cash flow records</li>
+                            <li>Built Excel models for capital forecasting, OPEX planning, and working capital</li>
+                            <li>Performed variance analysis and recommended cost optimizations</li>
+                            <li>Created financial summaries and dashboards for reporting and investor updates</li>
+                            <li>Conducted market trend analysis and benchmark studies for strategic investment insights</li>
+                            <li>Supported budgeting, compliance documentation, and audit preparedness</li>
+                        </ul>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Operations Management Intern</h4>
+                        <p class="meta">Echaar Equipments Pvt. Ltd., Thane City, India | January 2022 – June 2022</p>
+                        <ul>
+                            <li>Analyzed operational data to identify and resolve 70% of challenges, resulting in a 10% productivity increase</li>
+                            <li>Recommended process improvements based on data analysis, resulting in 10% reduction in factory downtime</li>
+                            <li>Documented communication protocols and facilitated training sessions, boosting team collaboration and achieving 15% improvement in project turnaround time</li>
+                            <li>Developed dashboards that streamlined bottleneck identification, increasing efficiency by 25%</li>
+                            <li>Authored research paper on floor safety, improving safety by 50% and employee output by 15%</li>
+                        </ul>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Sales and Marketing Intern</h4>
+                        <p class="meta">Tech Analogy, Mumbai, India | October 2021 – December 2021</p>
+                        <ul>
+                            <li>Pioneered an industry workshop, driving a 90% surge in attendance through strategic planning</li>
+                            <li>Led collaborations with 15 clubs and universities, achieving 40% boost in event scheduling efficiency</li>
+                            <li>Secured 50 attendee surge through engagement strategies</li>
+                            <li>Developed dashboards using Excel and MySQL, increasing team productivity by 15%</li>
+                        </ul>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Supply Chain and Operations Intern</h4>
+                        <p class="meta">Asian Synthetics Pvt Ltd, Mumbai, India | January 2019 - June 2019</p>
+                        <ul>
+                            <li>Initiated new digital system using affordable PCs, increasing productivity by 10%</li>
+                            <li>Surveyed floor workers and provided suggestions, improving employee satisfaction by 5%</li>
+                            <li>Sourced wholesalers of embroidery machine parts, reducing machine malfunction by 50% and repair costs by 60%</li>
+                            <li>Implemented new supply chain system, making dispatch 2 times faster and 20% more efficient</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="resume-section">
+                    <h3>Projects</h3>
+                    <div class="resume-item">
+                        <h4>Customer Churn Prediction - Data Science</h4>
+                        <ul>
+                            <li>Utilized Python and machine learning algorithms including logistic regression and random forests to analyze customer datasets</li>
+                            <li>Applied advanced preprocessing techniques with Pandas and NumPy to enhance model performance</li>
+                            <li>Achieved over 85% accuracy in churn prediction using XGBoost and neural networks</li>
+                        </ul>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Car Company Database Project</h4>
+                        <ul>
+                            <li>Architected and executed a relational database system for a car company using MySQL</li>
+                            <li>Curated and normalized data from over 10 sources, ensuring data quality and integrity</li>
+                            <li>Developed and deployed complex SQL queries for data-driven decisions</li>
+                        </ul>
+                    </div>
+                    <div class="resume-item">
+                        <h4>Real-Time Data Pipeline and Analytics for E-commerce Platform</h4>
+                        <ul>
+                            <li>Designed real-time data ingestion pipeline using Apache Kafka, processing over 1 million transactions daily</li>
+                            <li>Optimized ETL workflows with Apache Spark, enhancing pipeline efficiency</li>
+                            <li>Integrated MySQL and MongoDB as hybrid storage solutions, improving query performance by 25%</li>
+                            <li>Collaborated with teams to troubleshoot issues and identify bottlenecks</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Navigation -->
     <nav>
         <ul>
@@ -379,6 +640,7 @@
             <li><a href="#skills">Skills</a></li>
             <li><a href="#projects">Projects</a></li>
             <li><a href="#contact">Contact</a></li>
+            <li><a onclick="openResume()">Resume</a></li>
         </ul>
     </nav>
 
@@ -386,7 +648,7 @@
     <section id="home" class="hero">
         <div class="hero-content">
             <h1>Jainam Gala</h1>
-            <p>Developer | Designer | Creator</p>
+            <p>Data Analyst | Financial Strategist | Business Intelligence Expert</p>
             <a href="#contact" class="cta-button">Get In Touch</a>
         </div>
     </section>
@@ -396,10 +658,10 @@
         <h2>About Me</h2>
         <div class="about-content">
             <div class="about-text">
-                <p>Welcome to my digital space — I’m Jainam Gala. A data-driven mind with an industrial engineer’s precision and a finance enthusiast’s curiosity.</p>
+                <p>Welcome to my digital space — I'm Jainam Gala. A data-driven mind with an industrial engineer's precision and a finance enthusiast's curiosity.</p>
                 <p>I specialize in turning raw data into clear, strategic insights that help businesses make smarter decisions. My journey began in industrial engineering, where I learned to see systems as stories of efficiency — now, I bring that mindset to the world of analytics and finance.</p>
-                <p>Whether it’s analyzing market behavior, optimizing operations, or visualizing performance, I believe that data is more than numbers — it’s the language of opportunity.</p>
-                <p>When I’m not deep in dashboards or models, I’m exploring financial markets, studying business strategy, or building tools that merge analytics with impact.</p>
+                <p>Whether it's analyzing market behavior, optimizing operations, or visualizing performance, I believe that data is more than numbers — it's the language of opportunity.</p>
+                <p>When I'm not deep in dashboards or models, I'm exploring financial markets, studying business strategy, or building tools that merge analytics with impact.</p>
             </div>
             <div class="about-image">
                 <div class="avatar">JG</div>
@@ -408,23 +670,51 @@
     </section>
 
     <!-- Skills Section -->
-<section id="contact">
-    <h2>Get In Touch</h2>
-    <div class="contact-content">
-        <p>I'm always open to new opportunities and collaborations. Feel free to reach out!</p>
-        <div class="contact-links">
-            <a href="mailto:jainamgala21@outlook.com" class="contact-link">
-                📧 Email
-            </a>
-            <a href="https://github.com/JaiGala2122" class="contact-link" target="_blank">
-                🔗 GitHub
-            </a>
-            <a href="https://www.linkedin.com/in/jainamgala21/" class="contact-link" target="_blank">
-                💼 LinkedIn
-            </a>
+    <section id="skills">
+        <h2>Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-card">
+                <div class="skill-icon">💻</div>
+                <h3>Programming Languages</h3>
+                <p>Python, R, C++, SQL</p>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon">🗄️</div>
+                <h3>Databases</h3>
+                <p>MySQL, MongoDB</p>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon">📊</div>
+                <h3>Data Analytics</h3>
+                <p>Pandas, NumPy, Apache Spark, Apache Kafka</p>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon">🤖</div>
+                <h3>Machine Learning</h3>
+                <p>XGBoost, TensorFlow, PyTorch, Scikit-learn</p>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon">📈</div>
+                <h3>Visualization</h3>
+                <p>Tableau, Power BI, Excel Dashboards</p>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon">🛠️</div>
+                <h3>Tools & Platforms</h3>
+                <p>Excel (Advanced), Power Query, ETL Workflows</p>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon">💰</div>
+                <h3>Financial Analysis</h3>
+                <p>Financial Modeling, Forecasting, Variance Analysis</p>
+            </div>
+            <div class="skill-card">
+                <div class="skill-icon">📉</div>
+                <h3>Business Intelligence</h3>
+                <p>KPI Dashboards, Reporting, Data-Driven Insights</p>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <!-- Projects Section -->
     <section id="projects">
@@ -435,7 +725,7 @@
                 <div class="project-content">
                     <h3>Customer Churn Prediction for Credit Card Company</h3>
                     <p>Predicting customer attrition using machine learning.</p>
-                  <a href="projects/customer-churn/index.html" class="project-link">View Project →</a>
+                    <a href="projects/customer-churn/index.html" class="project-link">View Project →</a>
                 </div>
             </div>
             <div class="project-card">
@@ -463,13 +753,13 @@
         <div class="contact-content">
             <p>I'm always open to new opportunities and collaborations. Feel free to reach out!</p>
             <div class="contact-links">
-                <a href="mailto:your.email@example.com" class="contact-link">
+                <a href="mailto:jainamgala21@outlook.com" class="contact-link">
                     📧 Email
                 </a>
-                <a href="https://github.com/jainamgala" class="contact-link" target="_blank">
+                <a href="https://github.com/JaiGala2122" class="contact-link" target="_blank">
                     🔗 GitHub
                 </a>
-                <a href="https://linkedin.com/in/jainamgala" class="contact-link" target="_blank">
+                <a href="https://www.linkedin.com/in/jainamgala21/" class="contact-link" target="_blank">
                     💼 LinkedIn
                 </a>
             </div>
@@ -482,6 +772,31 @@
     </footer>
 
     <script>
+        // Resume Modal Functions
+        function openResume() {
+            document.getElementById('resumeModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeResume() {
+            document.getElementById('resumeModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('resumeModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeResume();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeResume();
+            }
+        });
+
         // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -511,7 +826,7 @@
 
             document.querySelectorAll('nav a').forEach(a => {
                 a.classList.remove('active');
-                if (a.getAttribute('href').substring(1) === current) {
+                if (a.getAttribute('href') && a.getAttribute('href').substring(1) === current) {
                     a.classList.add('active');
                 }
             });
