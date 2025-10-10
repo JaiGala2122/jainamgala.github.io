@@ -330,6 +330,332 @@
                 <li><strong>Appropriate data types:</strong> DECIMAL for prices, DATETIME for timestamps, proper VARCHAR lengths</li>
             </ul>
 
+            <h3>Entity Relationship Diagram</h3>
+            <div style="background: white; border: 1px solid #ddd; padding: 50px 20px; margin: 20px 0; overflow-x: auto;">
+                
+                <div style="position: relative; min-width: 800px; height: 500px; margin: 0 auto;">
+                    
+                    <!-- Dimension Table (Center Top) -->
+                    <div style="position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: 220px; border: 2px solid #666; background: white;">
+                        <div style="background: #d3d3d3; padding: 8px; text-align: center; font-weight: bold; border-bottom: 2px solid #666;">
+                            dim_vehicle
+                        </div>
+                        <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px; width: 30px; background: #f0f0f0;">PK</td>
+                                <td style="padding: 4px 8px;">vehicle_key</td>
+                                <td style="padding: 4px 8px; text-align: right;">INT</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px;"></td>
+                                <td style="padding: 4px 8px;">make</td>
+                                <td style="padding: 4px 8px; text-align: right;">VARCHAR</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px;"></td>
+                                <td style="padding: 4px 8px;">model</td>
+                                <td style="padding: 4px 8px; text-align: right;">VARCHAR</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px;"></td>
+                                <td style="padding: 4px 8px;">year</td>
+                                <td style="padding: 4px 8px; text-align: right;">INT</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px;"></td>
+                                <td style="padding: 4px 8px;">engine</td>
+                                <td style="padding: 4px 8px; text-align: right;">VARCHAR</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px 8px;"></td>
+                                <td style="padding: 4px 8px;">fuel_type</td>
+                                <td style="padding: 4px 8px; text-align: right;">VARCHAR</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Vertical Line from dimension -->
+                    <div style="position: absolute; left: 50%; top: 185px; width: 2px; height: 60px; background: #666;"></div>
+                    
+                    <!-- Single bar at dimension end (ONE side) -->
+                    <div style="position: absolute; left: calc(50% - 8px); top: 185px; width: 16px; height: 2px; background: #666;"></div>
+                    
+                    <!-- Horizontal split line -->
+                    <div style="position: absolute; left: 50%; top: 245px; width: 80px; height: 2px; background: #666; transform: translateX(-50%);"></div>
+                    
+                    <!-- Horizontal lines to facts -->
+                    <div style="position: absolute; left: 15%; top: 245px; width: 35%; height: 2px; background: #666;"></div>
+                    <div style="position: absolute; left: 85%; top: 245px; width: 15%; height: 2px; background: #666; transform: translateX(-100%);"></div>
+                    
+                    <!-- Vertical lines down to fact tables -->
+                    <div style="position: absolute; left: 15%; top: 245px; width: 2px; height: 40px; background: #666;"></div>
+                    <div style="position: absolute; left: 50%; top: 245px; width: 2px; height: 40px; background: #666;"></div>
+                    <div style="position: absolute; left: 85%; top: 245px; width: 2px; height: 40px; background: #666;"></div>
+
+                    <!-- Crow's foot notation (MANY side) - Left -->
+                    <div style="position: absolute; left: calc(15% - 6px); top: 285px; width: 12px; height: 2px; background: #666;"></div>
+                    <div style="position: absolute; left: calc(15% - 8px); top: 283px; width: 2px; height: 8px; background: #666; transform: rotate(-30deg); transform-origin: bottom;"></div>
+                    <div style="position: absolute; left: calc(15% + 6px); top: 283px; width: 2px; height: 8px; background: #666; transform: rotate(30deg); transform-origin: bottom;"></div>
+                    
+                    <!-- Crow's foot notation (MANY side) - Center -->
+                    <div style="position: absolute; left: calc(50% - 6px); top: 285px; width: 12px; height: 2px; background: #666;"></div>
+                    <div style="position: absolute; left: calc(50% - 8px); top: 283px; width: 2px; height: 8px; background: #666; transform: rotate(-30deg); transform-origin: bottom;"></div>
+                    <div style="position: absolute; left: calc(50% + 6px); top: 283px; width: 2px; height: 8px; background: #666; transform: rotate(30deg); transform-origin: bottom;"></div>
+                    
+                    <!-- Crow's foot notation (MANY side) - Right -->
+                    <div style="position: absolute; left: calc(85% - 6px); top: 285px; width: 12px; height: 2px; background: #666;"></div>
+                    <div style="position: absolute; left: calc(85% - 8px); top: 283px; width: 2px; height: 8px; background: #666; transform: rotate(-30deg); transform-origin: bottom;"></div>
+                    <div style="position: absolute; left: calc(85% + 6px); top: 283px; width: 2px; height: 8px; background: #666; transform: rotate(30deg); transform-origin: bottom;"></div>
+
+                    <!-- Fact Table 1: Sales (Left) -->
+                    <div style="position: absolute; left: 5%; top: 290px; width: 220px; border: 2px solid #666; background: white;">
+                        <div style="background: #d3d3d3; padding: 8px; text-align: center; font-weight: bold; border-bottom: 2px solid #666;">
+                            fact_sales_listings
+                        </div>
+                        <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px; width: 30px; background: #f0f0f0;">PK</td>
+                                <td style="padding: 4px 8px;">listing_id</td>
+                                <td style="padding: 4px 8px; text-align: right;">BIGINT</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px; background: #f0f0f0;">FK</td>
+                                <td style="padding: 4px 8px;">vehicle_key</td>
+                                <td style="padding: 4px 8px; text-align: right;">INT</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px;"></td>
+                                <td style="padding: 4px 8px;">price</td>
+                                <td style="padding: 4px 8px; text-align: right;">DECIMAL</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px;"></td>
+                                <td style="padding: 4px 8px;">mileage</td>
+                                <td style="padding: 4px 8px; text-align: right;">INT</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px;"></td>
+                                <td style="padding: 4px 8px;">state</td>
+                                <td style="padding: 4px 8px; text-align: right;">VARCHAR</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px 8px;"></td>
+                                <td style="padding: 4px 8px;">listed_at</td>
+                                <td style="padding: 4px 8px; text-align: right;">DATETIME</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Fact Table 2: Maintenance (Center) -->
+                    <div style="position: absolute; left: 50%; top: 290px; transform: translateX(-50%); width: 220px; border: 2px solid #666; background: white;">
+                        <div style="background: #d3d3d3; padding: 8px; text-align: center; font-weight: bold; border-bottom: 2px solid #666;">
+                            fact_maintenance
+                        </div>
+                        <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px; width: 30px; background: #f0f0f0;">PK</td>
+                                <td style="padding: 4px 8px;">maint_id</td>
+                                <td style="padding: 4px 8px; text-align: right;">BIGINT</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px; background: #f0f0f0;">FK</td>
+                                <td style="padding: 4px 8px;">vehicle_key</td>
+                                <td style="padding: 4px 8px; text-align: right;">INT</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px;"></td>
+                                <td style="padding: 4px 8px;">component</td>
+                                <td style="padding: 4px 8px; text-align: right;">VARCHAR</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px;"></td>
+                                <td style="padding: 4px 8px;">dtc_code</td>
+                                <td style="padding: 4px 8px; text-align: right;">VARCHAR</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px;"></td>
+                                <td style="padding: 4px 8px;">cost</td>
+                                <td style="padding: 4px 8px; text-align: right;">DECIMAL</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px 8px;"></td>
+                                <td style="padding: 4px 8px;">event_date</td>
+                                <td style="padding: 4px 8px; text-align: right;">DATE</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Fact Table 3: Telematics (Right) -->
+                    <div style="position: absolute; right: 5%; top: 290px; width: 220px; border: 2px solid #666; background: white;">
+                        <div style="background: #d3d3d3; padding: 8px; text-align: center; font-weight: bold; border-bottom: 2px solid #666;">
+                            fact_telematics
+                        </div>
+                        <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px; width: 30px; background: #f0f0f0;">PK</td>
+                                <td style="padding: 4px 8px;">telem_id</td>
+                                <td style="padding: 4px 8px; text-align: right;">BIGINT</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px; background: #f0f0f0;">FK</td>
+                                <td style="padding: 4px 8px;">vehicle_key</td>
+                                <td style="padding: 4px 8px; text-align: right;">INT</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px;"></td>
+                                <td style="padding: 4px 8px;">ts</td>
+                                <td style="padding: 4px 8px; text-align: right;">DATETIME</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px;"></td>
+                                <td style="padding: 4px 8px;">speed</td>
+                                <td style="padding: 4px 8px; text-align: right;">DOUBLE</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 4px 8px;"></td>
+                                <td style="padding: 4px 8px;">rpm</td>
+                                <td style="padding: 4px 8px; text-align: right;">DOUBLE</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 4px 8px;"></td>
+                                <td style="padding: 4px 8px;">energy_kwh</td>
+                                <td style="padding: 4px 8px; text-align: right;">DOUBLE</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <h3>Sample Data Snippets</h3>
+            
+            <p><strong>dim_vehicle table:</strong></p>
+            <div style="overflow-x: auto; margin: 15px 0;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; background: white;">
+                    <thead>
+                        <tr style="background: #667eea; color: white;">
+                            <th style="padding: 10px; border: 1px solid #ddd;">vehicle_key</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">make</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">model</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">year</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">engine</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">fuel_type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd;">1001</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Toyota</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Camry</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">2018</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">2.5L I4</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Gasoline</td>
+                        </tr>
+                        <tr style="background: #f8f9fa;">
+                            <td style="padding: 10px; border: 1px solid #ddd;">1002</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Honda</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Accord</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">2019</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">1.5L Turbo</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Gasoline</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd;">1003</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Tesla</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Model 3</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">2020</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Electric</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Electric</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>fact_sales_listings table:</strong></p>
+            <div style="overflow-x: auto; margin: 15px 0;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; background: white;">
+                    <thead>
+                        <tr style="background: #2196f3; color: white;">
+                            <th style="padding: 10px; border: 1px solid #ddd;">listing_id</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">vehicle_key</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">price</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">mileage</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">state</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">listed_at</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd;">50001</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">1001</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">$18,500</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">42,000</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">CA</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">2024-01-15</td>
+                        </tr>
+                        <tr style="background: #f8f9fa;">
+                            <td style="padding: 10px; border: 1px solid #ddd;">50002</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">1002</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">$22,800</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">28,500</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">TX</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">2024-02-03</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd;">50003</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">1003</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">$35,900</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">15,200</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">NY</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">2024-03-12</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <p><strong>fact_maintenance table:</strong></p>
+            <div style="overflow-x: auto; margin: 15px 0;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; background: white;">
+                    <thead>
+                        <tr style="background: #ff9800; color: white;">
+                            <th style="padding: 10px; border: 1px solid #ddd;">maint_id</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">vehicle_key</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">component</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">dtc_code</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">cost</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">event_date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd;">7001</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">1001</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Brake Pads</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">P0420</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">$285.00</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">2023-11-20</td>
+                        </tr>
+                        <tr style="background: #f8f9fa;">
+                            <td style="padding: 10px; border: 1px solid #ddd;">7002</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">1002</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Oil Change</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">NULL</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">$55.00</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">2024-01-08</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border: 1px solid #ddd;">7003</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">1001</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">Battery</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">P0562</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">$175.00</td>
+                            <td style="padding: 10px; border: 1px solid #ddd;">2024-02-15</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
             <div class="sql-block">
 <span class="sql-comment">-- Creating the dimension table</span>
 <span class="sql-keyword">CREATE TABLE</span> dim_vehicle (
@@ -690,8 +1016,67 @@ maintenance_rates <span class="sql-keyword">AS</span> (
                 <a href="https://github.com/JaiGala2122/connected-vehicle-analytics/blob/main/sql/example_queries.sql" class="btn" target="_blank">📊 View SQL Queries</a>
             </div>
         </div>
+          <!-- Comments Section -->
+        <div class="section">
+            <h2>Comments & Feedback</h2>
+            <p style="text-align: center; margin-bottom: 30px;">Have questions or feedback about this project? I'd love to hear from you!</p>
+            
+            <form id="commentForm" style="max-width: 600px; margin: 0 auto;">
+                <div style="margin-bottom: 20px;">
+                    <label for="name" style="display: block; margin-bottom: 8px; font-weight: 600; color: #555;">Name:</label>
+                    <input type="text" id="name" name="name" required 
+                           style="width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 5px; font-size: 1rem; font-family: inherit;">
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label for="email" style="display: block; margin-bottom: 8px; font-weight: 600; color: #555;">Email:</label>
+                    <input type="email" id="email" name="email" required 
+                           style="width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 5px; font-size: 1rem; font-family: inherit;">
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <label for="comment" style="display: block; margin-bottom: 8px; font-weight: 600; color: #555;">Your Comment:</label>
+                    <textarea id="comment" name="comment" rows="5" required 
+                              style="width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 5px; font-size: 1rem; font-family: inherit; resize: vertical;"></textarea>
+                </div>
+                  <button type="submit" class="btn" style="width: 100%; cursor: pointer; border: none; font-size: 1rem;">
+                    💬 Send Comment
+                </button>
+            </form>
+            
+            <div id="formMessage" style="margin-top: 20px; padding: 15px; border-radius: 5px; display: none; text-align: center;"></div>
+        </div>
 
         <a href="../../index.html" class="back-link">← Back to Portfolio</a>
     </div>
+            <script>
+        // Handle comment form submission
+        document.getElementById('commentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const comment = document.getElementById('comment').value;
+            
+            // Create mailto link with pre-filled content
+            const subject = encodeURIComponent('Comment on Customer Churn Prediction Project');
+            const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nComment:\n${comment}`);
+            const mailtoLink = `mailto:jainamgala21@outlook.com?subject=${subject}&body=${body}`;
+            
+            // Open email client
+            window.location.href = mailtoLink;
+            
+            // Show success message
+            const messageDiv = document.getElementById('formMessage');
+            messageDiv.style.display = 'block';
+            messageDiv.style.background = '#d4edda';
+            messageDiv.style.color = '#155724';
+            messageDiv.style.border = '1px solid #c3e6cb';
+            messageDiv.innerHTML = '✅ Opening your email client... Please send the email to submit your comment!';
+            
+            // Reset form
+            this.reset();
+        });
+    </script>
 </body>
 </html>
