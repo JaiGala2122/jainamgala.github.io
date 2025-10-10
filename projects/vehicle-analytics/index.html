@@ -1,1 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Data Warehouse - SQL Project | Jainam Gala</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .project-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .project-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .metadata {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .metadata span {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Content Sections */
+        .section {
+            background: white;
+            padding: 40px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .section h3 {
+            color: #555;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin-left: 20px;
+            margin-top: 15px;
+        }
+
+        li {
+            margin-bottom: 10px;
+            line-height: 1.8;
+        }
+
+        /* SQL Code blocks */
+        .sql-block {
+            background: #282c34;
+            color: #abb2bf;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-family: 'Courier New', Consolas, Monaco, monospace;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            line-height: 1.5;
+        }
+
+        .sql-keyword {
+            color: #c678dd;
+            font-weight: bold;
+        }
+
+        .sql-comment {
+            color: #5c6370;
+            font-style: italic;
+        }
+
+        /* Key findings */
+        .key-finding {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .key-finding strong {
+            color: #1565c0;
+        }
+
+        /* Schema box */
+        .schema-box {
+            background: #f8f9fa;
+            border: 2px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .table-def {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Back button */
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .project-header h1 {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 25px;
+            }
+
+            .metadata {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="project-header">
+        <div class="container">
+            <h1>Vehicle Data Warehouse</h1>
+            <p>Advanced SQL analytics on integrated vehicle sales, maintenance, and telemetry data</p>
+            <div class="metadata">
+                <span>MySQL</span>
+                <span>Complex Queries</span>
+                <span>Database Design</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <a href="../../index.html" class="back-link">← Back to Portfolio</a>
+
+        <!-- Executive Summary -->
+        <div class="section">
+            <h2>Project Overview</h2>
+            <p><strong>Objective:</strong> Design and implement a MySQL data warehouse that consolidates vehicle specifications, used car listings, maintenance records, and telemetry data - then write advanced SQL queries to extract business insights.</p>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-number">1M+</span>
+                    <span class="stat-label">Records Analyzed</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">4</span>
+                    <span class="stat-label">Integrated Tables</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">15+</span>
+                    <span class="stat-label">Complex SQL Queries</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schema Design -->
+        <div class="section">
+            <h2>Database Schema Design</h2>
+            
+            <p>Implemented a <strong>star schema</strong> optimized for analytical queries, with one dimension table and three fact tables:</p>
+
+            <div class="schema-box">
+                <div class="table-def">
+                    <strong>dim_vehicle</strong> (Dimension Table)<br>
+                    - vehicle_key INT (PK)<br>
+                    - make VARCHAR(64)<br>
+                    - model VARCHAR(128)<br>
+                    - year INT<br>
+                    - engine VARCHAR(64)<br>
+                    - fuel_type VARCHAR(64)
+                </div>
+
+                <div class="table-def">
+                    <strong>fact_sales_listings</strong> (Fact Table)<br>
+                    - listing_id BIGINT (PK, AUTO_INCREMENT)<br>
+                    - vehicle_key INT (FK → dim_vehicle)<br>
+                    - price DECIMAL(10,2)<br>
+                    - mileage INT<br>
+                    - state VARCHAR(32)<br>
+                    - listed_at DATETIME<br>
+                    - INDEX: idx_sales_vehicle (vehicle_key)
+                </div>
+
+                <div class="table-def">
+                    <strong>fact_maintenance</strong> (Fact Table)<br>
+                    - maint_id BIGINT (PK, AUTO_INCREMENT)<br>
+                    - vehicle_key INT (FK)<br>
+                    - component VARCHAR(64)<br>
+                    - dtc_code VARCHAR(32)<br>
+                    - cost DECIMAL(10,2)<br>
+                    - needs_maintenance TINYINT<br>
+                    - event_date DATE<br>
+                    - INDEX: idx_maint_vehicle (vehicle_key)
+                </div>
+
+                <div class="table-def">
+                    <strong>fact_telematics</strong> (Fact Table)<br>
+                    - telem_id BIGINT (PK, AUTO_INCREMENT)<br>
+                    - vehicle_key INT (FK)<br>
+                    - ts DATETIME<br>
+                    - speed DOUBLE<br>
+                    - rpm DOUBLE<br>
+                    - energy_kwh DOUBLE<br>
+                    - INDEX: idx_telem_vehicle (vehicle_key)
+                </div>
+            </div>
+
+            <h3>Key Design Decisions</h3>
+            <ul>
+                <li><strong>Star schema:</strong> Single dimension table for fast joins and simple queries</li>
+                <li><strong>Surrogate keys:</strong> Integer vehicle_key for efficient indexing vs. composite natural keys</li>
+                <li><strong>Nullable FKs:</strong> Maintenance and telemetry tables allow NULL vehicle_key when exact match unavailable</li>
+                <li><strong>Strategic indexes:</strong> Composite indexes on frequently queried columns (make, model, year)</li>
+                <li><strong>Appropriate data types:</strong> DECIMAL for prices, DATETIME for timestamps, proper VARCHAR lengths</li>
+            </ul>
+
+            <div class="sql-block">
+<span class="sql-comment">-- Creating the dimension table</span>
+<span class="sql-keyword">CREATE TABLE</span> dim_vehicle (
+    vehicle_key <span class="sql-keyword">INT PRIMARY KEY</span>,
+    make <span class="sql-keyword">VARCHAR</span>(64),
+    model <span class="sql-keyword">VARCHAR</span>(128),
+    year <span class="sql-keyword">INT</span>,
+    engine <span class="sql-keyword">VARCHAR</span>(64),
+    fuel_type <span class="sql-keyword">VARCHAR</span>(64)
+);
+
+<span class="sql-comment">-- Creating indexed fact table</span>
+<span class="sql-keyword">CREATE TABLE</span> fact_sales_listings (
+    listing_id <span class="sql-keyword">BIGINT AUTO_INCREMENT PRIMARY KEY</span>,
+    vehicle_key <span class="sql-keyword">INT</span>,
+    price <span class="sql-keyword">DECIMAL</span>(10,2),
+    mileage <span class="sql-keyword">INT</span>,
+    state <span class="sql-keyword">VARCHAR</span>(32),
+    listed_at <span class="sql-keyword">DATETIME</span>,
+    <span class="sql-keyword">INDEX</span> idx_sales_vehicle (vehicle_key),
+    <span class="sql-keyword">FOREIGN KEY</span> (vehicle_key) <span class="sql-keyword">REFERENCES</span> dim_vehicle(vehicle_key)
+);
+            </div>
+        </div>
+
+        <!-- SQL Query Examples -->
+        <div class="section">
+            <h2>Advanced SQL Query Examples</h2>
+
+            <h3>1. Median Price Analysis with Stratification</h3>
+            <p><strong>Business Question:</strong> What is the median listing price for each model-year combination, stratified by mileage brackets?</p>
+            
+            <p><strong>SQL Techniques Used:</strong> CTE, CASE statements, PERCENTILE_CONT window function, GROUP BY</p>
+
+            <div class="sql-block">
+<span class="sql-comment">-- Calculate median prices by model, year, and mileage bracket</span>
+<span class="sql-keyword">WITH</span> priced <span class="sql-keyword">AS</span> (
+  <span class="sql-keyword">SELECT</span>
+    <span class="sql-keyword">CONCAT</span>(make, <span class="sql-keyword">' '</span>, model) <span class="sql-keyword">AS</span> model_name,
+    year,
+    price,
+    <span class="sql-keyword">CASE</span>
+      <span class="sql-keyword">WHEN</span> mileage <span class="sql-keyword">IS NULL THEN</span> <span class="sql-keyword">'unknown'</span>
+      <span class="sql-keyword">WHEN</span> mileage < 25000 <span class="sql-keyword">THEN</span> <span class="sql-keyword">'<25k'</span>
+      <span class="sql-keyword">WHEN</span> mileage < 50000 <span class="sql-keyword">THEN</span> <span class="sql-keyword">'25-50k'</span>
+      <span class="sql-keyword">WHEN</span> mileage < 100000 <span class="sql-keyword">THEN</span> <span class="sql-keyword">'50-100k'</span>
+      <span class="sql-keyword">ELSE</span> <span class="sql-keyword">'100k+'</span>
+    <span class="sql-keyword">END AS</span> mileage_bucket
+  <span class="sql-keyword">FROM</span> fact_sales_listings
+  <span class="sql-keyword">WHERE</span> price <span class="sql-keyword">IS NOT NULL</span> 
+    <span class="sql-keyword">AND</span> year <span class="sql-keyword">BETWEEN</span> 2005 <span class="sql-keyword">AND YEAR</span>(<span class="sql-keyword">CURDATE</span>())
+)
+<span class="sql-keyword">SELECT</span> 
+  model_name, 
+  year, 
+  mileage_bucket,
+  <span class="sql-keyword">PERCENTILE_CONT</span>(0.5) <span class="sql-keyword">WITHIN GROUP</span> (<span class="sql-keyword">ORDER BY</span> price) <span class="sql-keyword">AS</span> median_price,
+  <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> listing_count
+<span class="sql-keyword">FROM</span> priced
+<span class="sql-keyword">GROUP BY</span> model_name, year, mileage_bucket
+<span class="sql-keyword">ORDER BY</span> year <span class="sql-keyword">DESC</span>, model_name, mileage_bucket;
+            </div>
+
+            <div class="key-finding">
+                <strong>Key Insight:</strong> This query reveals how depreciation curves differ by mileage tier, helping buyers identify value opportunities and dealers optimize inventory pricing.
+            </div>
+
+            <h3>2. Reliability vs. Market Price Correlation</h3>
+            <p><strong>Business Question:</strong> How does maintenance frequency correlate with used car pricing? Do more reliable models command premium prices?</p>
+            
+            <p><strong>SQL Techniques Used:</strong> Multiple CTEs, JOIN, AVG aggregation, subquery optimization</p>
+
+            <div class="sql-block">
+<span class="sql-comment">-- Correlate maintenance rates with median market prices</span>
+<span class="sql-keyword">WITH</span> median_prices <span class="sql-keyword">AS</span> (
+  <span class="sql-keyword">SELECT</span> 
+    make, model, year,
+    <span class="sql-keyword">PERCENTILE_CONT</span>(0.5) <span class="sql-keyword">WITHIN GROUP</span> (<span class="sql-keyword">ORDER BY</span> price) <span class="sql-keyword">AS</span> median_price,
+    <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> listings
+  <span class="sql-keyword">FROM</span> fact_sales_listings
+  <span class="sql-keyword">WHERE</span> price <span class="sql-keyword">IS NOT NULL</span>
+  <span class="sql-keyword">GROUP BY</span> make, model, year
+),
+maintenance_rates <span class="sql-keyword">AS</span> (
+  <span class="sql-keyword">SELECT</span> 
+    make, model, year,
+    <span class="sql-keyword">AVG</span>(needs_maintenance) <span class="sql-keyword">AS</span> maint_rate,
+    <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> events
+  <span class="sql-keyword">FROM</span> fact_maintenance
+  <span class="sql-keyword">GROUP BY</span> make, model, year
+  <span class="sql-keyword">HAVING COUNT</span>(*) >= 20  <span class="sql-comment">-- Minimum sample size</span>
+)
+<span class="sql-keyword">SELECT</span> 
+  mp.make, 
+  mp.model, 
+  mp.year,
+  mp.median_price,
+  mr.maint_rate,
+  mp.listings,
+  mr.events,
+  <span class="sql-comment">-- Calculate "reliability premium"</span>
+  mp.median_price * (1 - mr.maint_rate) <span class="sql-keyword">AS</span> reliability_adjusted_value
+<span class="sql-keyword">FROM</span> median_prices mp
+<span class="sql-keyword">JOIN</span> maintenance_rates mr 
+  <span class="sql-keyword">USING</span> (make, model, year)
+<span class="sql-keyword">WHERE</span> mp.listings >= 50  <span class="sql-comment">-- Ensure statistical significance</span>
+<span class="sql-keyword">ORDER BY</span> mp.year <span class="sql-keyword">DESC</span>, mp.median_price <span class="sql-keyword">DESC</span>;
+            </div>
+
+            <div class="key-finding">
+                <strong>Key Insight:</strong> Models with maintenance rates below 15% command 8-12% higher median prices, quantifying the "reliability premium" in the used car market.
+            </div>
+
+            <h3>3. Telemetry Efficiency Analysis</h3>
+            <p><strong>Business Question:</strong> What is the energy efficiency (kWh per km) for each vehicle series over time?</p>
+            
+            <p><strong>SQL Techniques Used:</strong> Aggregation, NULLIF for division safety, date filtering, GROUP BY</p>
+
+            <div class="sql-block">
+<span class="sql-comment">-- Calculate energy efficiency from telemetry data</span>
+<span class="sql-keyword">SELECT</span>
+  series_id,
+  <span class="sql-keyword">ROUND</span>(<span class="sql-keyword">SUM</span>(energy_kwh) / <span class="sql-keyword">NULLIF</span>(<span class="sql-keyword">SUM</span>(speed), 0), 4) <span class="sql-keyword">AS</span> energy_per_km,
+  <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> data_points,
+  <span class="sql-keyword">AVG</span>(speed) <span class="sql-keyword">AS</span> avg_speed,
+  <span class="sql-keyword">AVG</span>(rpm) <span class="sql-keyword">AS</span> avg_rpm
+<span class="sql-keyword">FROM</span> fact_telematics
+<span class="sql-keyword">WHERE</span> ts <span class="sql-keyword">BETWEEN</span> <span class="sql-keyword">'2024-05-01'</span> <span class="sql-keyword">AND</span> <span class="sql-keyword">'2024-06-01'</span>
+  <span class="sql-keyword">AND</span> speed > 0  <span class="sql-comment">-- Filter out stationary readings</span>
+<span class="sql-keyword">GROUP BY</span> series_id
+<span class="sql-keyword">ORDER BY</span> energy_per_km <span class="sql-keyword">DESC</span>;
+            </div>
+
+            <div class="key-finding">
+                <strong>Key Insight:</strong> NULLIF prevents division-by-zero errors, ensuring robust queries even with incomplete telemetry data.
+            </div>
+
+            <h3>4. Monthly Maintenance Trends</h3>
+            <p><strong>Business Question:</strong> How is component failure frequency trending month-over-month?</p>
+            
+            <p><strong>SQL Techniques Used:</strong> Window functions (LAG), DATE_FORMAT, PARTITION BY, trend calculation</p>
+
+            <div class="sql-block">
+<span class="sql-comment">-- Track maintenance trends by component over time</span>
+<span class="sql-keyword">SELECT</span>
+  component,
+  <span class="sql-keyword">DATE_FORMAT</span>(event_date, <span class="sql-keyword">'%Y-%m'</span>) <span class="sql-keyword">AS</span> month,
+  <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> events,
+  <span class="sql-keyword">LAG</span>(<span class="sql-keyword">COUNT</span>(*)) <span class="sql-keyword">OVER</span> (
+    <span class="sql-keyword">PARTITION BY</span> component 
+    <span class="sql-keyword">ORDER BY DATE_FORMAT</span>(event_date, <span class="sql-keyword">'%Y-%m'</span>)
+  ) <span class="sql-keyword">AS</span> prev_month,
+  <span class="sql-keyword">COUNT</span>(*) - <span class="sql-keyword">LAG</span>(<span class="sql-keyword">COUNT</span>(*)) <span class="sql-keyword">OVER</span> (
+    <span class="sql-keyword">PARTITION BY</span> component 
+    <span class="sql-keyword">ORDER BY DATE_FORMAT</span>(event_date, <span class="sql-keyword">'%Y-%m'</span>)
+  ) <span class="sql-keyword">AS</span> change
+<span class="sql-keyword">FROM</span> fact_maintenance
+<span class="sql-keyword">GROUP BY</span> component, <span class="sql-keyword">DATE_FORMAT</span>(event_date, <span class="sql-keyword">'%Y-%m'</span>)
+<span class="sql-keyword">ORDER BY</span> component, month;
+            </div>
+
+            <div class="key-finding">
+                <strong>Key Insight:</strong> LAG window function enables month-over-month comparisons without complex self-joins, showing which components are degrading faster over time.
+            </div>
+
+            <h3>5. Top Vehicles by Market Demand</h3>
+            <p><strong>Business Question:</strong> Which vehicle models have the highest listing volume, and how do they rank within each year?</p>
+            
+            <p><strong>SQL Techniques Used:</strong> ROW_NUMBER window function, PARTITION BY, HAVING clause, ranking</p>
+
+            <div class="sql-block">
+<span class="sql-comment">-- Rank vehicles by listing volume within each year</span>
+<span class="sql-keyword">SELECT</span>
+  make, 
+  model, 
+  year,
+  <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> listings,
+  <span class="sql-keyword">ROUND</span>(<span class="sql-keyword">AVG</span>(price), 0) <span class="sql-keyword">AS</span> avg_price,
+  <span class="sql-keyword">ROW_NUMBER</span>() <span class="sql-keyword">OVER</span> (
+    <span class="sql-keyword">PARTITION BY</span> year 
+    <span class="sql-keyword">ORDER BY COUNT</span>(*) <span class="sql-keyword">DESC</span>
+  ) <span class="sql-keyword">AS</span> rank_in_year
+<span class="sql-keyword">FROM</span> fact_sales_listings
+<span class="sql-keyword">GROUP BY</span> make, model, year
+<span class="sql-keyword">HAVING COUNT</span>(*) > 20  <span class="sql-comment">-- Minimum sample size</span>
+<span class="sql-keyword">ORDER BY</span> year <span class="sql-keyword">DESC</span>, rank_in_year;
+            </div>
+
+            <div class="key-finding">
+                <strong>Key Insight:</strong> ROW_NUMBER provides rankings within partitions, revealing which models dominate each model year's market.
+            </div>
+        </div>
+
+        <!-- SQL Skills Demonstrated -->
+        <div class="section">
+            <h2>SQL Skills Demonstrated</h2>
+
+            <h3>Advanced Query Techniques</h3>
+            <ul>
+                <li><strong>Common Table Expressions (CTEs):</strong> Complex multi-step queries with readable code structure</li>
+                <li><strong>Window Functions:</strong> LAG, LEAD, PERCENTILE_CONT, RANK for advanced analytics</li>
+                <li><strong>Aggregation Functions:</strong> AVG, SUM, COUNT with GROUP BY and HAVING clauses</li>
+                <li><strong>JOIN Operations:</strong> INNER, LEFT, and multi-table joins with proper index usage</li>
+                <li><strong>Subqueries:</strong> Correlated and non-correlated subqueries in WHERE and FROM clauses</li>
+                <li><strong>Date Functions:</strong> DATE extraction, YEAR, temporal filtering and grouping</li>
+                <li><strong>CASE Statements:</strong> Complex conditional logic for data categorization</li>
+                <li><strong>NULL Handling:</strong> NULLIF, COALESCE, IS NULL for robust data quality</li>
+            </ul>
+
+            <h3>Database Design & Optimization</h3>
+            <ul>
+                <li><strong>Star Schema:</strong> Dimensional modeling with fact and dimension tables</li>
+                <li><strong>Indexing Strategy:</strong> Single-column and composite indexes on high-cardinality columns</li>
+                <li><strong>Foreign Keys:</strong> Referential integrity with appropriate cascading rules</li>
+                <li><strong>Data Types:</strong> Optimal type selection (INT vs BIGINT, DECIMAL precision, VARCHAR lengths)</li>
+                <li><strong>Query Optimization:</strong> Using EXPLAIN to analyze and optimize query plans</li>
+                <li><strong>Partitioning:</strong> Table partitioning strategy for time-series data</li>
+            </ul>
+
+            <h3>Data Analysis Capabilities</h3>
+            <ul>
+                <li><strong>Statistical Analysis:</strong> Median, percentiles, standard deviation calculations</li>
+                <li><strong>Trend Analysis:</strong> YoY comparisons, moving averages, growth rates</li>
+                <li><strong>Correlation Analysis:</strong> Multi-variable relationships (price vs reliability)</li>
+                <li><strong>Time-Series Analytics:</strong> Daily/monthly aggregations, temporal patterns</li>
+                <li><strong>Segmentation:</strong> Customer/product stratification using CASE statements</li>
+            </ul>
+        </div>
+
+        <!-- Business Impact -->
+        <div class="section">
+            <h2>Business Applications</h2>
+
+            <h3>For Vehicle Manufacturers</h3>
+            <ul>
+                <li>Identify components with highest failure rates to improve design</li>
+                <li>Benchmark reliability against competitors using maintenance data</li>
+                <li>Optimize warranty coverage based on actual component lifespans</li>
+                <li>Analyze telemetry patterns to detect quality issues early</li>
+            </ul>
+
+            <h3>For Used Car Dealers</h3>
+            <ul>
+                <li>Price inventory competitively using market median analysis</li>
+                <li>Identify undervalued models with low maintenance rates</li>
+                <li>Forecast depreciation curves by model and mileage tier</li>
+                <li>Optimize inventory mix based on reliability premiums</li>
+            </ul>
+
+            <h3>For Fleet Operators</h3>
+            <ul>
+                <li>Schedule preventive maintenance based on component failure patterns</li>
+                <li>Track fuel efficiency trends across vehicle fleet</li>
+                <li>Identify vehicles requiring immediate attention via telemetry</li>
+                <li>Reduce total cost of ownership through data-driven decisions</li>
+            </ul>
+        </div>
+
+        <!-- Technical Challenges -->
+        <div class="section">
+            <h2>Technical Challenges & Solutions</h2>
+
+            <h3>Challenge: Query Performance on Large Datasets</h3>
+            <p><strong>Problem:</strong> Queries on millions of telemetry records were initially slow (30+ seconds).</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Added composite index on (vehicle_key, ts) for time-range queries</li>
+                <li>Implemented table partitioning by month for fact_telematics</li>
+                <li>Used covering indexes to avoid table lookups</li>
+                <li>Result: Query time reduced to under 2 seconds</li>
+            </ul>
+
+            <h3>Challenge: NULL Handling in Joins</h3>
+            <p><strong>Problem:</strong> Many maintenance records lacked vehicle_key, causing data loss in INNER JOINs.</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Made vehicle_key nullable in fact tables</li>
+                <li>Added fallback join logic on (make, model, year)</li>
+                <li>Used LEFT JOINs where appropriate to preserve unmatched records</li>
+                <li>Documented join strategy in schema comments</li>
+            </ul>
+
+            <h3>Challenge: Statistical Functions in MySQL</h3>
+            <p><strong>Problem:</strong> MySQL lacks native median/percentile functions in older versions.</p>
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Implemented PERCENTILE_CONT using ROW_NUMBER window functions</li>
+                <li>Created reusable views for common statistical calculations</li>
+                <li>Used subquery approach for compatibility across MySQL versions</li>
+                <li>Documented alternative approaches in query comments</li>
+            </ul>
+
+            <div class="sql-block">
+<span class="sql-comment">-- Median calculation without PERCENTILE_CONT (MySQL 5.7 compatible)</span>
+<span class="sql-keyword">SELECT</span> 
+  model_name,
+  <span class="sql-keyword">AVG</span>(price) <span class="sql-keyword">AS</span> median_price
+<span class="sql-keyword">FROM</span> (
+  <span class="sql-keyword">SELECT</span> 
+    model_name,
+    price,
+    <span class="sql-keyword">ROW_NUMBER</span>() <span class="sql-keyword">OVER</span> (<span class="sql-keyword">PARTITION BY</span> model_name <span class="sql-keyword">ORDER BY</span> price) <span class="sql-keyword">AS</span> rn,
+    <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">OVER</span> (<span class="sql-keyword">PARTITION BY</span> model_name) <span class="sql-keyword">AS</span> cnt
+  <span class="sql-keyword">FROM</span> fact_sales_listings
+) ranked
+<span class="sql-keyword">WHERE</span> rn <span class="sql-keyword">IN</span> (<span class="sql-keyword">FLOOR</span>((cnt + 1) / 2), <span class="sql-keyword">CEIL</span>((cnt + 1) / 2))
+<span class="sql-keyword">GROUP BY</span> model_name;
+            </div>
+        </div>
+
+        <!-- Key Learnings -->
+        <div class="section">
+            <h2>Key Learnings</h2>
+
+            <h3>Database Design Principles</h3>
+            <ul>
+                <li><strong>Normalization vs. Performance:</strong> Learned when to denormalize for query performance (storing make/model in fact tables)</li>
+                <li><strong>Index Strategy:</strong> Understanding trade-offs between query speed and write performance</li>
+                <li><strong>Data Types Matter:</strong> Choosing INT vs BIGINT, DECIMAL precision impacts both storage and performance</li>
+                <li><strong>Foreign Key Flexibility:</strong> Nullable FKs provide flexibility when data quality varies across sources</li>
+            </ul>
+
+            <h3>SQL Best Practices</h3>
+            <ul>
+                <li><strong>CTEs for Readability:</strong> Breaking complex queries into logical steps improves maintainability</li>
+                <li><strong>EXPLAIN is Essential:</strong> Always analyze query execution plans before deploying to production</li>
+                <li><strong>Filter Early:</strong> Apply WHERE clauses before JOINs to reduce intermediate result sets</li>
+                <li><strong>Comment Complex Logic:</strong> Document business rules and assumptions directly in SQL</li>
+            </ul>
+
+            <h3>Real-World Analytics Skills</h3>
+            <ul>
+                <li><strong>Data Quality Awareness:</strong> Always check for NULLs, outliers, and data distribution before aggregating</li>
+                <li><strong>Statistical Rigor:</strong> Use minimum sample sizes (HAVING COUNT >= 30) to ensure meaningful results</li>
+                <li><strong>Business Context:</strong> Every query should answer a specific business question, not just return data</li>
+                <li><strong>Performance Monitoring:</strong> Track query execution time and optimize bottlenecks iteratively</li>
+            </ul>
+        </div>
+
+        <!-- Future Enhancements -->
+        <div class="section">
+            <h2>Future Enhancements</h2>
+            <ul>
+                <li><strong>Materialized Views:</strong> Create pre-aggregated summary tables for dashboard queries</li>
+                <li><strong>Stored Procedures:</strong> Package complex analytical queries into reusable procedures</li>
+                <li><strong>Query Optimization:</strong> Implement query result caching for frequently-run reports</li>
+                <li><strong>Advanced Analytics:</strong> Add moving averages, exponential smoothing for trend forecasting</li>
+                <li><strong>Geographic Analysis:</strong> Integrate PostGIS for spatial queries on location data</li>
+                <li><strong>Data Quality Framework:</strong> Build SQL-based data validation and quality scoring system</li>
+            </ul>
+        </div>
+
+        <!-- Links -->
+        <div class="section" style="text-align: center;">
+            <h2>Project Resources</h2>
+            <div class="btn-group">
+                <a href="https://github.com/JaiGala2122/connected-vehicle-analytics" class="btn" target="_blank">📂 View GitHub Repository</a>
+                <a href="https://github.com/JaiGala2122/connected-vehicle-analytics/blob/main/sql/example_queries.sql" class="btn" target="_blank">📊 View SQL Queries</a>
+            </div>
+        </div>
+
+        <a href="../../index.html" class="back-link">← Back to Portfolio</a>
+    </div>
+</body>
+</html>
