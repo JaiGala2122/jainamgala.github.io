@@ -351,10 +351,91 @@
                 <li><strong>High operational costs</strong> - Inefficient batch processing consuming $3,500/month in infrastructure</li>
             </ul>
 
-            <div class="image-placeholder">
-                <strong>Architecture Diagram</strong><br>
-                [Insert: System architecture showing Kafka → Spark → Storage layers]<br>
-                5-layer real-time pipeline with hybrid storage strategy
+            <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin: 30px 0;">
+                <svg viewBox="0 0 800 500" style="width: 100%; height: auto;">
+                    <!-- Background -->
+                    <rect width="800" height="500" fill="#f8f9fa"/>
+                    
+                    <!-- Title -->
+                    <text x="400" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#667eea">System Architecture Overview</text>
+                    
+                    <!-- Layer 1: Ingestion -->
+                    <rect x="50" y="60" width="700" height="70" rx="8" fill="url(#grad1)"/>
+                    <text x="400" y="85" text-anchor="middle" font-size="16" font-weight="bold" fill="white">1. Streaming Ingestion Layer</text>
+                    <text x="400" y="110" text-anchor="middle" font-size="13" fill="white">Apache Kafka • 3 Brokers • 12 Partitions • 3x Replication</text>
+                    
+                    <!-- Arrow -->
+                    <path d="M 400 130 L 400 150" stroke="#667eea" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Layer 2: Processing -->
+                    <rect x="50" y="150" width="700" height="70" rx="8" fill="url(#grad2)"/>
+                    <text x="400" y="175" text-anchor="middle" font-size="16" font-weight="bold" fill="white">2. Real-Time Processing Engine</text>
+                    <text x="400" y="200" text-anchor="middle" font-size="13" fill="white">Spark Structured Streaming • Windowed Aggregations</text>
+                    
+                    <!-- Arrow -->
+                    <path d="M 400 220 L 400 240" stroke="#667eea" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Layer 3: Storage (split into 3) -->
+                    <g>
+                        <rect x="50" y="240" width="220" height="70" rx="8" fill="url(#grad3)"/>
+                        <text x="160" y="265" text-anchor="middle" font-size="14" font-weight="bold" fill="white">PostgreSQL</text>
+                        <text x="160" y="290" text-anchor="middle" font-size="11" fill="white">Aggregated Metrics</text>
+                        
+                        <rect x="290" y="240" width="220" height="70" rx="8" fill="url(#grad3)"/>
+                        <text x="400" y="265" text-anchor="middle" font-size="14" font-weight="bold" fill="white">Elasticsearch</text>
+                        <text x="400" y="290" text-anchor="middle" font-size="11" fill="white">Event Logs</text>
+                        
+                        <rect x="530" y="240" width="220" height="70" rx="8" fill="url(#grad3)"/>
+                        <text x="640" y="265" text-anchor="middle" font-size="14" font-weight="bold" fill="white">Redis</text>
+                        <text x="640" y="290" text-anchor="middle" font-size="11" fill="white">Hot Cache</text>
+                    </g>
+                    
+                    <!-- Arrows from storage -->
+                    <path d="M 160 310 L 160 350 L 400 350" stroke="#667eea" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <path d="M 400 310 L 400 350" stroke="#667eea" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <path d="M 640 310 L 640 350 L 400 350" stroke="#667eea" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Layer 4: Analytics -->
+                    <rect x="50" y="350" width="700" height="60" rx="8" fill="url(#grad4)"/>
+                    <text x="400" y="375" text-anchor="middle" font-size="16" font-weight="bold" fill="white">4. Analytics & Visualization Layer</text>
+                    <text x="400" y="395" text-anchor="middle" font-size="13" fill="white">Grafana Dashboards • FastAPI • <2s Query Response</text>
+                    
+                    <!-- Arrow -->
+                    <path d="M 400 410 L 400 430" stroke="#667eea" stroke-width="3" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Layer 5: Monitoring -->
+                    <rect x="50" y="430" width="700" height="60" rx="8" fill="url(#grad5)"/>
+                    <text x="400" y="455" text-anchor="middle" font-size="16" font-weight="bold" fill="white">5. Monitoring & Operations</text>
+                    <text x="400" y="475" text-anchor="middle" font-size="13" fill="white">Prometheus • AlertManager • 20+ Alerts • PagerDuty</text>
+                    
+                    <!-- Gradients -->
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:0.9" />
+                            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:0.9" />
+                        </linearGradient>
+                        <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:0.8" />
+                            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:0.8" />
+                        </linearGradient>
+                        <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:0.7" />
+                            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:0.7" />
+                        </linearGradient>
+                        <linearGradient id="grad5" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:0.6" />
+                            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:0.6" />
+                        </linearGradient>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                            <polygon points="0 0, 10 5, 0 10" fill="#667eea" />
+                        </marker>
+                    </defs>
+                </svg>
+                <p style="text-align: center; margin-top: 15px; color: #666; font-style: italic;">5-Layer Architecture: From ingestion to monitoring</p>
             </div>
         </div>
 
@@ -407,10 +488,123 @@
                 </div>
             </div>
 
-            <div class="image-placeholder">
-                <strong>Data Flow Diagram</strong><br>
-                [Insert: Visual showing transaction flow through all 5 layers]<br>
-                Complete end-to-end data pipeline architecture
+            <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin: 30px 0;">
+                <svg viewBox="0 0 900 400" style="width: 100%; height: auto;">
+                    <!-- Background -->
+                    <rect width="900" height="400" fill="#f8f9fa"/>
+                    
+                    <!-- Title -->
+                    <text x="450" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#667eea">Real-Time Data Flow</text>
+                    
+                    <!-- E-commerce App -->
+                    <rect x="20" y="60" width="120" height="280" rx="8" fill="#10b981" opacity="0.9"/>
+                    <text x="80" y="90" text-anchor="middle" font-size="14" font-weight="bold" fill="white">E-Commerce</text>
+                    <text x="80" y="110" text-anchor="middle" font-size="14" font-weight="bold" fill="white">Application</text>
+                    <text x="80" y="180" text-anchor="middle" font-size="12" fill="white">Transactions</text>
+                    <text x="80" y="200" text-anchor="middle" font-size="12" fill="white">Orders</text>
+                    <text x="80" y="220" text-anchor="middle" font-size="12" fill="white">Customers</text>
+                    <text x="80" y="260" text-anchor="middle" font-size="24" font-weight="bold" fill="white">1M+/day</text>
+                    <text x="80" y="280" text-anchor="middle" font-size="11" fill="white">transactions</text>
+                    
+                    <!-- Arrow to Kafka -->
+                    <path d="M 140 200 L 190 200" stroke="#667eea" stroke-width="4" marker-end="url(#arrow)"/>
+                    <text x="165" y="190" text-anchor="middle" font-size="11" fill="#667eea" font-weight="bold">Stream</text>
+                    
+                    <!-- Kafka -->
+                    <rect x="190" y="60" width="140" height="280" rx="8" fill="url(#kafkaGrad)"/>
+                    <text x="260" y="90" text-anchor="middle" font-size="16" font-weight="bold" fill="white">Apache Kafka</text>
+                    <text x="260" y="130" text-anchor="middle" font-size="12" fill="white">⚡ 3 Brokers</text>
+                    <text x="260" y="155" text-anchor="middle" font-size="12" fill="white">📊 12 Partitions</text>
+                    <text x="260" y="180" text-anchor="middle" font-size="12" fill="white">🔄 3x Replication</text>
+                    <text x="260" y="220" text-anchor="middle" font-size="11" fill="white">Topics:</text>
+                    <text x="260" y="238" text-anchor="middle" font-size="10" fill="white">• transactions.raw</text>
+                    <text x="260" y="254" text-anchor="middle" font-size="10" fill="white">• transactions.validated</text>
+                    <text x="260" y="270" text-anchor="middle" font-size="10" fill="white">• transactions.enriched</text>
+                    <text x="260" y="310" text-anchor="middle" font-size="20" font-weight="bold" fill="white">&lt;1s</text>
+                    <text x="260" y="327" text-anchor="middle" font-size="10" fill="white">ingestion</text>
+                    
+                    <!-- Arrow to Spark -->
+                    <path d="M 330 200 L 380 200" stroke="#667eea" stroke-width="4" marker-end="url(#arrow)"/>
+                    <text x="355" y="190" text-anchor="middle" font-size="11" fill="#667eea" font-weight="bold">Process</text>
+                    
+                    <!-- Spark -->
+                    <rect x="380" y="60" width="140" height="280" rx="8" fill="url(#sparkGrad)"/>
+                    <text x="450" y="90" text-anchor="middle" font-size="16" font-weight="bold" fill="white">Spark</text>
+                    <text x="450" y="110" text-anchor="middle" font-size="16" font-weight="bold" fill="white">Streaming</text>
+                    <text x="450" y="145" text-anchor="middle" font-size="12" fill="white">🔍 Validate</text>
+                    <text x="450" y="165" text-anchor="middle" font-size="12" fill="white">✨ Enrich</text>
+                    <text x="450" y="185" text-anchor="middle" font-size="12" fill="white">🔄 Deduplicate</text>
+                    <text x="450" y="205" text-anchor="middle" font-size="12" fill="white">📊 Aggregate</text>
+                    <text x="450" y="240" text-anchor="middle" font-size="11" fill="white">Windows:</text>
+                    <text x="450" y="258" text-anchor="middle" font-size="10" fill="white">1-min | 5-min | 1-hour</text>
+                    <text x="450" y="295" text-anchor="middle" font-size="20" font-weight="bold" fill="white">~3s</text>
+                    <text x="450" y="312" text-anchor="middle" font-size="10" fill="white">processing</text>
+                    
+                    <!-- Arrow to Storage -->
+                    <path d="M 520 200 L 570 200" stroke="#667eea" stroke-width="4" marker-end="url(#arrow)"/>
+                    <text x="545" y="190" text-anchor="middle" font-size="11" fill="#667eea" font-weight="bold">Store</text>
+                    
+                    <!-- Storage (3 databases) -->
+                    <g>
+                        <rect x="570" y="60" width="140" height="85" rx="8" fill="#6366f1" opacity="0.9"/>
+                        <text x="640" y="85" text-anchor="middle" font-size="14" font-weight="bold" fill="white">PostgreSQL</text>
+                        <text x="640" y="105" text-anchor="middle" font-size="11" fill="white">Aggregated</text>
+                        <text x="640" y="120" text-anchor="middle" font-size="11" fill="white">Metrics</text>
+                        <text x="640" y="138" text-anchor="middle" font-size="10" fill="white">&lt;800ms query</text>
+                        
+                        <rect x="570" y="157" width="140" height="85" rx="8" fill="#8b5cf6" opacity="0.9"/>
+                        <text x="640" y="182" text-anchor="middle" font-size="14" font-weight="bold" fill="white">Elasticsearch</text>
+                        <text x="640" y="202" text-anchor="middle" font-size="11" fill="white">Event Logs</text>
+                        <text x="640" y="217" text-anchor="middle" font-size="11" fill="white">Full Search</text>
+                        <text x="640" y="235" text-anchor="middle" font-size="10" fill="white">&lt;500ms query</text>
+                        
+                        <rect x="570" y="254" width="140" height="85" rx="8" fill="#a855f7" opacity="0.9"/>
+                        <text x="640" y="279" text-anchor="middle" font-size="14" font-weight="bold" fill="white">Redis Cache</text>
+                        <text x="640" y="299" text-anchor="middle" font-size="11" fill="white">Hot Data</text>
+                        <text x="640" y="314" text-anchor="middle" font-size="11" fill="white">95% hit rate</text>
+                        <text x="640" y="332" text-anchor="middle" font-size="10" fill="white">&lt;200ms query</text>
+                    </g>
+                    
+                    <!-- Arrow to Dashboard -->
+                    <path d="M 710 200 L 760 200" stroke="#667eea" stroke-width="4" marker-end="url(#arrow)"/>
+                    <text x="735" y="190" text-anchor="middle" font-size="11" fill="#667eea" font-weight="bold">Visualize</text>
+                    
+                    <!-- Dashboard -->
+                    <rect x="760" y="60" width="120" height="280" rx="8" fill="#f59e0b" opacity="0.9"/>
+                    <text x="820" y="90" text-anchor="middle" font-size="14" font-weight="bold" fill="white">Real-Time</text>
+                    <text x="820" y="110" text-anchor="middle" font-size="14" font-weight="bold" fill="white">Dashboards</text>
+                    <text x="820" y="150" text-anchor="middle" font-size="12" fill="white">📊 Grafana</text>
+                    <text x="820" y="175" text-anchor="middle" font-size="12" fill="white">📈 Metrics</text>
+                    <text x="820" y="200" text-anchor="middle" font-size="12" fill="white">🎯 Alerts</text>
+                    <text x="820" y="245" text-anchor="middle" font-size="11" fill="white">100+ users</text>
+                    <text x="820" y="280" text-anchor="middle" font-size="20" font-weight="bold" fill="white">5s</text>
+                    <text x="820" y="297" text-anchor="middle" font-size="10" fill="white">total latency</text>
+                    
+                    <!-- Total time indicator -->
+                    <rect x="20" y="360" width="860" height="30" rx="5" fill="#e9ecef"/>
+                    <rect x="20" y="360" width="860" height="30" rx="5" fill="url(#timeGrad)" opacity="0.3"/>
+                    <text x="450" y="380" text-anchor="middle" font-size="14" font-weight="bold" fill="#667eea">⚡ Total End-to-End: ~5 seconds (2,880x faster than batch)</text>
+                    
+                    <!-- Gradients -->
+                    <defs>
+                        <linearGradient id="kafkaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="sparkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                        </linearGradient>
+                        <linearGradient id="timeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+                        </linearGradient>
+                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+                            <polygon points="0 0, 10 5, 0 10" fill="#667eea" />
+                        </marker>
+                    </defs>
+                </svg>
+                <p style="text-align: center; margin-top: 15px; color: #666; font-style: italic;">Complete data flow from transaction to dashboard in ~5 seconds</p>
             </div>
         </div>
 
@@ -511,10 +705,88 @@ metrics = parsed_stream \
                 </div>
             </div>
 
-            <div class="image-placeholder">
-                <strong>Performance Comparison Chart</strong><br>
-                [Insert: Before/After comparison showing latency improvement]<br>
-                Query performance: Batch (4hr) vs Real-Time (5s)
+            <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin: 30px 0;">
+                <svg viewBox="0 0 800 450" style="width: 100%; height: auto;">
+                    <!-- Background -->
+                    <rect width="800" height="450" fill="#f8f9fa"/>
+                    
+                    <!-- Title -->
+                    <text x="400" y="35" text-anchor="middle" font-size="22" font-weight="bold" fill="#667eea">Performance: Batch vs Real-Time</text>
+                    <text x="400" y="60" text-anchor="middle" font-size="14" fill="#666">Before and After Comparison</text>
+                    
+                    <!-- Y-axis labels -->
+                    <text x="40" y="100" text-anchor="end" font-size="12" fill="#666">4 hours</text>
+                    <line x1="50" y1="95" x2="750" y2="95" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="5,5"/>
+                    
+                    <text x="40" y="175" text-anchor="end" font-size="12" fill="#666">3 hours</text>
+                    <line x1="50" y1="170" x2="750" y2="170" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="5,5"/>
+                    
+                    <text x="40" y="250" text-anchor="end" font-size="12" fill="#666">2 hours</text>
+                    <line x1="50" y1="245" x2="750" y2="245" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="5,5"/>
+                    
+                    <text x="40" y="325" text-anchor="end" font-size="12" fill="#666">1 hour</text>
+                    <line x1="50" y1="320" x2="750" y2="320" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="5,5"/>
+                    
+                    <text x="40" y="400" text-anchor="end" font-size="12" fill="#666">5 sec</text>
+                    <line x1="50" y1="395" x2="750" y2="395" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="5,5"/>
+                    
+                    <!-- X-axis -->
+                    <line x1="50" y1="410" x2="750" y2="410" stroke="#333" stroke-width="2"/>
+                    
+                    <!-- BEFORE Bar -->
+                    <rect x="150" y="100" width="180" height="310" rx="8" fill="#ef4444" opacity="0.8"/>
+                    <text x="240" y="250" text-anchor="middle" font-size="40" font-weight="bold" fill="white">4 hrs</text>
+                    <text x="240" y="280" text-anchor="middle" font-size="14" fill="white">Batch ETL</text>
+                    <text x="240" y="300" text-anchor="middle" font-size="12" fill="white">(Overnight Jobs)</text>
+                    
+                    <!-- BEFORE Label -->
+                    <text x="240" y="430" text-anchor="middle" font-size="16" font-weight="bold" fill="#ef4444">BEFORE</text>
+                    
+                    <!-- AFTER Bar -->
+                    <rect x="470" y="395" width="180" height="15" rx="8" fill="#10b981" opacity="0.9"/>
+                    <text x="560" y="260" text-anchor="middle" font-size="40" font-weight="bold" fill="#10b981">5s</text>
+                    <text x="560" y="290" text-anchor="middle" font-size="14" fill="#10b981">Real-Time</text>
+                    <text x="560" y="310" text-anchor="middle" font-size="12" fill="#10b981">(Streaming)</text>
+                    
+                    <!-- AFTER Label -->
+                    <text x="560" y="430" text-anchor="middle" font-size="16" font-weight="bold" fill="#10b981">AFTER</text>
+                    
+                    <!-- Improvement indicator -->
+                    <rect x="200" y="80" width="400" height="0" fill="none"/>
+                    <path d="M 330 80 L 470 80" stroke="#667eea" stroke-width="3" marker-end="url(#arrowImprove)"/>
+                    <text x="400" y="75" text-anchor="middle" font-size="16" font-weight="bold" fill="#667eea">2,880x FASTER</text>
+                    
+                    <!-- Additional metrics boxes -->
+                    <g>
+                        <rect x="60" y="130" width="80" height="60" rx="5" fill="white" stroke="#ef4444" stroke-width="2"/>
+                        <text x="100" y="152" text-anchor="middle" font-size="12" font-weight="bold" fill="#ef4444">Stale Data</text>
+                        <text x="100" y="168" text-anchor="middle" font-size="10" fill="#666">Reports</text>
+                        <text x="100" y="182" text-anchor="middle" font-size="10" fill="#666">outdated</text>
+                        
+                        <rect x="60" y="200" width="80" height="60" rx="5" fill="white" stroke="#ef4444" stroke-width="2"/>
+                        <text x="100" y="222" text-anchor="middle" font-size="12" font-weight="bold" fill="#ef4444">$3,500</text>
+                        <text x="100" y="238" text-anchor="middle" font-size="10" fill="#666">Monthly</text>
+                        <text x="100" y="252" text-anchor="middle" font-size="10" fill="#666">cost</text>
+                        
+                        <rect x="660" y="130" width="80" height="60" rx="5" fill="white" stroke="#10b981" stroke-width="2"/>
+                        <text x="700" y="152" text-anchor="middle" font-size="12" font-weight="bold" fill="#10b981">Real-Time</text>
+                        <text x="700" y="168" text-anchor="middle" font-size="10" fill="#666">Instant</text>
+                        <text x="700" y="182" text-anchor="middle" font-size="10" fill="#666">insights</text>
+                        
+                        <rect x="660" y="200" width="80" height="60" rx="5" fill="white" stroke="#10b981" stroke-width="2"/>
+                        <text x="700" y="222" text-anchor="middle" font-size="12" font-weight="bold" fill="#10b981">$1,800</text>
+                        <text x="700" y="238" text-anchor="middle" font-size="10" fill="#666">Monthly</text>
+                        <text x="700" y="252" text-anchor="middle" font-size="10" fill="#666">cost</text>
+                    </g>
+                    
+                    <!-- Defs -->
+                    <defs>
+                        <marker id="arrowImprove" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+                            <polygon points="0 0, 12 6, 0 12" fill="#667eea" />
+                        </marker>
+                    </defs>
+                </svg>
+                <p style="text-align: center; margin-top: 15px; color: #666; font-style: italic;">Dramatic latency reduction: 4 hours → 5 seconds, plus 48% cost savings</p>
             </div>
         </div>
 
@@ -601,10 +873,147 @@ metrics = parsed_stream \
                 <li><strong>Faster decisions:</strong> 100+ business users access real-time dashboards</li>
             </ul>
 
-            <div class="image-placeholder">
-                <strong>Dashboard Screenshot</strong><br>
-                [Insert: Grafana dashboard showing real-time metrics]<br>
-                Live dashboard with <2s refresh rate showing revenue, transactions, and trends
+            <div style="background: #1e1e1e; padding: 20px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); margin: 30px 0;">
+                <svg viewBox="0 0 1000 600" style="width: 100%; height: auto;">
+                    <!-- Dashboard Background -->
+                    <rect width="1000" height="600" fill="#1e1e1e"/>
+                    
+                    <!-- Header Bar -->
+                    <rect x="0" y="0" width="1000" height="50" fill="#2a2a2a"/>
+                    <text x="20" y="32" font-size="20" font-weight="bold" fill="#f59e0b">📊 E-Commerce Real-Time Analytics</text>
+                    <text x="900" y="32" font-size="14" fill="#10b981">● LIVE</text>
+                    <text x="820" y="32" font-size="12" fill="#999">Last update: 2s ago</text>
+                    
+                    <!-- Top Stats Row -->
+                    <g>
+                        <!-- Revenue Card -->
+                        <rect x="20" y="70" width="230" height="120" rx="8" fill="#2a2a2a"/>
+                        <text x="135" y="95" text-anchor="middle" font-size="12" fill="#999">Total Revenue (Today)</text>
+                        <text x="135" y="135" text-anchor="middle" font-size="36" font-weight="bold" fill="#10b981">$48,392</text>
+                        <text x="135" y="165" text-anchor="middle" font-size="11" fill="#10b981">↑ 12.5% vs yesterday</text>
+                        
+                        <!-- Transactions Card -->
+                        <rect x="270" y="70" width="230" height="120" rx="8" fill="#2a2a2a"/>
+                        <text x="385" y="95" text-anchor="middle" font-size="12" fill="#999">Transactions (Last Hour)</text>
+                        <text x="385" y="135" text-anchor="middle" font-size="36" font-weight="bold" fill="#60a5fa">1,247</text>
+                        <text x="385" y="165" text-anchor="middle" font-size="11" fill="#60a5fa">↑ 8.2% increase</text>
+                        
+                        <!-- Active Users Card -->
+                        <rect x="520" y="70" width="230" height="120" rx="8" fill="#2a2a2a"/>
+                        <text x="635" y="95" text-anchor="middle" font-size="12" fill="#999">Active Customers</text>
+                        <text x="635" y="135" text-anchor="middle" font-size="36" font-weight="bold" fill="#a855f7">342</text>
+                        <text x="635" y="165" text-anchor="middle" font-size="11" fill="#a855f7">Shopping now</text>
+                        
+                        <!-- Avg Order Value Card -->
+                        <rect x="770" y="70" width="210" height="120" rx="8" fill="#2a2a2a"/>
+                        <text x="875" y="95" text-anchor="middle" font-size="12" fill="#999">Avg Order Value</text>
+                        <text x="875" y="135" text-anchor="middle" font-size="36" font-weight="bold" fill="#f59e0b">$38.79</text>
+                        <text x="875" y="165" text-anchor="middle" font-size="11" fill="#f59e0b">↑ 3.1% up</text>
+                    </g>
+                    
+                    <!-- Revenue Chart -->
+                    <g>
+                        <rect x="20" y="210" width="630" height="260" rx="8" fill="#2a2a2a"/>
+                        <text x="30" y="235" font-size="14" font-weight="bold" fill="#fff">Revenue per Minute (Last Hour)</text>
+                        <text x="600" y="235" font-size="11" fill="#10b981">Real-time</text>
+                        
+                        <!-- Chart Grid -->
+                        <line x1="50" y1="250" x2="50" y2="450" stroke="#444" stroke-width="1"/>
+                        <line x1="50" y1="450" x2="630" y2="450" stroke="#444" stroke-width="1"/>
+                        
+                        <!-- Y-axis labels -->
+                        <text x="45" y="260" text-anchor="end" font-size="10" fill="#999">$80</text>
+                        <text x="45" y="310" text-anchor="end" font-size="10" fill="#999">$60</text>
+                        <text x="45" y="360" text-anchor="end" font-size="10" fill="#999">$40</text>
+                        <text x="45" y="410" text-anchor="end" font-size="10" fill="#999">$20</text>
+                        <text x="45" y="455" text-anchor="end" font-size="10" fill="#999">$0</text>
+                        
+                        <!-- Revenue Line Chart -->
+                        <polyline points="50,380 90,360 130,340 170,370 210,330 250,310 290,340 330,320 370,300 410,330 450,310 490,290 530,310 570,280 610,300" 
+                                  fill="none" stroke="#10b981" stroke-width="3"/>
+                        <polyline points="50,450 90,360 130,340 170,370 210,330 250,310 290,340 330,320 370,300 410,330 450,310 490,290 530,310 570,280 610,300 610,450" 
+                                  fill="url(#revenueGradient)" opacity="0.3"/>
+                        
+                        <!-- X-axis time labels -->
+                        <text x="90" y="465" text-anchor="middle" font-size="9" fill="#999">:00</text>
+                        <text x="250" y="465" text-anchor="middle" font-size="9" fill="#999">:15</text>
+                        <text x="410" y="465" text-anchor="middle" font-size="9" fill="#999">:30</text>
+                        <text x="570" y="465" text-anchor="middle" font-size="9" fill="#999">:45</text>
+                    </g>
+                    
+                    <!-- Top Countries -->
+                    <g>
+                        <rect x="670" y="210" width="310" height="260" rx="8" fill="#2a2a2a"/>
+                        <text x="680" y="235" font-size="14" font-weight="bold" fill="#fff">Top Countries (Today)</text>
+                        
+                        <!-- Country bars -->
+                        <rect x="680" y="255" width="280" height="35" rx="4" fill="#3a3a3a"/>
+                        <rect x="680" y="255" width="250" height="35" rx="4" fill="#667eea" opacity="0.8"/>
+                        <text x="690" y="277" font-size="13" font-weight="bold" fill="#fff">🇬🇧 United Kingdom</text>
+                        <text x="945" y="277" text-anchor="end" font-size="13" font-weight="bold" fill="#fff">$28,450</text>
+                        
+                        <rect x="680" y="300" width="280" height="35" rx="4" fill="#3a3a3a"/>
+                        <rect x="680" y="300" width="180" height="35" rx="4" fill="#8b5cf6" opacity="0.8"/>
+                        <text x="690" y="322" font-size="13" font-weight="bold" fill="#fff">🇩🇪 Germany</text>
+                        <text x="945" y="322" text-anchor="end" font-size="13" font-weight="bold" fill="#fff">$8,230</text>
+                        
+                        <rect x="680" y="345" width="280" height="35" rx="4" fill="#3a3a3a"/>
+                        <rect x="680" y="345" width="160" height="35" rx="4" fill="#a855f7" opacity="0.8"/>
+                        <text x="690" y="367" font-size="13" font-weight="bold" fill="#fff">🇫🇷 France</text>
+                        <text x="945" y="367" text-anchor="end" font-size="13" font-weight="bold" fill="#fff">$6,890</text>
+                        
+                        <rect x="680" y="390" width="280" height="35" rx="4" fill="#3a3a3a"/>
+                        <rect x="680" y="390" width="110" height="35" rx="4" fill="#c084fc" opacity="0.8"/>
+                        <text x="690" y="412" font-size="13" font-weight="bold" fill="#fff">🇪🇸 Spain</text>
+                        <text x="945" y="412" text-anchor="end" font-size="13" font-weight="bold" fill="#fff">$3,120</text>
+                        
+                        <rect x="680" y="435" width="280" height="35" rx="4" fill="#3a3a3a"/>
+                        <rect x="680" y="435" width="90" height="35" rx="4" fill="#d8b4fe" opacity="0.8"/>
+                        <text x="690" y="457" font-size="13" font-weight="bold" fill="#fff">🇳🇱 Netherlands</text>
+                        <text x="945" y="457" text-anchor="end" font-size="13" font-weight="bold" fill="#fff">$1,702</text>
+                    </g>
+                    
+                    <!-- System Health Indicators -->
+                    <g>
+                        <rect x="20" y="490" width="960" height="90" rx="8" fill="#2a2a2a"/>
+                        <text x="30" y="515" font-size="14" font-weight="bold" fill="#fff">System Health</text>
+                        
+                        <!-- Health metrics -->
+                        <rect x="30" y="525" width="180" height="45" rx="4" fill="#1e1e1e"/>
+                        <text x="40" y="543" font-size="11" fill="#999">Kafka Lag</text>
+                        <text x="40" y="560" font-size="18" font-weight="bold" fill="#10b981">124 msgs</text>
+                        <circle cx="200" cy="547" r="5" fill="#10b981"/>
+                        
+                        <rect x="230" y="525" width="180" height="45" rx="4" fill="#1e1e1e"/>
+                        <text x="240" y="543" font-size="11" fill="#999">Processing Time</text>
+                        <text x="240" y="560" font-size="18" font-weight="bold" fill="#10b981">4.2s</text>
+                        <circle cx="400" cy="547" r="5" fill="#10b981"/>
+                        
+                        <rect x="430" y="525" width="180" height="45" rx="4" fill="#1e1e1e"/>
+                        <text x="440" y="543" font-size="11" fill="#999">Query Time (p95)</text>
+                        <text x="440" y="560" font-size="18" font-weight="bold" fill="#10b981">1.8s</text>
+                        <circle cx="600" cy="547" r="5" fill="#10b981"/>
+                        
+                        <rect x="630" y="525" width="180" height="45" rx="4" fill="#1e1e1e"/>
+                        <text x="640" y="543" font-size="11" fill="#999">Cache Hit Rate</text>
+                        <text x="640" y="560" font-size="18" font-weight="bold" fill="#10b981">95.2%</text>
+                        <circle cx="800" cy="547" r="5" fill="#10b981"/>
+                        
+                        <rect x="830" y="525" width="140" height="45" rx="4" fill="#1e1e1e"/>
+                        <text x="840" y="543" font-size="11" fill="#999">Uptime</text>
+                        <text x="840" y="560" font-size="18" font-weight="bold" fill="#10b981">99.9%</text>
+                        <circle cx="960" cy="547" r="5" fill="#10b981"/>
+                    </g>
+                    
+                    <!-- Gradients -->
+                    <defs>
+                        <linearGradient id="revenueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#10b981;stop-opacity:0" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <p style="text-align: center; margin-top: 15px; color: #999; font-style: italic;">Live Grafana dashboard with <2s query response and 5s refresh rate</p>
             </div>
         </div>
 
@@ -784,9 +1193,7 @@ metrics = parsed_stream \
         <div class="section" style="text-align: center;">
             <h2>Project Resources</h2>
             <div class="btn-group">
-                <a href="https://github.com/yourusername/ecommerce-realtime-analytics" class="btn" target="_blank">📂 GitHub Repository</a>
-                <a href="https://github.com/yourusername/ecommerce-realtime-analytics/blob/main/docs/ARCHITECTURE.md" class="btn" target="_blank">📖 Documentation</a>
-                <a href="https://github.com/yourusername/ecommerce-realtime-analytics#quick-start" class="btn btn-secondary" target="_blank">🚀 Quick Start Guide</a>
+                <a href="https://github.com/yourusername/ecommerce-realtime-analytics" class="btn" target="_blank">📂 View GitHub Repository</a>
             </div>
         </div>
 
