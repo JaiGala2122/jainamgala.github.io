@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chip Warehousing and Shipping Optimization | Jainam Gala</title>
+  <meta name="description" content="A seven-day plan for 9,215 orders. Modeled warehouse cost fell by $141,691.76, with no daily capacity violations.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #152033;
+      --ink-soft: #3c4b63;
+      --muted: #5d6b82;
+      --line: #d5deea;
+      --paper: #f4f7fb;
+      --cream: #f7f4ec;
+      --navy: #0e1c3f;
+      --navy-2: #16315f;
+      --slate: #8b97ab;
+      --gold: #f5c518;
+      --copper: #c2410c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Public Sans", "Segoe UI", sans-serif;
+      font-size: 1.05rem;
+      line-height: 1.65;
+    }
+    a { color: var(--copper); }
+    :focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
+    .sitebar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+      padding: 0.85rem 1.5rem;
+      background: var(--navy);
+      color: var(--cream);
+    }
+    .sitebar a { color: var(--cream); text-decoration: none; font-weight: 500; }
+    .sitebar-mark { font-family: Fraunces, Georgia, serif; font-size: 1.15rem; }
+    .sitebar nav { display: flex; gap: 1.15rem; font-size: 0.92rem; }
+    .sitebar nav a { color: rgba(247, 244, 236, 0.82); }
+    .sitebar nav a:hover { color: var(--gold); }
+    .hero {
+      padding: 3.5rem 1.5rem 2.5rem;
+      background:
+        radial-gradient(720px 320px at 100% 0%, rgba(245, 197, 24, 0.2), transparent 60%),
+        var(--navy);
+      color: var(--cream);
+    }
+    .wrap { width: min(920px, 100%); margin: 0 auto; }
+    .kicker {
+      margin: 0 0 0.8rem;
+      color: var(--gold);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3 { font-family: Fraunces, Georgia, serif; font-weight: 560; letter-spacing: -0.03em; }
+    h1 { margin: 0; font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: 1.05; }
+    .lede { max-width: 40rem; margin: 1rem 0 0; font-size: 1.2rem; color: rgba(247, 244, 236, 0.88); }
+    .proof {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 0;
+      padding: 1.1rem 0 0;
+      list-style: none;
+      border-top: 1px solid rgba(247, 244, 236, 0.16);
+    }
+    .proof strong {
+      display: block;
+      color: var(--gold);
+      font-family: Fraunces, Georgia, serif;
+      font-size: 1.55rem;
+      font-weight: 560;
+      line-height: 1;
+    }
+    .proof li { color: rgba(247, 244, 236, 0.78); font-size: 0.92rem; }
+    main { padding: 1.5rem 1.5rem 3rem; }
+    section {
+      margin: 0 auto 1.25rem;
+      padding: 1.6rem 1.5rem 1.7rem;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+    h2 {
+      margin: 0 0 0.9rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid var(--navy);
+      color: var(--navy);
+      font-size: 1.7rem;
+    }
+    h3 { margin: 1.4rem 0 0.4rem; color: var(--navy); font-size: 1.25rem; }
+    p { margin: 0.55rem 0 0; }
+    .figure {
+      margin: 1.2rem 0 0.4rem;
+      padding: 0.8rem;
+      background: var(--paper);
+      border: 1px solid var(--line);
+    }
+    .figure svg { display: block; width: 100%; height: auto; }
+    .figure figcaption { margin-top: 0.45rem; color: var(--muted); font-size: 0.92rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.8rem; font-size: 0.98rem; }
+    th, td { padding: 0.55rem 0.45rem; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--navy); font-size: 0.82rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    td:last-child, th:last-child { text-align: right; }
+    .note {
+      margin-top: 0.9rem;
+      padding: 0.8rem 0.9rem;
+      background: #fff6e8;
+      border-left: 3px solid var(--gold);
+    }
+    .flow { display: grid; gap: 0.55rem; margin-top: 0.8rem; }
+    .step {
+      padding: 0.65rem 0.8rem;
+      background: var(--paper);
+      border-left: 3px solid var(--navy);
+    }
+    .step.split { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; padding: 0; background: transparent; border: 0; }
+    .step .yes { border-left-color: var(--navy-2); }
+    .step .no { border-left-color: var(--copper); }
+    .yes, .no { padding: 0.65rem 0.8rem; background: var(--paper); }
+    pre {
+      margin: 0.8rem 0 0;
+      padding: 0.9rem 1rem;
+      overflow-x: auto;
+      background: var(--navy);
+      color: var(--cream);
+      font-size: 0.92rem;
+    }
+    .back {
+      display: inline-block;
+      margin: 0 0 1rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    footer {
+      padding: 1.2rem 1.5rem 1.6rem;
+      background: #091428;
+      color: rgba(247, 244, 236, 0.72);
+    }
+    footer .wrap { display: flex; justify-content: space-between; gap: 1rem; }
+    @media (max-width: 720px) {
+      .proof, .step.split { grid-template-columns: 1fr; }
+      .sitebar nav a:nth-child(2) { display: none; }
+      section { padding: 1.2rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="sitebar">
+    <a class="sitebar-mark" href="../../index.html">Jainam Gala</a>
+    <nav aria-label="Primary">
+      <a href="../../index.html#experience">Experience</a>
+      <a href="../../index.html#work">Work</a>
+      <a href="../../index.html#contact">Contact</a>
+    </nav>
+  </header>
+
+  <header class="hero">
+    <div class="wrap">
+      <p class="kicker">Supply chain · Excel to Python · MILP</p>
+      <h1>Chip Warehousing and Shipping Optimization</h1>
+      <p class="lede">A seven-day plan for 9,215 orders. Modeled warehouse cost fell by $141,691.76, and no warehouse broke its daily capacity.</p>
+      <ul class="proof">
+        <li><strong>9,215</strong> orders assigned, zero daily capacity violations</li>
+        <li><strong>$141,692</strong> lower modeled warehouse cost, about 0.9%</li>
+        <li><strong>1,611</strong> orders moved to a different warehouse</li>
+        <li><strong>3.66s</strong> final solver time. Exact optimality was not proved</li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <a class="back" href="../../index.html#work">← Back to portfolio</a>
+
+    <section>
+      <h2>Project overview</h2>
+      <p>The question was practical: can the current network handle these orders, and is there a cheaper assignment that still works? Excel and Power Query checked examples. Python repeated those checks across the full dataset. A mixed-integer linear program chose the warehouse, the shipping route, and the processing day together.</p>
+      <p>This is a public portfolio case built on the <a href="https://brunel.figshare.com/articles/dataset/Supply_Chain_Logistics_Problem_Dataset/7558679">Brunel Supply Chain Logistics Problem Dataset</a>. It is not a client engagement.</p>
+    </section>
+
+    <section>
+      <h2>Key results</h2>
+      <table>
+        <thead>
+          <tr><th>Measure</th><th>Saved result</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Orders assigned / daily capacity violations</td><td>9,215 / 0</td></tr>
+          <tr><td>Historical assignment warehouse cost at current rates</td><td>$15,633,221.91</td></tr>
+          <tr><td>New plan warehouse cost</td><td>$15,491,530.16</td></tr>
+          <tr><td>Warehouse-cost reduction</td><td>$141,691.76 · 0.9%</td></tr>
+          <tr><td>Orders moved to another warehouse</td><td>1,611</td></tr>
+          <tr><td>Plan freight / total cost</td><td>$22,065.48 / $15,513,595.64</td></tr>
+          <tr><td>Remaining possible improvement</td><td>$4,394.34 · 0.0283%</td></tr>
+          <tr><td>Final solver time</td><td>3.66 seconds</td></tr>
+        </tbody>
+      </table>
+      <p class="note">The solver met its 1% tolerance and kept the starting plan. Exact optimality was not proved. Solver time excludes preparation. The remaining gap is possible improvement, not savings already achieved.</p>
+    </section>
+
+    <section>
+      <h2>Dataset and tools</h2>
+      <p><strong>Scope.</strong> 9,215 orders, 19 warehouses, and 1,540 freight-rate records. Seven tables: OrderList, FreightRates, PlantPorts, ProductsPerPlant, VmiCustomers, WhCapacities, and WhCosts.</p>
+      <p><strong>Tools.</strong> Excel, Power Query, Python, pandas, NumPy, openpyxl, SciPy, and HiGHS (highspy).</p>
+    </section>
+
+    <section>
+      <h2>Visual findings</h2>
+      <p>The charts use the same colors as the rest of the site. Navy is the plan, slate is the historical baseline, copper is the constraint, and gold marks a remainder that is real but small.</p>
+
+      <h3>1. PLANT03 is the bottleneck</h3>
+      <p>Historical assignments exceed the current seven-day capacity by 1,450 orders. This comparison does not establish that those orders were late in history.</p>
+      <figure class="figure">
+        <svg viewBox="0 0 720 420" role="img" aria-labelledby="chart1-title chart1-desc">
+          <title id="chart1-title">PLANT03 can't handle its historical workload</title>
+          <desc id="chart1-desc">Seven-day capacity is 7,091 orders. Historical orders are 8,541, which is 1,450 orders over capacity.</desc>
+          <text x="48" y="36" font-size="22" font-weight="700" fill="#152033">PLANT03 can't handle its historical workload</text>
+          <text x="48" y="60" font-size="14" fill="#5d6b82">Capacity = 1,013 orders/day × 7 days (planning assumption)</text>
+          <line x1="78" y1="90" x2="78" y2="330" stroke="#d5deea"/>
+          <line x1="78" y1="330" x2="680" y2="330" stroke="#d5deea"/>
+          <g fill="#5d6b82" font-size="12">
+            <text x="70" y="334" text-anchor="end">0</text>
+            <text x="70" y="250" text-anchor="end">2,000</text>
+            <text x="70" y="198" text-anchor="end">4,000</text>
+            <text x="70" y="146" text-anchor="end">6,000</text>
+            <text x="70" y="94" text-anchor="end">8,000</text>
+          </g>
+          <text x="28" y="220" font-size="13" fill="#5d6b82" transform="rotate(-90 28 220)" text-anchor="middle">Orders</text>
+          <line x1="78" y1="140.9" x2="660" y2="140.9" stroke="#152033" stroke-dasharray="5 4"/>
+          <rect x="175" y="140.9" width="120" height="189.1" fill="#8b97ab"/>
+          <rect x="430" y="102.2" width="120" height="227.8" fill="#c2410c"/>
+          <text x="235" y="132" text-anchor="middle" font-size="16" font-weight="700" fill="#152033">7,091</text>
+          <text x="490" y="94" text-anchor="middle" font-size="16" font-weight="700" fill="#152033">8,541</text>
+          <text x="235" y="356" text-anchor="middle" font-size="14" fill="#152033">7-day capacity</text>
+          <text x="490" y="356" text-anchor="middle" font-size="14" fill="#152033">Historical orders</text>
+          <line x1="564" y1="102.2" x2="564" y2="140.9" stroke="#c2410c" stroke-width="2"/>
+          <polyline points="558,110 564,102 570,110" fill="none" stroke="#c2410c" stroke-width="2"/>
+          <polyline points="558,133 564,141 570,133" fill="none" stroke="#c2410c" stroke-width="2"/>
+          <text x="400" y="78" font-size="14" font-weight="700" fill="#c2410c">1,450 orders over capacity</text>
+        </svg>
+        <figcaption>PLANT03: 8,541 historical orders versus 7,091 seven-day capacity.</figcaption>
+      </figure>
+
+      <h3>2. Most orders have no warehouse alternative</h3>
+      <p>7,562 orders have one eligible warehouse. 1,653 have alternatives. PLANT03 must handle 7,043 of them, leaving only 48 spare slots over seven days. A required warehouse can still leave the route and the day open.</p>
+      <figure class="figure">
+        <svg viewBox="0 0 720 420" role="img" aria-labelledby="chart5-title chart5-desc">
+          <title id="chart5-title">Most orders cannot change warehouse</title>
+          <desc id="chart5-desc">Of 9,215 orders, 7,043 can only use PLANT03, 519 have another single warehouse, 1,587 have two choices, and 66 have three choices.</desc>
+          <text x="36" y="36" font-size="22" font-weight="700" fill="#152033">Most orders cannot change warehouse</text>
+          <text x="36" y="60" font-size="14" fill="#5d6b82">9,215 orders · 82.06% have only one eligible warehouse</text>
+          <path d="M 180 230 L 180 100 A 130 130 0 1 1 50.52 218.34 Z" fill="#c2410c"/>
+          <path d="M 180 230 L 50.52 218.34 A 130 130 0 0 1 62.59 174.19 Z" fill="#8b97ab"/>
+          <path d="M 180 230 L 62.59 174.19 A 130 130 0 0 1 174.15 100.13 Z" fill="#16315f"/>
+          <path d="M 180 230 L 174.15 100.13 A 130 130 0 0 1 180 100 Z" fill="#f5c518"/>
+          <g font-size="15" fill="#152033">
+            <rect x="390" y="120" width="16" height="16" fill="#c2410c"/>
+            <text x="416" y="133">PLANT03 only · 7,043 orders · 76.43%</text>
+            <rect x="390" y="156" width="16" height="16" fill="#8b97ab"/>
+            <text x="416" y="169">Another single warehouse · 519 · 5.63%</text>
+            <rect x="390" y="192" width="16" height="16" fill="#16315f"/>
+            <text x="416" y="205">Two warehouse choices · 1,587 · 17.22%</text>
+            <rect x="390" y="228" width="16" height="16" fill="#f5c518"/>
+            <text x="416" y="241">Three warehouse choices · 66 · 0.72%</text>
+          </g>
+          <text x="36" y="390" font-size="14" fill="#5d6b82">A fixed warehouse can still leave shipping-route and day choices open.</text>
+        </svg>
+        <figcaption>Warehouse choices: PLANT03 only 7,043; another single warehouse 519; two choices 1,587; three choices 66.</figcaption>
+      </figure>
+
+      <h3>3. Reassignment reduces dependence</h3>
+      <p>1,611 orders changed warehouse. The chart shows net workload changes. PLANT03's load fell by 1,498 orders.</p>
+      <figure class="figure">
+        <svg viewBox="0 0 720 460" role="img" aria-labelledby="chart2-title chart2-desc">
+          <title id="chart2-title">1,611 orders moved to a different warehouse</title>
+          <desc id="chart2-desc">PLANT03 lost 1,498 orders. PLANT02 gained 686, PLANT04 gained 386, and smaller gains and losses appear at the other plants.</desc>
+          <text x="36" y="34" font-size="22" font-weight="700" fill="#152033">1,611 orders moved to a different warehouse</text>
+          <text x="36" y="56" font-size="14" fill="#5d6b82">Only warehouses whose workload changed are shown</text>
+          <text x="120" y="86" font-size="13" font-weight="700" fill="#c2410c">◀ Orders moved away</text>
+          <text x="430" y="86" font-size="13" font-weight="700" fill="#16315f">Orders gained ▶</text>
+          <line x1="360" y1="100" x2="360" y2="400" stroke="#d5deea"/>
+          <g font-size="13" fill="#152033">
+            <text x="120" y="122" text-anchor="end">PLANT02</text>
+            <rect x="360" y="108" width="103" height="18" fill="#16315f"/><text x="470" y="122">+686</text>
+            <text x="120" y="150" text-anchor="end">PLANT04</text>
+            <rect x="360" y="136" width="58" height="18" fill="#16315f"/><text x="426" y="150">+386</text>
+            <text x="120" y="178" text-anchor="end">PLANT10</text>
+            <rect x="360" y="164" width="27" height="18" fill="#16315f"/><text x="394" y="178">+183</text>
+            <text x="120" y="206" text-anchor="end">PLANT05</text>
+            <rect x="360" y="192" width="27" height="18" fill="#16315f"/><text x="394" y="206">+180</text>
+            <text x="120" y="234" text-anchor="end">PLANT07</text>
+            <rect x="360" y="220" width="15" height="18" fill="#16315f"/><text x="382" y="234">+102</text>
+            <text x="120" y="262" text-anchor="end">PLANT09</text>
+            <rect x="360" y="248" width="9" height="18" fill="#16315f"/><text x="376" y="262">+62</text>
+            <text x="120" y="290" text-anchor="end">PLANT13</text>
+            <rect x="360" y="276" width="3" height="18" fill="#16315f"/><text x="370" y="290">+12</text>
+            <text x="120" y="318" text-anchor="end">PLANT12</text>
+            <rect x="357" y="304" width="3" height="18" fill="#c2410c"/><text x="350" y="318" text-anchor="end">−12</text>
+            <text x="120" y="346" text-anchor="end">PLANT08</text>
+            <rect x="345" y="332" width="15" height="18" fill="#c2410c"/><text x="338" y="346" text-anchor="end">−101</text>
+            <text x="120" y="374" text-anchor="end">PLANT03</text>
+            <rect x="135" y="360" width="225" height="18" fill="#c2410c"/>
+            <text x="148" y="374" fill="#f7f4ec" font-weight="700">−1,498</text>
+          </g>
+          <text x="360" y="430" text-anchor="middle" font-size="13" fill="#5d6b82">Net change in orders (plan − historical)</text>
+        </svg>
+        <figcaption>Net order changes by warehouse after reassignment.</figcaption>
+      </figure>
+
+      <h3>4. Warehouse costs fall</h3>
+      <p>Both assignments use the same current warehouse rates. Incomplete historical freight matches prevent a full total-cost savings comparison.</p>
+      <figure class="figure">
+        <svg viewBox="0 0 720 300" role="img" aria-labelledby="chart3-title chart3-desc">
+          <title id="chart3-title">Warehouse cost: about $142,000 lower</title>
+          <desc id="chart3-desc">Historical routing costs $15,633,222. The optimized plan costs $15,491,530.</desc>
+          <text x="36" y="36" font-size="22" font-weight="700" fill="#152033">Warehouse cost: about $142,000 lower</text>
+          <text x="36" y="60" font-size="14" fill="#5d6b82">0.9% reduction · freight excluded (historical rates unavailable)</text>
+          <text x="36" y="120" font-size="14" fill="#152033">Historical routing</text>
+          <rect x="190" y="102" width="430" height="28" fill="#8b97ab"/>
+          <text x="628" y="122" font-size="14" font-weight="700" fill="#152033">$15,633,222</text>
+          <text x="36" y="190" font-size="14" fill="#152033">Optimized plan</text>
+          <rect x="190" y="172" width="426" height="28" fill="#16315f"/>
+          <text x="624" y="192" font-size="14" font-weight="700" fill="#152033">$15,491,530</text>
+          <line x1="190" y1="230" x2="640" y2="230" stroke="#d5deea"/>
+          <g fill="#5d6b82" font-size="12">
+            <text x="190" y="250">$0M</text>
+            <text x="280" y="250">$4M</text>
+            <text x="370" y="250">$8M</text>
+            <text x="455" y="250">$12M</text>
+            <text x="545" y="250">$16M</text>
+            <text x="630" y="250">$20M</text>
+          </g>
+          <text x="400" y="280" text-anchor="middle" font-size="13" fill="#5d6b82">Warehouse cost (unit quantity × cost per unit)</text>
+        </svg>
+        <figcaption>Historical assignment $15,633,221.91 versus the new plan $15,491,530.16.</figcaption>
+      </figure>
+
+      <h3>5. Freight is a small share under this model</h3>
+      <p>Freight is 0.14% of scenario cost. The slice is drawn at its true size and has not been enlarged.</p>
+      <figure class="figure">
+        <svg viewBox="0 0 720 420" role="img" aria-labelledby="chart4-title chart4-desc">
+          <title id="chart4-title">Warehouse cost dominates this modeled plan</title>
+          <desc id="chart4-desc">Warehouse cost is $15,491,530.16, or 99.86 percent. Freight is $22,065.48, or 0.14 percent. Total scenario cost is $15,513,595.64.</desc>
+          <text x="36" y="36" font-size="22" font-weight="700" fill="#152033">Warehouse cost dominates this modeled plan</text>
+          <text x="36" y="60" font-size="14" fill="#5d6b82">Total scenario cost: $15,513,595.64</text>
+          <path d="M 190 230 L 190 100 A 130 130 0 1 1 188.84 100.01 Z" fill="#16315f"/>
+          <path d="M 190 230 L 188.84 100.01 A 130 130 0 0 1 190 100 Z" fill="#f5c518"/>
+          <g font-size="15" fill="#152033">
+            <rect x="400" y="160" width="16" height="16" fill="#16315f"/>
+            <text x="426" y="164">Warehouse · 99.86%</text>
+            <text x="426" y="186">$15,491,530.16</text>
+            <rect x="400" y="210" width="16" height="16" fill="#f5c518"/>
+            <text x="426" y="214">Freight · 0.14%</text>
+            <text x="426" y="236">$22,065.48</text>
+          </g>
+          <text x="400" y="300" font-size="14" fill="#5d6b82">Freight is a very thin slice;</text>
+          <text x="400" y="320" font-size="14" fill="#5d6b82">its size has not been enlarged.</text>
+          <text x="36" y="390" font-size="14" fill="#5d6b82">Scenario pricing only; historical freight savings could not be established.</text>
+        </svg>
+        <figcaption>Cost split: warehouse 99.86% and freight 0.14%.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>Decision trees</h2>
+      <p>These show the decision rules and the reasoning. They are not separate experiments for every branch.</p>
+
+      <h3>Choose the approach</h3>
+      <div class="flow">
+        <div class="step">Validate examples in Excel</div>
+        <div class="step">Does historical routing fit seven-day capacity?</div>
+        <div class="step split">
+          <div class="no">No. PLANT03 exceeds capacity, so build a feasible reassignment.</div>
+          <div class="yes">Yes. Keep the baseline and assess cost.</div>
+        </div>
+        <div class="step">If reassigning: 1,653 orders may change warehouse. 7,562 must keep the required warehouse. Route and day choices stay open either way.</div>
+        <div class="step">Use Python and MILP.</div>
+        <div class="step split">
+          <div class="no">No complete historical freight baseline in this dataset. Compare warehouse cost, and report plan freight separately.</div>
+          <div class="yes">If a complete freight baseline existed, compare total cost on the same basis.</div>
+        </div>
+      </div>
+      <p class="note"><strong>Why MILP?</strong> Orders stay whole, while warehouse capacity and shared freight pricing connect their decisions.</p>
+
+      <h3>Solve and validate</h3>
+      <div class="flow">
+        <div class="step">The original search ran over six hours and returned no plan.</div>
+        <div class="step">Simplify pricing and remove unnecessary options. Build a starting schedule.</div>
+        <div class="step">Check coverage, eligibility, capacity, and weight. Repair anything that fails, then check again.</div>
+        <div class="step">Save the starting plan and search again with choices open.</div>
+        <div class="step split">
+          <div class="yes">If the requested cost gap is reached, save the best plan and report the gap.</div>
+          <div class="no">If time runs out first, keep the best checked plan and report that the search is unfinished.</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Obstacles and decisions</h2>
+      <table>
+        <thead>
+          <tr><th>Obstacle</th><th>Response</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>No customer feedback; unclear timing fields</td><td>Tested network feasibility without claiming service failures.</td></tr>
+          <tr><td>Spare capacity and independent cheapest choices were misleading</td><td>Counted orders, enforced eligibility, and shared capacity.</td></tr>
+          <tr><td>Million-row Excel joins; missing Column12; connection-only sheets</td><td>Fixed query steps, loaded summaries, and automated the checks in Python.</td></tr>
+          <tr><td>Rounded IDs, missing pip, read-only arrays</td><td>Preserved original IDs and corrected the setup.</td></tr>
+          <tr><td>Historical carrier and weight-band mismatches</td><td>Avoided forced matches. Limited the savings comparison to warehouse costs.</td></tr>
+          <tr><td>Actual shipping groups unknown</td><td>Modeled compatible orders that share a route and a day.</td></tr>
+          <tr><td>Six-hour search returned no plan</td><td>Simplified equivalent calculations and supplied a checked starting plan.</td></tr>
+          <tr><td>Grouping could restrict choices</td><td>Kept all orders and allowed final warehouse, route, and day changes.</td></tr>
+          <tr><td>Other studies reported different totals</td><td>Compared scope and pricing rules, and kept one run's results together.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Assumptions and limits</h2>
+      <p>Seven days is a planning scenario. All orders are available at the start. Processing and dispatch share a day. No delivery deadlines or delay penalties are modeled.</p>
+      <p>Whole orders must satisfy product, customer, port, service, and daily order-capacity rules. Warehouse cost is quantity times the unit rate, not a daily holding cost.</p>
+      <p>Compatible orders on the same route and day share a weight band. AIR charges apply per order. GROUND charges apply per group. Customer-arranged freight costs the company nothing in freight, and the warehouse cost still applies.</p>
+      <p>The 48-slot PLANT03 cushion is arithmetic. A capacity-loss stress test has not been completed.</p>
+    </section>
+
+    <section>
+      <h2>Project files and running</h2>
+      <table>
+        <thead>
+          <tr><th>Files</th><th>Purpose</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>README.md, images/</td><td>Project story, decision trees, and five charts</td></tr>
+          <tr><td>Supply chain logisitcs problem.xlsx</td><td>Original seven-table data</td></tr>
+          <tr><td>supply chain analysis.xlsx</td><td>Excel and Power Query workflow</td></tr>
+          <tr><td>supply chain analysis.py</td><td>Automated checks, model, and exports</td></tr>
+          <tr><td>requirements.txt, .gitignore</td><td>Dependencies and excluded working files</td></tr>
+          <tr><td>starting_plan_orders.csv, best_plan_orders.csv</td><td>Initial and retained order assignments</td></tr>
+          <tr><td>starting_plan_daily_capacity.csv, best_plan_daily_capacity.csv</td><td>Daily warehouse workloads</td></tr>
+          <tr><td>starting_plan_freight_groups.csv, best_plan_freight_groups.csv</td><td>Group weights, bands, and freight charges</td></tr>
+          <tr><td>starting_plan_cost.json, best_plan_cost.json</td><td>Cost totals</td></tr>
+          <tr><td>solve_summary.json, solver.log</td><td>Settings, status, runtime, bound, and gap</td></tr>
+        </tbody>
+      </table>
+      <p>Keep the script beside the original workbook.</p>
+      <pre>python -m pip install -r requirements.txt
+python "supply chain analysis.py"</pre>
+      <p>Each run creates a timestamped folder under shipping_results/. Keep its ten outputs together. The final search uses a 300-second budget and a 1% gap target.</p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>Jainam Gala</span>
+      <a href="../../index.html#work">Selected work</a>
+    </div>
+  </footer>
+</body>
+</html>
