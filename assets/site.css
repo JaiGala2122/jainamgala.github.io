@@ -542,12 +542,21 @@ section { scroll-margin-top: calc(var(--header) + 1rem); }
   border-bottom: 0;
 }
 
-#contact .index-label,
-#contact .email-link { color: var(--amber); }
+#contact .index-label { color: var(--amber); }
 
 #contact h2 { color: var(--cream); }
 
-#contact .email-link:hover { color: #ffe07a; }
+#contact .button-primary {
+  margin-top: 1.25rem;
+  color: var(--forest);
+  text-decoration: none;
+}
+
+#contact .button-primary:hover {
+  color: var(--forest);
+  background: #ffe07a;
+  text-decoration: none;
+}
 
 #contact .contact-links a { color: var(--cream); }
 
