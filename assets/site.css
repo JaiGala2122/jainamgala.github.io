@@ -504,11 +504,10 @@ section { scroll-margin-top: calc(var(--header) + 1rem); }
   display: inline-block;
   margin: 0.4rem 0 0;
   color: var(--ink);
-  font-family: var(--serif);
-  font-size: clamp(1.8rem, 4vw, 3rem);
-  font-weight: 560;
-  letter-spacing: -0.035em;
-  line-height: 1.1;
+  font-family: var(--sans);
+  font-size: 1.15rem;
+  font-weight: 400;
+  line-height: 1.4;
   text-decoration: none;
   overflow-wrap: anywhere;
 }
