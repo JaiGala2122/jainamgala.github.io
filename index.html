@@ -559,12 +559,21 @@ section { scroll-margin-top: calc(var(--header) + 1rem); }
   border-bottom: 0;
 }
 
-#contact .index-label,
-#contact .email-link { color: var(--amber); }
+#contact .index-label { color: var(--amber); }
 
 #contact h2 { color: var(--cream); }
 
-#contact .email-link:hover { color: #ffe07a; }
+#contact .button-primary {
+  margin-top: 1.25rem;
+  color: var(--forest);
+  text-decoration: none;
+}
+
+#contact .button-primary:hover {
+  color: var(--forest);
+  background: #ffe07a;
+  text-decoration: none;
+}
 
 #contact .contact-links a { color: var(--cream); }
 
@@ -1057,7 +1066,7 @@ section { scroll-margin-top: calc(var(--header) + 1rem); }
         <div>
           <p class="index-label">05 — Contact</p>
           <h2 id="contact-heading">If the seat is supply chain, demand planning, or operations, send it.</h2>
-          <a class="email-link" href="mailto:galajainam21@gmail.com">galajainam21@gmail.com</a>
+          <a class="button button-primary" href="mailto:galajainam21@gmail.com?subject=Supply%20chain%20role">Email me</a>
           <div class="contact-links">
             <a href="https://www.linkedin.com/in/jainamgala21/" rel="me" target="_blank">LinkedIn</a>
             <a href="https://github.com/JaiGala2122" rel="me" target="_blank">GitHub</a>
