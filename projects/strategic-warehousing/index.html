@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Jainam Gala's supply chain portfolio case: Excel validation, Python automation and capacity-aware planning for 9,215 orders.">
+<title>Strategic Warehousing and Shipping | Jainam Gala</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:'Segoe UI',Tahoma,sans-serif;line-height:1.7;color:#25304a;background:#f6f7fb}a{color:#4a45ab}a:focus-visible{outline:3px solid #e7a627;outline-offset:4px}.nav{max-width:1080px;margin:auto;padding:20px 24px}.hero{background:linear-gradient(135deg,#667eea,#764ba2);color:white;padding:64px 24px}.hero-inner,main{max-width:1032px;margin:auto}.eyebrow{text-transform:uppercase;font-size:.8rem;letter-spacing:.14em;font-weight:700}h1{font-size:clamp(2.1rem,5vw,3.4rem);line-height:1.15;max-width:800px;margin:18px 0}h2{font-size:1.7rem;line-height:1.3;margin:0 0 20px}h3{font-size:1.1rem;margin:0 0 10px}.hero p{max-width:750px;font-size:1.1rem}.tags{display:flex;gap:9px;flex-wrap:wrap;margin-top:24px}.tags span{padding:5px 13px;border:1px solid #ffffff80;border-radius:20px;font-size:.85rem}main{padding:36px 24px 60px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:34px}.metric,section{background:white;border:1px solid #e3e5ee;border-radius:14px;padding:28px}.metric strong{display:block;font-size:2rem;color:#514caa;line-height:1.3}.metric span{font-size:.9rem}section{margin-bottom:24px}p{margin:0 0 16px}p:last-child{margin-bottom:0}.two{display:grid;grid-template-columns:1fr 1fr;gap:24px}.muted{color:#596278;font-size:.9rem}.bar-row{margin:22px 0}.bar-label{display:flex;justify-content:space-between;gap:15px;font-size:.9rem;margin-bottom:7px}.track{height:18px;background:#f0f1f7;border-radius:4px;overflow:hidden}.fill{height:100%;background:#7164cb}.fill.gray{background:#9da5b5}.fill.green{background:#268b79}.note{border-left:4px solid #7164cb;background:#f5f3fc;padding:16px 18px;margin-top:20px}.steps{padding-left:23px;margin:0}.steps li{padding:0 0 18px 8px}.steps li:last-child{padding-bottom:0}.steps strong{display:block}.table-wrap{overflow-x:auto}table{border-collapse:collapse;width:100%;font-size:.95rem}th,td{padding:12px 8px;text-align:left;border-bottom:1px solid #e6e8ef}th{background:#f7f7fc}td:last-child{text-align:right;white-space:nowrap}details{border-top:1px solid #e6e8ef;padding:16px 0}summary{cursor:pointer;font-weight:600}details p{padding-top:12px}.footer{text-align:center;padding:24px;font-size:.9rem;color:#596278}ul{padding-left:22px}@media(max-width:650px){.metrics,.two{grid-template-columns:1fr}.hero{padding:40px 24px}.metric,section{padding:22px}main{padding:24px 16px}.bar-label{font-size:.82rem}}
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="Project navigation"><a href="../../index.html#projects">← Back to portfolio</a></nav>
+<header class="hero"><div class="hero-inner">
+<div class="eyebrow">Supply chain planning · Portfolio case study</div>
+<h1>Strategic Warehousing and Shipping</h1>
+<p>Can the current warehouse network handle 9,215 orders, and what would a cheaper workable assignment look like?</p>
+<div class="tags"><span>Excel &amp; Power Query</span><span>Python</span><span>MILP / HiGHS</span><span>Seven-day scenario</span></div>
+</div></header>
+<main>
+<div class="metrics" aria-label="Key results">
+<div class="metric"><strong>9,215</strong><span>Orders assigned within daily capacity</span></div>
+<div class="metric"><strong>$141,692</strong><span>Modeled warehouse-cost reduction</span></div>
+<div class="metric"><strong>0.0283%</strong><span>Gap to the model's cost lower bound</span></div>
+</div>
+<section>
+<h2>The problem I found</h2>
+<p>I started by checking the network before trying to optimize it. The data describes historical orders alongside current warehouse and shipping restrictions. PLANT03 handled 8,541 historical orders, but its current capacity is only 7,091 orders over seven days.</p>
+<p>Reassignment helps, but eligibility rules limit the choices: 7,043 orders must still use PLANT03. This leaves just 48 slots at that plant across the seven-day scenario.</p>
+<div class="two">
+<div role="img" aria-label="PLANT03 historical demand 8,541 orders, seven-day capacity 7,091, unavoidable demand 7,043. Bars share a zero baseline.">
+<h3>PLANT03: where capacity gets tight</h3>
+<div class="bar-row"><div class="bar-label"><span>Historical orders</span><strong>8,541</strong></div><div class="track"><div class="fill gray" style="width:100%"></div></div></div>
+<div class="bar-row"><div class="bar-label"><span>Seven-day capacity</span><strong>7,091</strong></div><div class="track"><div class="fill" style="width:83.02%"></div></div></div>
+<div class="bar-row"><div class="bar-label"><span>Orders with no alternative</span><strong>7,043</strong></div><div class="track"><div class="fill green" style="width:82.46%"></div></div></div>
+</div>
+<div><h3>What that means</h3><p>Unused capacity elsewhere cannot solve the bottleneck unless those warehouses can supply the product, serve the customer and use a valid shipping route.</p><p>Only 1,653 orders have more than one eligible warehouse. Orders with a required warehouse can still have different route and shipping-day choices.</p><p class="muted">This is a planning test under current constraints, not evidence that historical orders were late.</p></div>
+</div>
+</section>
+<section>
+<h2>From Excel checks to Python automation</h2>
+<ol class="steps">
+<li><strong>Check the rules on an example.</strong>I used Excel and Power Query to join product support, customer restrictions and plant-to-port links. For product 1689547 in the PLANT03 example, the checks found 192 eligible orders at PLANT03, 89 at PLANT02 and 9 at PLANT10.</li>
+<li><strong>Repeat the workflow for every order.</strong>Python reproduced the Excel findings and applied the same checks to all 9,215 orders. Capacity was measured in orders, not product units.</li>
+<li><strong>Choose warehouses, routes and days together.</strong>I used mixed-integer linear programming (MILP) because orders stay whole, warehouses share daily capacity, and compatible orders can share freight pricing groups.</li>
+<li><strong>Make the search practical.</strong>The first formulation ran for over six hours without returning a complete plan. I removed impossible or always-worse options, calculated fixed prices once and supplied a checked starting schedule. The final search could still change warehouses, routes and days.</li>
+<li><strong>Check the saved result.</strong>Every order was assigned once. Product, customer, port, service, weight-band and daily capacity checks passed, and the exported costs reconciled.</li>
+</ol>
+</section>
+<section>
+<h2>The saved result</h2>
+<div class="table-wrap"><table>
+<thead><tr><th scope="col">Measure</th><th scope="col">Result</th></tr></thead>
+<tbody>
+<tr><td>Historical assignment: warehouse cost at current rates</td><td>$15,633,221.91</td></tr>
+<tr><td>New plan: warehouse cost</td><td>$15,491,530.16</td></tr>
+<tr><td>Warehouse-cost reduction</td><td>$141,691.76 · 0.9%</td></tr>
+<tr><td>Plan freight cost</td><td>$22,065.48</td></tr>
+<tr><td>Total plan cost</td><td>$15,513,595.64</td></tr>
+<tr><td>Orders moved to another warehouse</td><td>1,611</td></tr>
+<tr><td>Remaining possible improvement under the model</td><td>$4,394.34 · 0.0283%</td></tr>
+<tr><td>Final solver time</td><td>3.66 seconds</td></tr>
+</tbody></table></div>
+<div class="note"><strong>A feasible plan with a small remaining gap.</strong> The solver met the requested 1% tolerance and retained the starting plan. Exact optimality was not proved. The 3.66 seconds measures the final solver run, not the whole analysis.</div>
+</section>
+<section>
+<h2>Obstacles that changed the approach</h2>
+<details open><summary>Missing historical freight matches</summary><p>Historical carriers and weight bands did not always match the current rate card. I could compare warehouse costs using the same rates, but could not establish a complete historical freight baseline. The project therefore reports scenario freight separately and does not claim total historical shipping savings.</p></details>
+<details><summary>Excel joins became too large to review</summary><p>Joining freight bands produced about a million rows. I kept Excel for examples and summaries, then used Python to repeat the workflow across the full dataset. I also repaired a missing-column query step and preserved the original order IDs.</p></details>
+<details><summary>A large model did not return a plan</summary><p>More than six hours of searching produced a lower bound but no complete assignment. A validated starting schedule and a smaller equivalent pricing formulation made the final search practical without permanently fixing shipping days or reducing the order sample.</p></details>
+<details><summary>Other projects reported different totals</summary><p>I checked differences in order coverage, freight pricing and capacity assumptions. A lower published number is not directly comparable unless it solves the same problem under the same rules.</p></details>
+</section>
+<section>
+<h2>Scope and assumptions</h2>
+<ul>
+<li>This is a public-data portfolio case, not a client engagement or evidence of customer complaints.</li>
+<li>All orders are available at the start of a seven-day scenario. Processing and dispatch use the same assigned day; delivery deadlines and delay penalties are not modeled.</li>
+<li>Warehouse cost is quantity multiplied by unit cost, rather than a daily holding charge.</li>
+<li>Compatible orders on the same route and day share a freight weight band. AIR pricing applies per order; GROUND pricing applies to the group. Customer-arranged freight has zero company freight cost.</li>
+<li>The 48 spare PLANT03 slots show limited capacity headroom. A capacity-loss stress test has not been completed.</li>
+</ul>
+<p class="muted">Source: <a href="https://brunel.figshare.com/articles/dataset/Supply_Chain_Logistics_Problem_Dataset/7558679">Brunel Supply Chain Logistics Problem Dataset</a>. Results shown are from one saved and checked run.</p>
+</section>
+</main>
+<footer class="footer">Jainam Gala · <a href="../../index.html#projects">More projects</a></footer>
+</body>
+</html>
