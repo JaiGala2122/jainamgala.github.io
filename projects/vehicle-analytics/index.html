@@ -1,242 +1,129 @@
+Replace the whole `projects/vehicle-analytics/index.html` file with this.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehicle Data Warehouse - SQL Project | Jainam Gala</title>
+    <title>Inventory and Sales Analytics | Jainam Gala</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --ink: #152033;
+            --navy: #0e1c3f;
+            --navy-2: #16315f;
+            --gold: #f5c518;
+            --copper: #c2410c;
+            --line: #d5deea;
+            --paper: #f4f7fb;
+            --muted: #52627a;
         }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f8f9fa;
+            font-family: "Public Sans", "Segoe UI", sans-serif;
+            line-height: 1.65;
+            color: var(--ink);
+            background: var(--paper);
         }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
+        .sitebar {
+            position: sticky; top: 0; z-index: 20;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 7vw; background: rgba(244,247,251,.94);
+            border-bottom: 1px solid var(--line); backdrop-filter: blur(10px);
         }
-
-        /* Header */
+        .sitebar-mark { color: var(--navy); font-weight: 700; text-decoration: none; letter-spacing: .01em; }
+        .sitebar nav { display: flex; gap: 22px; }
+        .sitebar nav a { color: var(--navy); text-decoration: none; font-size: .92rem; font-weight: 600; }
+        .sitebar nav a:hover { color: var(--copper); }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
         .project-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 60px 20px;
-            text-align: center;
-            margin-bottom: 40px;
+            background:
+                radial-gradient(circle at 88% 12%, rgba(245,197,24,.22), transparent 28%),
+                linear-gradient(160deg, var(--navy-2), var(--navy) 58%);
+            color: white; padding: 72px 20px 56px; margin-bottom: 28px;
         }
-
         .project-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-family: Fraunces, Georgia, serif;
+            font-size: clamp(2.2rem, 5vw, 3.4rem);
+            font-weight: 560; letter-spacing: -.03em; line-height: 1.05; margin-bottom: 12px;
         }
-
-        .project-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        .metadata {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
+        .project-header p { font-size: 1.12rem; max-width: 640px; color: #d7e0ee; }
+        .metadata { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
         .metadata span {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,.28);
+            padding: 6px 12px; border-radius: 999px; font-size: .82rem; letter-spacing: .04em;
         }
-
-        /* Content Sections */
         .section {
-            background: white;
-            padding: 40px;
-            margin-bottom: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: white; padding: 36px; margin-bottom: 22px;
+            border: 1px solid var(--line);
         }
-
         .section h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-            border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
+            font-family: Fraunces, Georgia, serif;
+            color: var(--navy); margin-bottom: 16px; font-size: 1.7rem; font-weight: 560;
+            border-bottom: 2px solid var(--navy); padding-bottom: 8px;
         }
-
-        .section h3 {
-            color: #555;
-            margin-top: 25px;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-
-        /* Stats Grid */
+        .section h3 { color: var(--navy); margin-top: 26px; margin-bottom: 10px; font-size: 1.08rem; }
         .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px; margin: 24px 0;
         }
-
-        .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            display: block;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin-top: 5px;
-        }
-
-        /* Lists */
-        ul, ol {
-            margin-left: 20px;
-            margin-top: 15px;
-        }
-
-        li {
-            margin-bottom: 10px;
-            line-height: 1.8;
-        }
-
-        /* SQL Code blocks */
+        .stat-card { background: var(--navy); color: white; padding: 22px; text-align: left; }
+        .stat-number { font-family: Fraunces, Georgia, serif; font-size: 2.3rem; display: block; letter-spacing: -.03em; }
+        .stat-label { font-size: .82rem; color: #d7e0ee; margin-top: 4px; display: block; }
+        ul, ol { margin-left: 20px; margin-top: 12px; }
+        li { margin-bottom: 8px; }
         .sql-block {
-            background: #282c34;
-            color: #abb2bf;
-            border-left: 4px solid #667eea;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 4px;
-            font-family: 'Courier New', Consolas, Monaco, monospace;
-            font-size: 0.85rem;
-            overflow-x: auto;
-            line-height: 1.5;
+            background: #12203a; color: #d7e0ee; border-left: 4px solid var(--gold);
+            padding: 18px; margin: 18px 0; font-family: ui-monospace, Consolas, monospace;
+            font-size: .82rem; overflow-x: auto; line-height: 1.55;
         }
-
-        .sql-keyword {
-            color: #c678dd;
-            font-weight: bold;
-        }
-
-        .sql-comment {
-            color: #5c6370;
-            font-style: italic;
-        }
-
-        /* Key findings */
+        .sql-keyword { color: var(--gold); font-weight: 700; }
+        .sql-comment { color: #8b97ab; font-style: italic; }
         .key-finding {
-            background: #e3f2fd;
-            border-left: 4px solid #2196f3;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 4px;
+            background: #fff6e8; border-left: 4px solid var(--gold);
+            padding: 16px 18px; margin: 18px 0;
         }
-
-        .key-finding strong {
-            color: #1565c0;
-        }
-
-        /* Schema box */
-        .schema-box {
-            background: #f8f9fa;
-            border: 2px solid #667eea;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-        }
-
-        .table-def {
-            background: white;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border-left: 4px solid #667eea;
-        }
-
-        /* Buttons */
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 25px;
-            flex-wrap: wrap;
-        }
-
+        .key-finding strong { color: #9a3412; }
+        .schema-box { background: #f7f4ec; border: 1px solid var(--navy); padding: 16px; margin: 18px 0; }
+        .table-def { background: white; padding: 14px; margin: 10px 0; border-left: 4px solid var(--navy-2); font-family: ui-monospace, Consolas, monospace; font-size: .88rem; }
+        .btn-group { display: flex; gap: 12px; justify-content: flex-start; margin-top: 18px; flex-wrap: wrap; }
         .btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background: white;
-            color: #667eea;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-block; padding: 12px 18px; background: var(--gold); color: var(--navy);
+            text-decoration: none; font-weight: 700; border: 0; cursor: pointer;
         }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        .btn:hover { background: #ffd84d; }
+        .back-link { display: inline-block; margin-bottom: 16px; color: var(--copper); text-decoration: none; font-weight: 700; }
+        .back-link:hover { text-decoration: underline; }
+        input, textarea {
+            width: 100%; padding: 12px; border: 1px solid var(--line); font: inherit; color: var(--ink); background: white;
         }
-
-        /* Back button */
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
-        /* Responsive */
+        input:focus, textarea:focus { outline: 2px solid var(--gold); border-color: transparent; }
+        label { display: block; margin-bottom: 8px; font-weight: 700; color: var(--navy); }
         @media (max-width: 768px) {
-            .project-header h1 {
-                font-size: 2rem;
-            }
-            
-            .section {
-                padding: 25px;
-            }
-
-            .metadata {
-                flex-direction: column;
-                gap: 10px;
-            }
+            .section { padding: 22px; }
+            .sitebar { padding: 12px 18px; }
+            .sitebar nav { gap: 14px; }
         }
     </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+<header class="sitebar">
+  <a class="sitebar-mark" href="../../index.html">Jainam Gala</a>
+  <nav aria-label="Primary">
+    <a href="../../index.html#experience">Experience</a>
+    <a href="../../index.html#work">Work</a>
+    <a href="../../index.html#contact">Contact</a>
+  </nav>
+</header>
+
     <div class="project-header">
         <div class="container">
-            <h1>Vehicle Data Warehouse</h1>
-            <p>Advanced SQL analytics on integrated vehicle sales, maintenance, and telemetry data</p>
+            <p style="letter-spacing:.14em;text-transform:uppercase;font-size:.78rem;color:#f5c518;font-weight:700;margin-bottom:10px;">SQL case study</p>
+            <h1>Inventory and Sales Analytics</h1>
+            <p>A vehicle data warehouse. MySQL schema and advanced queries across sales listings, maintenance, and telemetry.</p>
             <div class="metadata">
                 <span>MySQL</span>
                 <span>Complex Queries</span>
@@ -248,11 +135,10 @@
     <div class="container">
         <a href="../../index.html" class="back-link">← Back to Portfolio</a>
 
-        <!-- Executive Summary -->
         <div class="section">
             <h2>Project Overview</h2>
             <p><strong>Objective:</strong> Design and implement a MySQL data warehouse that consolidates vehicle specifications, used car listings, maintenance records, and telemetry data - then write advanced SQL queries to extract business insights.</p>
-            
+
             <div class="stats-grid">
                 <div class="stat-card">
                     <span class="stat-number">1M+</span>
@@ -269,10 +155,9 @@
             </div>
         </div>
 
-        <!-- Schema Design -->
         <div class="section">
             <h2>Database Schema Design</h2>
-            
+
             <p>Implemented a <strong>star schema</strong> optimized for analytical queries, with one dimension table and three fact tables:</p>
 
             <div class="schema-box">
@@ -332,12 +217,9 @@
 
             <h3>Entity Relationship Diagram</h3>
             <div style="background: white; border: 1px solid #ddd; padding: 50px 20px; margin: 20px 0; overflow-x: auto;">
-                
                 <div style="position: relative; min-width: 800px; height: 500px; margin: 0 auto;">
-                    
-                    <!-- Dimension Table (Center Top) -->
-                    <div style="position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: 220px; border: 2px solid #666; background: white;">
-                        <div style="background: #d3d3d3; padding: 8px; text-align: center; font-weight: bold; border-bottom: 2px solid #666;">
+                    <div style="position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: 220px; border: 2px solid #0e1c3f; background: white;">
+                        <div style="background: #16315f; color: white; padding: 8px; text-align: center; font-weight: bold; border-bottom: 2px solid #0e1c3f;">
                             dim_vehicle
                         </div>
                         <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
@@ -374,42 +256,26 @@
                         </table>
                     </div>
 
-                    <!-- Vertical Line from dimension -->
-                    <div style="position: absolute; left: 50%; top: 185px; width: 2px; height: 60px; background: #666;"></div>
-                    
-                    <!-- Single bar at dimension end (ONE side) -->
-                    <div style="position: absolute; left: calc(50% - 8px); top: 185px; width: 16px; height: 2px; background: #666;"></div>
-                    
-                    <!-- Horizontal split line -->
-                    <div style="position: absolute; left: 50%; top: 245px; width: 80px; height: 2px; background: #666; transform: translateX(-50%);"></div>
-                    
-                    <!-- Horizontal lines to facts -->
-                    <div style="position: absolute; left: 15%; top: 245px; width: 35%; height: 2px; background: #666;"></div>
-                    <div style="position: absolute; left: 85%; top: 245px; width: 15%; height: 2px; background: #666; transform: translateX(-100%);"></div>
-                    
-                    <!-- Vertical lines down to fact tables -->
-                    <div style="position: absolute; left: 15%; top: 245px; width: 2px; height: 40px; background: #666;"></div>
-                    <div style="position: absolute; left: 50%; top: 245px; width: 2px; height: 40px; background: #666;"></div>
-                    <div style="position: absolute; left: 85%; top: 245px; width: 2px; height: 40px; background: #666;"></div>
+                    <div style="position: absolute; left: 50%; top: 185px; width: 2px; height: 60px; background: #0e1c3f;"></div>
+                    <div style="position: absolute; left: calc(50% - 8px); top: 185px; width: 16px; height: 2px; background: #0e1c3f;"></div>
+                    <div style="position: absolute; left: 50%; top: 245px; width: 80px; height: 2px; background: #0e1c3f; transform: translateX(-50%);"></div>
+                    <div style="position: absolute; left: 15%; top: 245px; width: 35%; height: 2px; background: #0e1c3f;"></div>
+                    <div style="position: absolute; left: 85%; top: 245px; width: 15%; height: 2px; background: #0e1c3f; transform: translateX(-100%);"></div>
+                    <div style="position: absolute; left: 15%; top: 245px; width: 2px; height: 40px; background: #0e1c3f;"></div>
+                    <div style="position: absolute; left: 50%; top: 245px; width: 2px; height: 40px; background: #0e1c3f;"></div>
+                    <div style="position: absolute; left: 85%; top: 245px; width: 2px; height: 40px; background: #0e1c3f;"></div>
+                    <div style="position: absolute; left: calc(15% - 6px); top: 285px; width: 12px; height: 2px; background: #0e1c3f;"></div>
+                    <div style="position: absolute; left: calc(15% - 8px); top: 283px; width: 2px; height: 8px; background: #0e1c3f; transform: rotate(-30deg); transform-origin: bottom;"></div>
+                    <div style="position: absolute; left: calc(15% + 6px); top: 283px; width: 2px; height: 8px; background: #0e1c3f; transform: rotate(30deg); transform-origin: bottom;"></div>
+                    <div style="position: absolute; left: calc(50% - 6px); top: 285px; width: 12px; height: 2px; background: #0e1c3f;"></div>
+                    <div style="position: absolute; left: calc(50% - 8px); top: 283px; width: 2px; height: 8px; background: #0e1c3f; transform: rotate(-30deg); transform-origin: bottom;"></div>
+                    <div style="position: absolute; left: calc(50% + 6px); top: 283px; width: 2px; height: 8px; background: #0e1c3f; transform: rotate(30deg); transform-origin: bottom;"></div>
+                    <div style="position: absolute; left: calc(85% - 6px); top: 285px; width: 12px; height: 2px; background: #0e1c3f;"></div>
+                    <div style="position: absolute; left: calc(85% - 8px); top: 283px; width: 2px; height: 8px; background: #0e1c3f; transform: rotate(-30deg); transform-origin: bottom;"></div>
+                    <div style="position: absolute; left: calc(85% + 6px); top: 283px; width: 2px; height: 8px; background: #0e1c3f; transform: rotate(30deg); transform-origin: bottom;"></div>
 
-                    <!-- Crow's foot notation (MANY side) - Left -->
-                    <div style="position: absolute; left: calc(15% - 6px); top: 285px; width: 12px; height: 2px; background: #666;"></div>
-                    <div style="position: absolute; left: calc(15% - 8px); top: 283px; width: 2px; height: 8px; background: #666; transform: rotate(-30deg); transform-origin: bottom;"></div>
-                    <div style="position: absolute; left: calc(15% + 6px); top: 283px; width: 2px; height: 8px; background: #666; transform: rotate(30deg); transform-origin: bottom;"></div>
-                    
-                    <!-- Crow's foot notation (MANY side) - Center -->
-                    <div style="position: absolute; left: calc(50% - 6px); top: 285px; width: 12px; height: 2px; background: #666;"></div>
-                    <div style="position: absolute; left: calc(50% - 8px); top: 283px; width: 2px; height: 8px; background: #666; transform: rotate(-30deg); transform-origin: bottom;"></div>
-                    <div style="position: absolute; left: calc(50% + 6px); top: 283px; width: 2px; height: 8px; background: #666; transform: rotate(30deg); transform-origin: bottom;"></div>
-                    
-                    <!-- Crow's foot notation (MANY side) - Right -->
-                    <div style="position: absolute; left: calc(85% - 6px); top: 285px; width: 12px; height: 2px; background: #666;"></div>
-                    <div style="position: absolute; left: calc(85% - 8px); top: 283px; width: 2px; height: 8px; background: #666; transform: rotate(-30deg); transform-origin: bottom;"></div>
-                    <div style="position: absolute; left: calc(85% + 6px); top: 283px; width: 2px; height: 8px; background: #666; transform: rotate(30deg); transform-origin: bottom;"></div>
-
-                    <!-- Fact Table 1: Sales (Left) -->
-                    <div style="position: absolute; left: 5%; top: 290px; width: 220px; border: 2px solid #666; background: white;">
-                        <div style="background: #d3d3d3; padding: 8px; text-align: center; font-weight: bold; border-bottom: 2px solid #666;">
+                    <div style="position: absolute; left: 5%; top: 290px; width: 220px; border: 2px solid #0e1c3f; background: white;">
+                        <div style="background: #16315f; color: white; padding: 8px; text-align: center; font-weight: bold; border-bottom: 2px solid #0e1c3f;">
                             fact_sales_listings
                         </div>
                         <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
@@ -423,32 +289,15 @@
                                 <td style="padding: 4px 8px;">vehicle_key</td>
                                 <td style="padding: 4px 8px; text-align: right;">INT</td>
                             </tr>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px;"></td>
-                                <td style="padding: 4px 8px;">price</td>
-                                <td style="padding: 4px 8px; text-align: right;">DECIMAL</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px;"></td>
-                                <td style="padding: 4px 8px;">mileage</td>
-                                <td style="padding: 4px 8px; text-align: right;">INT</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px;"></td>
-                                <td style="padding: 4px 8px;">state</td>
-                                <td style="padding: 4px 8px; text-align: right;">VARCHAR</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 4px 8px;"></td>
-                                <td style="padding: 4px 8px;">listed_at</td>
-                                <td style="padding: 4px 8px; text-align: right;">DATETIME</td>
-                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">price</td><td style="padding: 4px 8px; text-align: right;">DECIMAL</td></tr>
+                            <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">mileage</td><td style="padding: 4px 8px; text-align: right;">INT</td></tr>
+                            <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">state</td><td style="padding: 4px 8px; text-align: right;">VARCHAR</td></tr>
+                            <tr><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">listed_at</td><td style="padding: 4px 8px; text-align: right;">DATETIME</td></tr>
                         </table>
                     </div>
 
-                    <!-- Fact Table 2: Maintenance (Center) -->
-                    <div style="position: absolute; left: 50%; top: 290px; transform: translateX(-50%); width: 220px; border: 2px solid #666; background: white;">
-                        <div style="background: #d3d3d3; padding: 8px; text-align: center; font-weight: bold; border-bottom: 2px solid #666;">
+                    <div style="position: absolute; left: 50%; top: 290px; transform: translateX(-50%); width: 220px; border: 2px solid #0e1c3f; background: white;">
+                        <div style="background: #16315f; color: white; padding: 8px; text-align: center; font-weight: bold; border-bottom: 2px solid #0e1c3f;">
                             fact_maintenance
                         </div>
                         <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
@@ -462,32 +311,15 @@
                                 <td style="padding: 4px 8px;">vehicle_key</td>
                                 <td style="padding: 4px 8px; text-align: right;">INT</td>
                             </tr>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px;"></td>
-                                <td style="padding: 4px 8px;">component</td>
-                                <td style="padding: 4px 8px; text-align: right;">VARCHAR</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px;"></td>
-                                <td style="padding: 4px 8px;">dtc_code</td>
-                                <td style="padding: 4px 8px; text-align: right;">VARCHAR</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px;"></td>
-                                <td style="padding: 4px 8px;">cost</td>
-                                <td style="padding: 4px 8px; text-align: right;">DECIMAL</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 4px 8px;"></td>
-                                <td style="padding: 4px 8px;">event_date</td>
-                                <td style="padding: 4px 8px; text-align: right;">DATE</td>
-                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">component</td><td style="padding: 4px 8px; text-align: right;">VARCHAR</td></tr>
+                            <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">dtc_code</td><td style="padding: 4px 8px; text-align: right;">VARCHAR</td></tr>
+                            <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">cost</td><td style="padding: 4px 8px; text-align: right;">DECIMAL</td></tr>
+                            <tr><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">event_date</td><td style="padding: 4px 8px; text-align: right;">DATE</td></tr>
                         </table>
                     </div>
 
-                    <!-- Fact Table 3: Telematics (Right) -->
-                    <div style="position: absolute; right: 5%; top: 290px; width: 220px; border: 2px solid #666; background: white;">
-                        <div style="background: #d3d3d3; padding: 8px; text-align: center; font-weight: bold; border-bottom: 2px solid #666;">
+                    <div style="position: absolute; right: 5%; top: 290px; width: 220px; border: 2px solid #0e1c3f; background: white;">
+                        <div style="background: #16315f; color: white; padding: 8px; text-align: center; font-weight: bold; border-bottom: 2px solid #0e1c3f;">
                             fact_telematics
                         </div>
                         <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
@@ -501,40 +333,22 @@
                                 <td style="padding: 4px 8px;">vehicle_key</td>
                                 <td style="padding: 4px 8px; text-align: right;">INT</td>
                             </tr>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px;"></td>
-                                <td style="padding: 4px 8px;">ts</td>
-                                <td style="padding: 4px 8px; text-align: right;">DATETIME</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px;"></td>
-                                <td style="padding: 4px 8px;">speed</td>
-                                <td style="padding: 4px 8px; text-align: right;">DOUBLE</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px;"></td>
-                                <td style="padding: 4px 8px;">rpm</td>
-                                <td style="padding: 4px 8px; text-align: right;">DOUBLE</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 4px 8px;"></td>
-                                <td style="padding: 4px 8px;">energy_kwh</td>
-                                <td style="padding: 4px 8px; text-align: right;">DOUBLE</td>
-                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">ts</td><td style="padding: 4px 8px; text-align: right;">DATETIME</td></tr>
+                            <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">speed</td><td style="padding: 4px 8px; text-align: right;">DOUBLE</td></tr>
+                            <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">rpm</td><td style="padding: 4px 8px; text-align: right;">DOUBLE</td></tr>
+                            <tr><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">energy_kwh</td><td style="padding: 4px 8px; text-align: right;">DOUBLE</td></tr>
                         </table>
                     </div>
-
                 </div>
-
             </div>
 
             <h3>Sample Data Snippets</h3>
-            
+
             <p><strong>dim_vehicle table:</strong></p>
             <div style="overflow-x: auto; margin: 15px 0;">
                 <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; background: white;">
                     <thead>
-                        <tr style="background: #667eea; color: white;">
+                        <tr style="background: #16315f; color: white;">
                             <th style="padding: 10px; border: 1px solid #ddd;">vehicle_key</th>
                             <th style="padding: 10px; border: 1px solid #ddd;">make</th>
                             <th style="padding: 10px; border: 1px solid #ddd;">model</th>
@@ -552,7 +366,7 @@
                             <td style="padding: 10px; border: 1px solid #ddd;">2.5L I4</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">Gasoline</td>
                         </tr>
-                        <tr style="background: #f8f9fa;">
+                        <tr style="background: #f4f7fb;">
                             <td style="padding: 10px; border: 1px solid #ddd;">1002</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">Honda</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">Accord</td>
@@ -576,7 +390,7 @@
             <div style="overflow-x: auto; margin: 15px 0;">
                 <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; background: white;">
                     <thead>
-                        <tr style="background: #2196f3; color: white;">
+                        <tr style="background: #16315f; color: white;">
                             <th style="padding: 10px; border: 1px solid #ddd;">listing_id</th>
                             <th style="padding: 10px; border: 1px solid #ddd;">vehicle_key</th>
                             <th style="padding: 10px; border: 1px solid #ddd;">price</th>
@@ -594,7 +408,7 @@
                             <td style="padding: 10px; border: 1px solid #ddd;">CA</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">2024-01-15</td>
                         </tr>
-                        <tr style="background: #f8f9fa;">
+                        <tr style="background: #f4f7fb;">
                             <td style="padding: 10px; border: 1px solid #ddd;">50002</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">1002</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">$22,800</td>
@@ -618,7 +432,7 @@
             <div style="overflow-x: auto; margin: 15px 0;">
                 <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; background: white;">
                     <thead>
-                        <tr style="background: #ff9800; color: white;">
+                        <tr style="background: #c2410c; color: white;">
                             <th style="padding: 10px; border: 1px solid #ddd;">maint_id</th>
                             <th style="padding: 10px; border: 1px solid #ddd;">vehicle_key</th>
                             <th style="padding: 10px; border: 1px solid #ddd;">component</th>
@@ -636,7 +450,7 @@
                             <td style="padding: 10px; border: 1px solid #ddd;">$285.00</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">2023-11-20</td>
                         </tr>
-                        <tr style="background: #f8f9fa;">
+                        <tr style="background: #f4f7fb;">
                             <td style="padding: 10px; border: 1px solid #ddd;">7002</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">1002</td>
                             <td style="padding: 10px; border: 1px solid #ddd;">Oil Change</td>
@@ -681,13 +495,11 @@
             </div>
         </div>
 
-        <!-- SQL Query Examples -->
         <div class="section">
             <h2>Advanced SQL Query Examples</h2>
 
             <h3>1. Median Price Analysis with Stratification</h3>
             <p><strong>Business Question:</strong> What is the median listing price for each model-year combination, stratified by mileage brackets?</p>
-            
             <p><strong>SQL Techniques Used:</strong> CTE, CASE statements, PERCENTILE_CONT window function, GROUP BY</p>
 
             <div class="sql-block">
@@ -705,12 +517,12 @@
       <span class="sql-keyword">ELSE</span> <span class="sql-keyword">'100k+'</span>
     <span class="sql-keyword">END AS</span> mileage_bucket
   <span class="sql-keyword">FROM</span> fact_sales_listings
-  <span class="sql-keyword">WHERE</span> price <span class="sql-keyword">IS NOT NULL</span> 
+  <span class="sql-keyword">WHERE</span> price <span class="sql-keyword">IS NOT NULL</span>
     <span class="sql-keyword">AND</span> year <span class="sql-keyword">BETWEEN</span> 2005 <span class="sql-keyword">AND YEAR</span>(<span class="sql-keyword">CURDATE</span>())
 )
-<span class="sql-keyword">SELECT</span> 
-  model_name, 
-  year, 
+<span class="sql-keyword">SELECT</span>
+  model_name,
+  year,
   mileage_bucket,
   <span class="sql-keyword">PERCENTILE_CONT</span>(0.5) <span class="sql-keyword">WITHIN GROUP</span> (<span class="sql-keyword">ORDER BY</span> price) <span class="sql-keyword">AS</span> median_price,
   <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> listing_count
@@ -725,13 +537,12 @@
 
             <h3>2. Reliability vs. Market Price Correlation</h3>
             <p><strong>Business Question:</strong> How does maintenance frequency correlate with used car pricing? Do more reliable models command premium prices?</p>
-            
             <p><strong>SQL Techniques Used:</strong> Multiple CTEs, JOIN, AVG aggregation, subquery optimization</p>
 
             <div class="sql-block">
 <span class="sql-comment">-- Correlate maintenance rates with median market prices</span>
 <span class="sql-keyword">WITH</span> median_prices <span class="sql-keyword">AS</span> (
-  <span class="sql-keyword">SELECT</span> 
+  <span class="sql-keyword">SELECT</span>
     make, model, year,
     <span class="sql-keyword">PERCENTILE_CONT</span>(0.5) <span class="sql-keyword">WITHIN GROUP</span> (<span class="sql-keyword">ORDER BY</span> price) <span class="sql-keyword">AS</span> median_price,
     <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> listings
@@ -740,7 +551,7 @@
   <span class="sql-keyword">GROUP BY</span> make, model, year
 ),
 maintenance_rates <span class="sql-keyword">AS</span> (
-  <span class="sql-keyword">SELECT</span> 
+  <span class="sql-keyword">SELECT</span>
     make, model, year,
     <span class="sql-keyword">AVG</span>(needs_maintenance) <span class="sql-keyword">AS</span> maint_rate,
     <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> events
@@ -748,9 +559,9 @@ maintenance_rates <span class="sql-keyword">AS</span> (
   <span class="sql-keyword">GROUP BY</span> make, model, year
   <span class="sql-keyword">HAVING COUNT</span>(*) >= 20  <span class="sql-comment">-- Minimum sample size</span>
 )
-<span class="sql-keyword">SELECT</span> 
-  mp.make, 
-  mp.model, 
+<span class="sql-keyword">SELECT</span>
+  mp.make,
+  mp.model,
   mp.year,
   mp.median_price,
   mr.maint_rate,
@@ -759,7 +570,7 @@ maintenance_rates <span class="sql-keyword">AS</span> (
   <span class="sql-comment">-- Calculate "reliability premium"</span>
   mp.median_price * (1 - mr.maint_rate) <span class="sql-keyword">AS</span> reliability_adjusted_value
 <span class="sql-keyword">FROM</span> median_prices mp
-<span class="sql-keyword">JOIN</span> maintenance_rates mr 
+<span class="sql-keyword">JOIN</span> maintenance_rates mr
   <span class="sql-keyword">USING</span> (make, model, year)
 <span class="sql-keyword">WHERE</span> mp.listings >= 50  <span class="sql-comment">-- Ensure statistical significance</span>
 <span class="sql-keyword">ORDER BY</span> mp.year <span class="sql-keyword">DESC</span>, mp.median_price <span class="sql-keyword">DESC</span>;
@@ -771,7 +582,6 @@ maintenance_rates <span class="sql-keyword">AS</span> (
 
             <h3>3. Telemetry Efficiency Analysis</h3>
             <p><strong>Business Question:</strong> What is the energy efficiency (kWh per km) for each vehicle series over time?</p>
-            
             <p><strong>SQL Techniques Used:</strong> Aggregation, NULLIF for division safety, date filtering, GROUP BY</p>
 
             <div class="sql-block">
@@ -795,7 +605,6 @@ maintenance_rates <span class="sql-keyword">AS</span> (
 
             <h3>4. Monthly Maintenance Trends</h3>
             <p><strong>Business Question:</strong> How is component failure frequency trending month-over-month?</p>
-            
             <p><strong>SQL Techniques Used:</strong> Window functions (LAG), DATE_FORMAT, PARTITION BY, trend calculation</p>
 
             <div class="sql-block">
@@ -805,11 +614,11 @@ maintenance_rates <span class="sql-keyword">AS</span> (
   <span class="sql-keyword">DATE_FORMAT</span>(event_date, <span class="sql-keyword">'%Y-%m'</span>) <span class="sql-keyword">AS</span> month,
   <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> events,
   <span class="sql-keyword">LAG</span>(<span class="sql-keyword">COUNT</span>(*)) <span class="sql-keyword">OVER</span> (
-    <span class="sql-keyword">PARTITION BY</span> component 
+    <span class="sql-keyword">PARTITION BY</span> component
     <span class="sql-keyword">ORDER BY DATE_FORMAT</span>(event_date, <span class="sql-keyword">'%Y-%m'</span>)
   ) <span class="sql-keyword">AS</span> prev_month,
   <span class="sql-keyword">COUNT</span>(*) - <span class="sql-keyword">LAG</span>(<span class="sql-keyword">COUNT</span>(*)) <span class="sql-keyword">OVER</span> (
-    <span class="sql-keyword">PARTITION BY</span> component 
+    <span class="sql-keyword">PARTITION BY</span> component
     <span class="sql-keyword">ORDER BY DATE_FORMAT</span>(event_date, <span class="sql-keyword">'%Y-%m'</span>)
   ) <span class="sql-keyword">AS</span> change
 <span class="sql-keyword">FROM</span> fact_maintenance
@@ -823,19 +632,18 @@ maintenance_rates <span class="sql-keyword">AS</span> (
 
             <h3>5. Top Vehicles by Market Demand</h3>
             <p><strong>Business Question:</strong> Which vehicle models have the highest listing volume, and how do they rank within each year?</p>
-            
             <p><strong>SQL Techniques Used:</strong> ROW_NUMBER window function, PARTITION BY, HAVING clause, ranking</p>
 
             <div class="sql-block">
 <span class="sql-comment">-- Rank vehicles by listing volume within each year</span>
 <span class="sql-keyword">SELECT</span>
-  make, 
-  model, 
+  make,
+  model,
   year,
   <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> listings,
   <span class="sql-keyword">ROUND</span>(<span class="sql-keyword">AVG</span>(price), 0) <span class="sql-keyword">AS</span> avg_price,
   <span class="sql-keyword">ROW_NUMBER</span>() <span class="sql-keyword">OVER</span> (
-    <span class="sql-keyword">PARTITION BY</span> year 
+    <span class="sql-keyword">PARTITION BY</span> year
     <span class="sql-keyword">ORDER BY COUNT</span>(*) <span class="sql-keyword">DESC</span>
   ) <span class="sql-keyword">AS</span> rank_in_year
 <span class="sql-keyword">FROM</span> fact_sales_listings
@@ -849,7 +657,6 @@ maintenance_rates <span class="sql-keyword">AS</span> (
             </div>
         </div>
 
-        <!-- SQL Skills Demonstrated -->
         <div class="section">
             <h2>SQL Skills Demonstrated</h2>
 
@@ -885,7 +692,6 @@ maintenance_rates <span class="sql-keyword">AS</span> (
             </ul>
         </div>
 
-        <!-- Business Impact -->
         <div class="section">
             <h2>Business Applications</h2>
 
@@ -914,7 +720,6 @@ maintenance_rates <span class="sql-keyword">AS</span> (
             </ul>
         </div>
 
-        <!-- Technical Challenges -->
         <div class="section">
             <h2>Technical Challenges & Solutions</h2>
 
@@ -950,11 +755,11 @@ maintenance_rates <span class="sql-keyword">AS</span> (
 
             <div class="sql-block">
 <span class="sql-comment">-- Median calculation without PERCENTILE_CONT (MySQL 5.7 compatible)</span>
-<span class="sql-keyword">SELECT</span> 
+<span class="sql-keyword">SELECT</span>
   model_name,
   <span class="sql-keyword">AVG</span>(price) <span class="sql-keyword">AS</span> median_price
 <span class="sql-keyword">FROM</span> (
-  <span class="sql-keyword">SELECT</span> 
+  <span class="sql-keyword">SELECT</span>
     model_name,
     price,
     <span class="sql-keyword">ROW_NUMBER</span>() <span class="sql-keyword">OVER</span> (<span class="sql-keyword">PARTITION BY</span> model_name <span class="sql-keyword">ORDER BY</span> price) <span class="sql-keyword">AS</span> rn,
@@ -966,7 +771,6 @@ maintenance_rates <span class="sql-keyword">AS</span> (
             </div>
         </div>
 
-        <!-- Key Learnings -->
         <div class="section">
             <h2>Key Learnings</h2>
 
@@ -995,7 +799,6 @@ maintenance_rates <span class="sql-keyword">AS</span> (
             </ul>
         </div>
 
-        <!-- Future Enhancements -->
         <div class="section">
             <h2>Future Enhancements</h2>
             <ul>
@@ -1008,75 +811,40 @@ maintenance_rates <span class="sql-keyword">AS</span> (
             </ul>
         </div>
 
-        <!-- Links -->
         <div class="section" style="text-align: center;">
             <h2>Project Resources</h2>
             <div class="btn-group">
-                <a href="https://github.com/JaiGala2122/connected-vehicle-analytics" class="btn" target="_blank">📂 View GitHub Repository</a>
-                <a href="https://github.com/JaiGala2122/connected-vehicle-analytics/blob/main/sql/example_queries.sql" class="btn" target="_blank">📊 View SQL Queries</a>
+                <a href="https://github.com/JaiGala2122/connected-vehicle-analytics" class="btn" target="_blank">View GitHub Repository</a>
+                <a href="https://github.com/JaiGala2122/connected-vehicle-analytics/blob/main/sql/example_queries.sql" class="btn" target="_blank">View SQL Queries</a>
             </div>
         </div>
-          <!-- Comments Section -->
+
         <div class="section">
             <h2>Comments & Feedback</h2>
             <p style="text-align: center; margin-bottom: 30px;">Have questions or feedback about this project? I'd love to hear from you!</p>
-            
+
             <form id="commentForm" style="max-width: 600px; margin: 0 auto;">
                 <div style="margin-bottom: 20px;">
-                    <label for="name" style="display: block; margin-bottom: 8px; font-weight: 600; color: #555;">Name:</label>
-                    <input type="text" id="name" name="name" required 
-                           style="width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 5px; font-size: 1rem; font-family: inherit;">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
                 </div>
-                
                 <div style="margin-bottom: 20px;">
-                    <label for="email" style="display: block; margin-bottom: 8px; font-weight: 600; color: #555;">Email:</label>
-                    <input type="email" id="email" name="email" required 
-                           style="width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 5px; font-size: 1rem; font-family: inherit;">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
                 </div>
-                
                 <div style="margin-bottom: 20px;">
-                    <label for="comment" style="display: block; margin-bottom: 8px; font-weight: 600; color: #555;">Your Comment:</label>
-                    <textarea id="comment" name="comment" rows="5" required 
-                              style="width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 5px; font-size: 1rem; font-family: inherit; resize: vertical;"></textarea>
+                    <label for="comment">Your Comment:</label>
+                    <textarea id="comment" name="comment" rows="5" required></textarea>
                 </div>
-                  <button type="submit" class="btn" style="width: 100%; cursor: pointer; border: none; font-size: 1rem;">
-                    💬 Send Comment
-                </button>
+                <button type="submit" class="btn" style="width: 100%;">Send Comment</button>
             </form>
-            
-            <div id="formMessage" style="margin-top: 20px; padding: 15px; border-radius: 5px; display: none; text-align: center;"></div>
+
+            <div id="formMessage" style="margin-top: 20px; padding: 15px; display: none; text-align: center;"></div>
         </div>
 
         <a href="../../index.html" class="back-link">← Back to Portfolio</a>
     </div>
-            <script>
-        // Handle comment form submission
-        document.getElementById('commentForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const comment = document.getElementById('comment').value;
-            
-            // Create mailto link with pre-filled content
-            const subject = encodeURIComponent('Comment on Customer Churn Prediction Project');
-            const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nComment:\n${comment}`);
-            const mailtoLink = `mailto:jainamgala21@outlook.com?subject=${subject}&body=${body}`;
-            
-            // Open email client
-            window.location.href = mailtoLink;
-            
-            // Show success message
-            const messageDiv = document.getElementById('formMessage');
-            messageDiv.style.display = 'block';
-            messageDiv.style.background = '#d4edda';
-            messageDiv.style.color = '#155724';
-            messageDiv.style.border = '1px solid #c3e6cb';
-            messageDiv.innerHTML = '✅ Opening your email client... Please send the email to submit your comment!';
-            
-            // Reset form
-            this.reset();
-        });
-    </script>
+    
 </body>
 </html>
+```
