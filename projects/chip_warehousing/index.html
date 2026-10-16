@@ -121,16 +121,29 @@
       background: #fff6e8;
       border-left: 3px solid var(--gold);
     }
-    .flow { display: grid; gap: 0.55rem; margin-top: 0.8rem; }
-    .step {
-      padding: 0.65rem 0.8rem;
+    .tree { display: flex; flex-direction: column; align-items: center; gap: 0; margin-top: 1rem; }
+    .node, .ask {
+      width: min(28rem, 100%);
+      margin: 0;
+      padding: 0.7rem 0.85rem;
+      text-align: center;
       background: var(--paper);
-      border-left: 3px solid var(--navy);
+      border: 1px solid var(--navy);
     }
-    .step.split { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; padding: 0; background: transparent; border: 0; }
-    .step .yes { border-left-color: var(--navy-2); }
-    .step .no { border-left-color: var(--copper); }
-    .yes, .no { padding: 0.65rem 0.8rem; background: var(--paper); }
+    .ask { background: #fff6e8; border-color: #e2b000; }
+    .stem { width: 2px; height: 16px; background: var(--navy); }
+    .fork { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; width: min(44rem, 100%); }
+    .branch { display: flex; flex-direction: column; align-items: center; }
+    .tag { margin: 0 0 0.35rem; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+    .tag.no { color: var(--copper); }
+    .tag.yes { color: var(--navy); }
+    .loop {
+      width: min(28rem, 100%);
+      margin-top: 0.35rem;
+      color: var(--muted);
+      font-size: 0.92rem;
+      text-align: center;
+    }
     pre {
       margin: 0.8rem 0 0;
       padding: 0.9rem 1rem;
@@ -154,6 +167,7 @@
     @media (max-width: 720px) {
       .proof, .step.split { grid-template-columns: 1fr; }
       .sitebar nav a:nth-child(2) { display: none; }
+      .fork { grid-template-columns: 1fr; }
       section { padding: 1.2rem 1rem; }
     }
   </style>
@@ -379,31 +393,99 @@
       <p>These show the decision rules and the reasoning. They are not separate experiments for every branch.</p>
 
       <h3>Choose the approach</h3>
-      <div class="flow">
-        <div class="step">Validate examples in Excel</div>
-        <div class="step">Does historical routing fit seven-day capacity?</div>
-        <div class="step split">
-          <div class="no">No. PLANT03 exceeds capacity, so build a feasible reassignment.</div>
-          <div class="yes">Yes. Keep the baseline and assess cost.</div>
+      <div class="tree">
+        <p class="node">Validate examples in Excel</p>
+        <div class="stem"></div>
+        <p class="ask">Historical routing fits seven-day capacity?</p>
+        <div class="stem"></div>
+        <div class="fork">
+          <div class="branch">
+            <p class="tag no">No · PLANT03 exceeds capacity</p>
+            <p class="node">Build a feasible reassignment</p>
+            <div class="stem"></div>
+            <p class="ask">Another eligible warehouse?</p>
+            <div class="stem"></div>
+            <div class="fork">
+              <div class="branch">
+                <p class="tag yes">Yes · 1,653 orders</p>
+                <p class="node">Allow warehouse choices</p>
+              </div>
+              <div class="branch">
+                <p class="tag no">No · 7,562 orders</p>
+                <p class="node">Keep the required warehouse</p>
+              </div>
+            </div>
+            <div class="stem"></div>
+            <p class="node">Keep valid route and day choices</p>
+            <div class="stem"></div>
+            <p class="node">Use Python and MILP</p>
+          </div>
+          <div class="branch">
+            <p class="tag yes">Yes</p>
+            <p class="node">Keep the baseline and assess cost</p>
+            <p class="loop">This path skips reassignment and joins the freight question below.</p>
+          </div>
         </div>
-        <div class="step">If reassigning: 1,653 orders may change warehouse. 7,562 must keep the required warehouse. Route and day choices stay open either way.</div>
-        <div class="step">Use Python and MILP.</div>
-        <div class="step split">
-          <div class="no">No complete historical freight baseline in this dataset. Compare warehouse cost, and report plan freight separately.</div>
-          <div class="yes">If a complete freight baseline existed, compare total cost on the same basis.</div>
+        <div class="stem"></div>
+        <p class="ask">Complete historical freight baseline?</p>
+        <div class="stem"></div>
+        <div class="fork">
+          <div class="branch">
+            <p class="tag no">No · this dataset</p>
+            <p class="node">Compare warehouse cost. Report plan freight separately.</p>
+          </div>
+          <div class="branch">
+            <p class="tag yes">Yes</p>
+            <p class="node">Compare total costs on the same basis.</p>
+          </div>
         </div>
       </div>
       <p class="note"><strong>Why MILP?</strong> Orders stay whole, while warehouse capacity and shared freight pricing connect their decisions.</p>
 
       <h3>Solve and validate</h3>
-      <div class="flow">
-        <div class="step">The original search ran over six hours and returned no plan.</div>
-        <div class="step">Simplify pricing and remove unnecessary options. Build a starting schedule.</div>
-        <div class="step">Check coverage, eligibility, capacity, and weight. Repair anything that fails, then check again.</div>
-        <div class="step">Save the starting plan and search again with choices open.</div>
-        <div class="step split">
-          <div class="yes">If the requested cost gap is reached, save the best plan and report the gap.</div>
-          <div class="no">If time runs out first, keep the best checked plan and report that the search is unfinished.</div>
+      <div class="tree">
+        <p class="node">Original search: over six hours without a plan</p>
+        <div class="stem"></div>
+        <p class="node">Simplify pricing and remove unnecessary options</p>
+        <div class="stem"></div>
+        <p class="node">Build a starting schedule</p>
+        <div class="stem"></div>
+        <p class="ask">Coverage, eligibility, capacity, and weight checks pass?</p>
+        <div class="stem"></div>
+        <div class="fork">
+          <div class="branch">
+            <p class="tag no">No</p>
+            <p class="node">Repair and recheck</p>
+            <p class="loop">Return to the same checks until they pass.</p>
+          </div>
+          <div class="branch">
+            <p class="tag yes">Yes</p>
+            <p class="node">Save the starting plan. Search with choices open.</p>
+          </div>
+        </div>
+        <div class="stem"></div>
+        <p class="ask">Requested cost gap reached?</p>
+        <div class="stem"></div>
+        <div class="fork">
+          <div class="branch">
+            <p class="tag yes">Yes</p>
+            <p class="node">Save the best plan and report the gap.</p>
+          </div>
+          <div class="branch">
+            <p class="tag no">No</p>
+            <p class="ask">Time budget exhausted?</p>
+            <div class="stem"></div>
+            <div class="fork">
+              <div class="branch">
+                <p class="tag no">No</p>
+                <p class="node">Keep searching with choices open.</p>
+              </div>
+              <div class="branch">
+                <p class="tag yes">Yes</p>
+                <p class="node">Keep the best checked plan. Report that the search is unfinished.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
