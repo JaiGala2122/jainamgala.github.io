@@ -1,826 +1,1247 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jainam Gala - Portfolio</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            overflow-x: hidden;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            padding: 1rem 0;
-        }
-
-        nav ul {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: #333;
-            font-weight: 500;
-            transition: color 0.3s;
-            position: relative;
-            cursor: pointer;
-        }
-
-        nav a:hover {
-            color: #6366f1;
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: #6366f1;
-            transition: width 0.3s;
-        }
-
-        nav a:hover::after {
-            width: 100%;
-        }
-
-        /* Resume Modal */
-        .resume-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s ease-out;
-        }
-
-        .resume-modal.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-
-        .resume-container {
-            background: white;
-            width: 90%;
-            max-width: 900px;
-            height: 90vh;
-            border-radius: 15px;
-            overflow: hidden;
-            position: relative;
-            animation: slideUp 0.4s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .resume-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .resume-header h2 {
-            margin: 0;
-            font-size: 1.5rem;
-            color: white;
-        }
-
-        .resume-header h2::after {
-            display: none;
-        }
-
-        .close-btn {
-            background: white;
-            color: #667eea;
-            border: none;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: transform 0.3s, background 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .close-btn:hover {
-            transform: rotate(90deg);
-            background: #f0f0f0;
-        }
-
-        .resume-content {
-            padding: 2rem;
-            height: calc(90vh - 80px);
-            overflow-y: auto;
-        }
-
-        .resume-section {
-            margin-bottom: 2rem;
-        }
-
-        .resume-section h3 {
-            color: #667eea;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #667eea;
-        }
-
-        .resume-item {
-            margin-bottom: 1.5rem;
-        }
-
-        .resume-item h4 {
-            color: #333;
-            margin-bottom: 0.3rem;
-        }
-
-        .resume-item .meta {
-            color: #666;
-            font-style: italic;
-            margin-bottom: 0.5rem;
-        }
-
-        .resume-item ul {
-            margin-left: 1.5rem;
-            color: #555;
-        }
-
-        .resume-item ul li {
-            margin-bottom: 0.3rem;
-        }
-
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="2" fill="white" opacity="0.1"/></svg>');
-            animation: float 20s linear infinite;
-        }
-
-        @keyframes float {
-            to {
-                transform: translateY(-100px);
-            }
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            animation: fadeInUp 1s ease-out;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-        }
-
-        .hero p {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-
-        .cta-button {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background: white;
-            color: #667eea;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 600;
-            transition: transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Sections */
-        section {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        h2 {
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            text-align: center;
-            color: #333;
-            position: relative;
-            display: inline-block;
-            width: 100%;
-        }
-
-        h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 4px;
-            background: #667eea;
-            border-radius: 2px;
-        }
-
-        /* About Section */
-        #about {
-            background: #f8f9fa;
-        }
-
-        .about-content {
-            display: flex;
-            gap: 3rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .about-text {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        .about-text p {
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            color: #555;
-        }
-
-        .about-image {
-            flex: 1;
-            min-width: 300px;
-            text-align: center;
-        }
-
-        .avatar {
-            width: 250px;
-            height: 250px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 6rem;
-            color: white;
-            margin: 0 auto;
-            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
-        }
-
-        /* Skills Section */
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .skill-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            text-align: center;
-        }
-
-        .skill-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .skill-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .skill-card h3 {
-            margin-bottom: 0.5rem;
-            color: #667eea;
-        }
-
-        /* Projects Section */
-        #projects {
-            background: #f8f9fa;
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .project-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .project-image {
-            height: 200px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            color: white;
-        }
-
-        .project-content {
-            padding: 1.5rem;
-        }
-
-        .project-content h3 {
-            color: #333;
-            margin-bottom: 0.5rem;
-        }
-
-        .project-content p {
-            color: #666;
-            margin-bottom: 1rem;
-        }
-
-        .project-link {
-            display: inline-block;
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-
-        .project-link:hover {
-            color: #764ba2;
-        }
-
-        /* Contact Section */
-        .contact-content {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .contact-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .contact-link {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 1rem 2rem;
-            background: #667eea;
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            transition: transform 0.3s, background 0.3s;
-            font-weight: 600;
-        }
-
-        .contact-link:hover {
-            background: #764ba2;
-            transform: translateY(-3px);
-        }
-
-        /* Footer */
-        footer {
-            background: #333;
-            color: white;
-            text-align: center;
-            padding: 2rem;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero p {
-                font-size: 1.2rem;
-            }
-
-            nav ul {
-                gap: 1rem;
-                flex-wrap: wrap;
-                padding: 0 1rem;
-            }
-
-            h2 {
-                font-size: 2rem;
-            }
-
-            .about-content {
-                flex-direction: column;
-            }
-
-            .resume-container {
-                width: 95%;
-                height: 95vh;
-            }
-
-            .resume-content {
-                padding: 1rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jainam Gala — Supply Chain &amp; Operations Analyst</title>
+  <meta name="description" content="Jainam Gala builds the forecast, vendor comparison, and audit report an operations team can act on. Supply chain analyst in Jersey City, open to NY/NJ roles.">
+  <meta name="theme-color" content="#0e1c3f">
+  <link rel="canonical" href="https://www.galajainam.com/">
+  <meta property="og:title" content="Jainam Gala — Supply Chain &amp; Operations Analyst">
+  <meta property="og:description" content="Forecasting, vendor analytics, and audit reporting. SQL, Power BI, Tableau, and Python. Based in Jersey City.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.galajainam.com/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,620&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+:root {
+  --ink: #152033;
+  --ink-soft: #3c4b63;
+  --muted: #5d6b82;
+  --line: #d5deea;
+  --paper: #f4f7fb;
+  --paper-2: #e7eef8;
+  --forest: #0e1c3f;
+  --forest-2: #16315f;
+  --cream: #f7f4ec;
+  --copper: #c2410c;
+  --copper-deep: #0e1c3f;
+  --amber: #f5c518;
+  --cta: #f5c518;
+  --header: 4.25rem;
+  --max: 1120px;
+  --serif: "Fraunces", "Iowan Old Style", Palatino, Georgia, serif;
+  --sans: "Public Sans", "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  text-rendering: optimizeLegibility;
+}
+
+img { max-width: 100%; }
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--copper);
+  outline-offset: 3px;
+}
+
+.skip {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  background: var(--cream);
+  color: var(--ink);
+  padding: 0.5rem 0.8rem;
+  z-index: 20;
+}
+
+.skip:focus { top: 0.75rem; }
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: var(--header);
+  padding: 0.75rem 1.5rem;
+  background: var(--forest);
+  color: var(--cream);
+}
+
+.mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--cream);
+  text-decoration: none;
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  font-weight: 560;
+  letter-spacing: -0.02em;
+}
+
+.monogram {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid rgba(247, 243, 235, 0.35);
+  font-family: var(--serif);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}
+
+.nav-toggle {
+  display: none;
+  background: transparent;
+  color: var(--cream);
+  border: 1px solid rgba(247, 243, 235, 0.35);
+  padding: 0.4rem 0.75rem;
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.35rem;
+}
+
+.site-nav a,
+.nav-resume {
+  color: rgba(247, 243, 235, 0.82);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  background: none;
+  border: 0;
+  padding: 0;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.site-nav a:hover,
+.nav-resume:hover,
+.site-nav a.is-active {
+  color: var(--cream);
+}
+
+.site-nav a.is-active {
+  box-shadow: inset 0 -1px 0 var(--cream);
+}
+
+.nav-resume {
+  border: 1px solid var(--amber);
+  padding: 0.35rem 0.75rem;
+  background: var(--amber);
+  color: var(--forest);
+  font-weight: 700;
+}
+
+.nav-resume:hover { color: var(--forest); background: #ffe07a; }
+
+main { overflow: clip; }
+
+.wrap {
+  width: min(var(--max), calc(100% - 3rem));
+  margin-inline: auto;
+}
+
+.hero {
+  padding: 4.5rem 0 2.5rem;
+  background:
+    radial-gradient(820px 380px at 92% -20%, rgba(245, 197, 24, 0.22), transparent 58%),
+    linear-gradient(160deg, #16315f 0%, var(--forest) 48%, #091428 100%);
+  color: var(--cream);
+  border-bottom: 0;
+}
+
+.hero .kicker { color: var(--amber); }
+
+.hero .lede { color: rgba(251, 247, 240, 0.86); }
+
+.hero .button-primary {
+  background: var(--amber);
+  color: var(--forest);
+}
+
+.hero .button-primary:hover { background: #ffe07a; }
+
+.hero .button-ghost {
+  color: var(--cream);
+  border-color: rgba(251, 247, 240, 0.5);
+}
+
+.hero .button-ghost:hover { background: rgba(255, 255, 255, 0.08); }
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.8fr);
+  gap: 3.5rem;
+  align-items: end;
+}
+
+.kicker {
+  margin: 0 0 1.25rem;
+  color: var(--copper);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 560;
+  font-size: clamp(3.4rem, 8vw, 6.4rem);
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+}
+
+.role-line {
+  margin: 0.85rem 0 0;
+  color: var(--cream);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.lede {
+  max-width: 38rem;
+  margin: 1rem 0 0;
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.proof {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin: 2.75rem auto 0;
+  padding: 1.25rem 0 0;
+  list-style: none;
+  border-top: 1px solid rgba(251, 247, 240, 0.16);
+}
+
+.proof li {
+  color: rgba(251, 247, 240, 0.78);
+  font-size: 0.92rem;
+}
+
+.proof strong {
+  display: block;
+  margin-bottom: 0.15rem;
+  color: var(--amber);
+  font-family: var(--serif);
+  font-size: 1.7rem;
+  font-weight: 560;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.55rem 1.1rem;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.button-primary {
+  background: var(--amber);
+  color: var(--forest);
+}
+
+.button-primary:hover { background: #ffe07a; }
+
+.button-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+.button-ghost:hover { background: var(--paper-2); }
+
+.dossier {
+  margin: 0;
+  border-top: 3px solid var(--amber);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--cream);
+}
+
+.dossier div {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid rgba(251, 247, 240, 0.14);
+}
+
+.dossier dt {
+  margin: 0;
+  color: rgba(251, 247, 240, 0.62);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dossier dd {
+  margin: 0;
+  font-size: 0.98rem;
+}
+
+section { scroll-margin-top: calc(var(--header) + 1rem); }
+
+.band {
+  padding: 4.5rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.band-head {
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  gap: 2rem;
+  margin-bottom: 2.25rem;
+  align-items: baseline;
+}
+
+.band-head h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 560;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.band-head p {
+  margin: 0;
+  max-width: 40rem;
+  color: var(--ink-soft);
+}
+
+.index-label {
+  margin: 0;
+  color: var(--copper);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.role,
+.case {
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  gap: 2rem;
+  padding: 1.6rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.role-meta time,
+.case-index {
+  display: block;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.role-meta p {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.case .case-index {
+  margin: 0;
+  color: var(--copper);
+  font-family: var(--serif);
+  font-size: 1.45rem;
+  font-weight: 560;
+  letter-spacing: -0.03em;
+}
+
+.role h3,
+.case h3 {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 560;
+  font-size: 1.55rem;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.org {
+  margin: 0.25rem 0 0.75rem;
+  color: var(--forest);
+  font-weight: 600;
+}
+
+.role ul,
+.about-copy p {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.role li + li { margin-top: 0.4rem; }
+
+.role ul { padding-left: 1.1rem; }
+
+.case-body p { margin: 0.55rem 0 0; color: var(--ink-soft); }
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chips li {
+  padding: 0.2rem 0.55rem;
+  border: 1px solid #f0d48a;
+  background: #fff8e4;
+  font-size: 0.82rem;
+  color: var(--forest);
+  font-weight: 600;
+}
+
+.case-link {
+  align-self: start;
+  justify-self: end;
+  color: var(--copper-deep);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.case-link:hover { text-decoration: underline; }
+
+.case {
+  grid-template-columns: 4.5rem 1fr auto;
+}
+
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.skill-grid h3 {
+  margin: 0 0 0.8rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 2px solid var(--amber);
+  color: var(--forest);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.skill-grid ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.skill-grid li {
+  padding: 0.45rem 0;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.about-layout {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr;
+  gap: 3rem;
+}
+
+.about-copy p + p { margin-top: 1rem; }
+
+.edu { margin: 0; }
+
+.edu div {
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.edu h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.edu p {
+  margin: 0.2rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.email-link {
+  display: inline-block;
+  margin: 0.4rem 0 0;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 560;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.email-link:hover { color: var(--copper-deep); }
+
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.contact-links a {
+  color: var(--copper-deep);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.contact-links a:hover { text-decoration: underline; }
+
+#work { background: #e7eef8; }
+
+#about { background: #fff6e8; }
+
+#contact {
+  background:
+    radial-gradient(640px 280px at 0% 100%, rgba(245, 197, 24, 0.16), transparent 60%),
+    var(--forest);
+  color: var(--cream);
+  border-bottom: 0;
+}
+
+#contact .index-label,
+#contact .email-link { color: var(--amber); }
+
+#contact h2 { color: var(--cream); }
+
+#contact .email-link:hover { color: #ffe07a; }
+
+#contact .contact-links a { color: var(--cream); }
+
+#contact .button-ghost {
+  color: var(--cream);
+  border-color: rgba(247, 244, 236, 0.45);
+}
+
+#contact .button-ghost:hover { background: rgba(255, 255, 255, 0.08); }
+
+.contact-aside {
+  padding: 1.1rem 1.15rem;
+  background: rgba(255, 255, 255, 0.06);
+  border-top: 3px solid var(--amber);
+  color: var(--cream);
+}
+
+.contact-aside p { margin: 0; }
+
+.contact-aside p + p { margin-top: 0.75rem; color: rgba(247, 243, 235, 0.78); }
+
+.site-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  width: auto;
+  margin: 0;
+  padding: 1.25rem max(1.5rem, calc((100% - var(--max)) / 2)) 1.6rem;
+  background: #091428;
+  color: rgba(247, 244, 236, 0.72);
+  font-size: 0.9rem;
+}
+
+#resume {
+  width: min(760px, calc(100% - 2rem));
+  max-height: min(88vh, 900px);
+  padding: 0;
+  border: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+#resume::backdrop { background: rgba(20, 38, 28, 0.72); }
+
+.resume-bar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: var(--forest);
+  color: var(--cream);
+}
+
+.resume-bar h2 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 560;
+}
+
+.resume-bar button {
+  background: transparent;
+  color: var(--cream);
+  border: 1px solid rgba(247, 243, 235, 0.4);
+  padding: 0.35rem 0.7rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.resume-body { padding: 1.25rem 1.4rem 2rem; }
+
+.resume-body h3 {
+  margin: 1.6rem 0 0.7rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  font-weight: 560;
+}
+
+.resume-body h4 { margin: 0 0 0.2rem; font-size: 1.02rem; }
+
+.resume-body .meta {
+  margin: 0 0 0.45rem;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.resume-body article + article { margin-top: 1.15rem; }
+
+.resume-body ul { margin: 0.35rem 0 0; padding-left: 1.15rem; color: var(--ink-soft); }
+
+.resume-body li + li { margin-top: 0.28rem; }
+
+@media (max-width: 900px) {
+  .hero-grid,
+  .band-head,
+  .role,
+  .about-layout,
+  .contact-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .skill-grid,
+  .proof {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .case { grid-template-columns: 4.5rem 1fr; }
+
+  .case-link {
+    grid-column: 2;
+    justify-self: start;
+    margin-top: 0.8rem;
+  }
+
+  .skill-grid { gap: 1.75rem 0; }
+}
+
+@media (max-width: 720px) {
+  .nav-toggle { display: inline-flex; }
+
+  .site-nav {
+    display: none;
+    position: absolute;
+    top: var(--header);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+    padding: 0.6rem 1.25rem 1rem;
+    background: var(--forest);
+    border-top: 1px solid rgba(247, 243, 235, 0.12);
+  }
+
+  .site-nav.is-open { display: flex; }
+
+  .site-nav a,
+  .nav-resume {
+    width: 100%;
+    text-align: left;
+    padding: 0.65rem 0;
+  }
+
+  .wrap { width: min(var(--max), calc(100% - 2rem)); }
+
+  .proof,
+  .skill-grid { grid-template-columns: 1fr; }
+
+  .hero { padding-top: 2.75rem; }
+
+  .role,
+  .case { gap: 0.45rem; }
+
+  .site-footer {
+    flex-direction: column;
+    width: auto;
+    padding-inline: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Jainam Gala",
+    "jobTitle": "Supply Chain and Operations Analyst",
+    "url": "https://www.galajainam.com/",
+    "email": "mailto:galajainam21@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Jersey City",
+      "addressRegion": "NJ",
+      "addressCountry": "US"
+    },
+    "alumniOf": [
+      "Pace University, Lubin School of Business",
+      "Dwarkadas J. Sanghvi College of Engineering"
+    ],
+    "sameAs": [
+      "https://github.com/JaiGala2122",
+      "https://www.linkedin.com/in/jainamgala21/"
+    ]
+  }
+  </script>
 </head>
 <body>
-    <!-- Resume Modal -->
-    <div id="resumeModal" class="resume-modal">
-        <div class="resume-container">
-            <div class="resume-header">
-                <h2>📄 My Resume</h2>
-                <button class="close-btn" onclick="closeResume()">×</button>
-            </div>
-            <div class="resume-content">
-                <div class="resume-section">
-                    <h3>Summary</h3>
-                    <p>Operations and supply chain analyst with an MBA in Business Analytics and an engineering background in production systems. Built supplier sourcing, demand forecasting, and decision-support models for an early-stage grocery delivery venture, and currently runs billing, claims, and reimbursement audit analytics for a retail pharmacy. Works in SQL, advanced Excel and Power Query, Power BI, Tableau, and Python, with a consistent focus on finding where operational processes leak money. </p>
-                </div>
+  <a class="skip" href="#main">Skip to content</a>
 
-                <div class="resume-section">
-                    <h3>Education</h3>
-                    <div class="resume-item">
-                        <h4>Masters of Business Administration (MBA)</h4>
-                        <p class="meta">Pace University, Lubin School of Business | December 2024</p>
-                        <p>Concentration: Business Analytics (STEM) | GPA: 3.75</p>
-                    </div>
-                    <div class="resume-item">
-                        <h4>Bachelor of Engineering (B.E.)</h4>
-                        <p class="meta">Dwarkadas J Sanghvi College of Engineering, Mumbai | July 2022</p>
-                        <p>Concentration: Production Engineering | GPA: 3.2</p>
-                    </div>
-                </div>
-
-                <div class="resume-section">
-                    <h3>Technical Skills</h3>
-                    <div class="resume-item">
-                        <ul>
-                            <li><strong>Analytics and Reporting:</strong> Advanced Excel (Power Query, pivot models, lookups), SQL, Power BI, Tableau</li>
-                            <li><strong>Operations and Supply Chain:</strong> Demand forecasting, inventory and purchasing planning, supplier sourcing and evaluation, variance     analysis, process documentation, audit and compliance reporting</li>
-                            <li><strong>Programming and Data:</strong> Python (pandas, NumPy, scikit-learn), R, MySQL, MongoDB</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="resume-section">
-                    <h3>Professional Experience</h3>
-                   <div class="resume-item">
-                        <h4>Audit and Data Analyst</h4>
-                        <p class="meta">Novecks Pharmacy, North Bergen, NJ | January 2026 – Present</p>
-                        <ul>
-                            <li>Audit prescription transactions, billing records, and insurance reimbursement reports, identifying discrepancies and documentation gaps for resolution</li>
-                            <li>Build recurring Excel reports on prescription volume, billing activity, and reimbursement amounts used by management for operational review</li>
-                            <li>Reconcile claim records against payer documentation requirements to support compliance with insurance and pharmacy regulations</li>
-                            <li>Analyze operational data to flag workflow bottlenecks and reporting gaps, and document findings for management</li>
-                        </ul>
-                    </div> 
-                    <div class="resume-item">
-                        <h4>Business Analyst</h4>
-                        <p class="meta">HL Gada LLC, New York, NY | February 2025 – January 2026</p>
-                        <ul>
-                            <li>Researched 3 established grocery-delivery competitors to design the demand-forecasting and sourcing model for the launch</li>
-                            <li>Built and maintained the supplier and vendor database across 20 vendor relationships, sourcing and comparing wholesalers to support assortment, cost, and lead-time decisions</li>
-                            <li>Analyzed competitor order and pricing data to model buying patterns and forecast order volume by category</li>
-                            <li>Produced market and competitive research on the NY/NJ Indian grocery delivery segment to size the opportunity before committing capital</li>
-                            <li>Tracked post-launch performance against forecast; the venture did not reach viable unit economics and was wound down after eleven months</li>
-                        </ul>
-                    </div>
-                    <div class="resume-item">
-                        <h4>Operations Management Intern</h4>
-                        <p class="meta">Echaar Equipments Pvt. Ltd., Thane City, India | January 2022 – June 2022</p>
-                        <ul>
-                            <li>Tracked raw material inventory, machine maintenance logs, and project timelines to identify the recurring causes of production schedule slippage</li>
-                            <li>Recommended sequencing and resource-allocation changes to reduce factory downtime, validating feasibility directly with shop-floor staff</li>
-                            <li>Built Excel dashboards that made production bottlenecks visible to the planning team</li>
-                            <li>Authored an internal research paper on shop floor fume extraction and workplace safety conditions</li>
-                        </ul>
-                    </div>
-                    <div class="resume-item">
-                        <h4>Supply Chain and Operations Intern</h4>
-                        <p class="meta">Asian Synthetics Pvt Ltd, Mumbai, India | January 2019 - June 2019</p>
-                        <ul>
-                            <li>Supported dispatch and finished-goods logistics at a textile manufacturing unit</li>
-                            <li>Sourced alternative wholesalers for embroidery machine parts, reducing single-supplier dependency and shortening repair lead times</li>
-                            <li>Implemented a digital record system replacing manual dispatch tracking</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="resume-section">
-                    <h3>Projects</h3>
-                    <div class="resume-item">
-                        <h4>Customer Churn Prediction - Data Science</h4>
-                        <ul>
-                            <li>Built and compared logistic regression, random forest, and XGBoost classifiers on a customer dataset</li>
-                            <li>Handled missing values, normalization, and feature engineering with pandas and NumPy</li>
-                            <li>Selected the final model using cross-validated ROC-AUC</li>
-                        </ul>
-                    </div>
-                    <div class="resume-item">
-                        <h4>Car Company Database Project</h4>
-                        <ul>
-                         <li>Designed and normalized a relational schema consolidating vehicle data from over 10 sources, with defined table relationships and constraints</li>
-                            <li>Wrote analytical SQL queries using joins, aggregations, and window functions to answer inventory and sales questions</li>
-                        </ul>
-                    </div>
-                    <div class="resume-item">
-                        <h4>Real-Time Data Pipeline and Analytics for E-commerce Platform</h4>
-                        <ul>
-                            <li>Built a real-time ingestion pipeline with Apache Kafka, streaming the UCI Online Retail dataset through a Kafka topic via a stream simulator</li>
-                            <li>Aggregated the stream in Spark Structured Streaming, computing per-minute metrics by country</li>
-                            <li>Landed results in Postgres and Parquet, with the full stack orchestrated locally via Docker Compose</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Navigation -->
-    <nav>
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li><a onclick="openResume()">Resume</a></li>
-        </ul>
+  <header class="site-header">
+    <a class="mark" href="#top">
+      <span class="monogram" aria-hidden="true">JG</span>
+      Jainam Gala
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    <nav id="site-nav" class="site-nav" aria-label="Primary">
+      <a href="#experience">Experience</a>
+      <a href="#work">Work</a>
+      <a href="#skills">Skills</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <button class="nav-resume" type="button" data-open-resume>Resume</button>
     </nav>
+  </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>Jainam Gala</h1>
-            <p>Supply Chain & Operations Analyst | Forecasting, Vendor Analytics & Demand Planning | SQL · Power BI · Tableau | MBA Business Analytics + Production Engineering</p>
-            <a href="#contact" class="cta-button">Get In Touch</a>
+  <main id="main">
+    <section class="hero" id="top" aria-labelledby="intro-heading">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="kicker">Open to roles in NY/NJ</p>
+          <h1 id="intro-heading">Jainam Gala</h1>
+          <p class="role-line">Supply chain and operations analyst</p>
+          <p class="lede">I show an operations team where the money is going, then hand them a report they can use. Forecasts, vendor comparisons, and pharmacy audit analytics.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="mailto:galajainam21@gmail.com?subject=Supply%20chain%20role">Email the role</a>
+            <a class="button button-ghost" href="#work">See the work</a>
+          </div>
         </div>
+        <dl class="dossier">
+          <div>
+            <dt>Now</dt>
+            <dd>Audit &amp; Data Analyst, Novecks Pharmacy</dd>
+          </div>
+          <div>
+            <dt>Before</dt>
+            <dd>Business Analyst, grocery delivery launch</dd>
+          </div>
+          <div>
+            <dt>Training</dt>
+            <dd>MBA, Business Analytics, Pace · 3.75</dd>
+          </div>
+          <div>
+            <dt>Tools</dt>
+            <dd>SQL, Excel, Power BI, Tableau, Python</dd>
+          </div>
+        </dl>
+      </div>
+      <ul class="proof wrap">
+        <li><strong>20</strong> vendors compared on cost, assortment, and lead time</li>
+        <li><strong>3.75</strong> GPA, STEM MBA in Business Analytics at Pace</li>
+        <li><strong>Live</strong> billing and reimbursement audits for a pharmacy</li>
+        <li><strong>NY/NJ</strong> supply chain, demand planning, and operations seats</li>
+      </ul>
     </section>
 
-    <!-- About Section -->
-    <section id="about">
-        <h2>About Me</h2>
-        <div class="about-content">
-            <div class="about-text">
-               <p>I find where operational processes leak money and build the reporting that makes the leak visible to the people who can fix it.</p>
-                <p>I've built demand forecasts and vendor analytics for an early-stage grocery-delivery venture, and I now run billing, claims, and reimbursement audit analytics for a pharmacy. My background is production engineering plus an MBA in Business Analytics.</p>
-                <p>I work in SQL, advanced Excel, Power BI, Tableau, and Python. Based in Jersey City, open to Supply Chain, Demand Planning, and Operations Analyst roles across the NY/NJ metro.</p>
-            </div>
-            <div class="about-image">
-                <div class="avatar">JG</div>
-            </div>
+    <section class="band" id="experience" aria-labelledby="experience-heading">
+      <div class="wrap">
+        <div class="band-head">
+          <p class="index-label">01 — Experience</p>
+          <div>
+            <h2 id="experience-heading">The reporting had a decision attached</h2>
+            <p>Pharmacy reimbursement audits now. A 20-vendor sourcing model and a category forecast before that. Shop-floor bottlenecks before that.</p>
+          </div>
         </div>
+
+        <article class="role">
+          <div class="role-meta">
+            <time datetime="2026-01">Jan 2026 — Present</time>
+            <p>North Bergen, NJ</p>
+          </div>
+          <div>
+            <h3>Audit and Data Analyst</h3>
+            <p class="org">Novecks Pharmacy</p>
+            <ul>
+              <li>Audit prescription transactions, billing records, and insurance reimbursement reports, and flag discrepancies and documentation gaps.</li>
+              <li>Build recurring Excel reports on prescription volume, billing activity, and reimbursement amounts used by management for operational review.</li>
+              <li>Reconcile claim records against payer documentation so the pharmacy can stay aligned with insurance requirements.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="role">
+          <div class="role-meta">
+            <time datetime="2025-02">Feb 2025 — Jan 2026</time>
+            <p>New York, NY</p>
+          </div>
+          <div>
+            <h3>Business Analyst</h3>
+            <p class="org">HL Gada LLC</p>
+            <ul>
+              <li>Built and maintained the supplier database across 20 vendor relationships, comparing wholesalers on assortment, cost, and lead time.</li>
+              <li>Analyzed competitor order and pricing data to model buying patterns and forecast order volume by category for an Indian grocery delivery launch in NY/NJ.</li>
+              <li>Tracked performance against the forecast. The venture did not reach viable unit economics and was wound down after eleven months.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="role">
+          <div class="role-meta">
+            <time datetime="2022-01">Jan 2022 — Jun 2022</time>
+            <p>Thane, India</p>
+          </div>
+          <div>
+            <h3>Operations Management Intern</h3>
+            <p class="org">Echaar Equipments Pvt. Ltd.</p>
+            <ul>
+              <li>Tracked raw material inventory, machine maintenance logs, and project timelines to find the recurring causes of production schedule slippage.</li>
+              <li>Built Excel dashboards that made production bottlenecks visible to the planning team, and checked proposed sequencing changes with shop-floor staff.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="role">
+          <div class="role-meta">
+            <time datetime="2019-01">Jan 2019 — Jun 2019</time>
+            <p>Mumbai, India</p>
+          </div>
+          <div>
+            <h3>Supply Chain and Operations Intern</h3>
+            <p class="org">Asian Synthetics Pvt Ltd</p>
+            <ul>
+              <li>Supported dispatch and finished-goods logistics at a textile manufacturing unit.</li>
+              <li>Sourced alternative wholesalers for embroidery machine parts, and replaced manual dispatch tracking with a digital record system.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
     </section>
 
-    <!-- Skills Section -->
-    <section id="skills">
-        <h2>Skills</h2>
-        <div class="skills-grid">
-            <div class="skill-card">
-                <div class="skill-icon">💻</div>
-                <h3>Programming Languages</h3>
-                <p>Python, R, C++, SQL</p>
-            </div>
-            <div class="skill-card">
-                <div class="skill-icon">🗄️</div>
-                <h3>Databases</h3>
-                <p>MySQL, MongoDB</p>
-            </div>
-            <div class="skill-card">
-                <div class="skill-icon">📊</div>
-                <h3>Data Analytics</h3>
-                <p>Pandas, NumPy, Apache Spark, Apache Kafka</p>
-            </div>
-            <div class="skill-card">
-                <div class="skill-icon">🤖</div>
-                <h3>Machine Learning</h3>
-                <p>XGBoost, TensorFlow, PyTorch, Scikit-learn</p>
-            </div>
-            <div class="skill-card">
-                <div class="skill-icon">📈</div>
-                <h3>Visualization</h3>
-                <p>Tableau, Power BI, Excel Dashboards</p>
-            </div>
-            <div class="skill-card">
-                <div class="skill-icon">🛠️</div>
-                <h3>Tools & Platforms</h3>
-                <p>Excel (Advanced), Power Query, ETL Workflows</p>
-            </div>
-            <div class="skill-card">
-                <div class="skill-icon">💰</div>
-                <h3>Financial Analysis</h3>
-                <p>Financial Modeling, Forecasting, Variance Analysis</p>
-            </div>
-            <div class="skill-card">
-                <div class="skill-icon">📉</div>
-                <h3>Business Intelligence</h3>
-                <p>KPI Dashboards, Reporting, Data-Driven Insights</p>
-            </div>
+    <section class="band" id="work" aria-labelledby="work-heading">
+      <div class="wrap">
+        <div class="band-head">
+          <p class="index-label">02 — Selected work</p>
+          <div>
+            <h2 id="work-heading">The result is in the first line</h2>
+            <p>A hiring manager should be able to see the number before opening the write-up.</p>
+          </div>
         </div>
+
+        <article class="case">
+          <p class="case-index">01</p>
+          <div class="case-body">
+            <h3>Customer Churn Prediction for a Credit Card Company</h3>
+            <p>87% ROC-AUC. Gradient boosting beat logistic regression and random forest on 10,000 credit-card customers, after cleaning and feature engineering in pandas and NumPy.</p>
+            <ul class="chips">
+              <li>87% ROC-AUC</li>
+              <li>10,000 customers</li>
+              <li>Python · scikit-learn</li>
+            </ul>
+          </div>
+          <a class="case-link" href="projects/customer-churn/index.html">Read the case</a>
+        </article>
+
+        <article class="case">
+          <p class="case-index">02</p>
+          <div class="case-body">
+            <h3>Vehicle Data Warehouse</h3>
+            <p>One schema for vehicle data from more than 10 sources. Joins, aggregations, and window functions answer the inventory and sales questions.</p>
+            <ul class="chips">
+              <li>MySQL</li>
+              <li>Star schema</li>
+              <li>Window functions</li>
+            </ul>
+          </div>
+          <a class="case-link" href="projects/vehicle-analytics/index.html">Read the case</a>
+        </article>
+
+        <article class="case">
+          <p class="case-index">03</p>
+          <div class="case-body">
+            <h3>Real-Time E-Commerce Analytics Pipeline</h3>
+            <p>Per-minute sales by country. Kafka took the UCI Online Retail stream, Spark aggregated it, and Postgres and Parquet stored it. The stack ran locally in Docker Compose.</p>
+            <ul class="chips">
+              <li>Kafka · Spark</li>
+              <li>Postgres · Parquet</li>
+              <li>Docker Compose</li>
+            </ul>
+          </div>
+          <a class="case-link" href="projects/realtime-analytics/index.html">Read the case</a>
+        </article>
+      </div>
     </section>
 
-    <!-- Projects Section -->
-    <section id="projects">
-        <h2>Projects</h2>
-        <div class="projects-grid">
-            <div class="project-card">
-                <div class="project-image">🔧</div>
-                <div class="project-content">
-                    <h3>Customer Churn Prediction for Credit Card Company</h3>
-                    <p>Predicting customer attrition using machine learning.</p>
-                    <a href="projects/customer-churn/index.html" class="project-link">View Project →</a>
-                </div>
-            </div>
-          <div class="project-card">
-    <div class="project-image">🚗</div>
-    <div class="project-content">
-        <h3>Vehicle Data Warehouse</h3>
-        <p>Advanced SQL analytics on integrated vehicle data with complex queries, window functions, and star schema design.</p>
-        <a href="projects/vehicle-analytics/index.html" class="project-link">View Project →</a>
+    <section class="band" id="skills" aria-labelledby="skills-heading">
+      <div class="wrap">
+        <div class="band-head">
+          <p class="index-label">03 — Skills</p>
+          <div>
+            <h2 id="skills-heading">What belongs on the requisition</h2>
+          </div>
+        </div>
+        <div class="skill-grid">
+          <div>
+            <h3>Programming</h3>
+            <ul>
+              <li>Python</li>
+              <li>R</li>
+              <li>C++</li>
+              <li>SQL</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Databases</h3>
+            <ul>
+              <li>MySQL</li>
+              <li>MongoDB</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Data analytics</h3>
+            <ul>
+              <li>pandas</li>
+              <li>NumPy</li>
+              <li>Apache Spark</li>
+              <li>Apache Kafka</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Machine learning</h3>
+            <ul>
+              <li>XGBoost</li>
+              <li>TensorFlow</li>
+              <li>PyTorch</li>
+              <li>scikit-learn</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Visualization</h3>
+            <ul>
+              <li>Tableau</li>
+              <li>Power BI</li>
+              <li>Excel dashboards</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Tools</h3>
+            <ul>
+              <li>Excel (advanced)</li>
+              <li>Power Query</li>
+              <li>ETL workflows</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Financial analysis</h3>
+            <ul>
+              <li>Financial modeling</li>
+              <li>Forecasting</li>
+              <li>Variance analysis</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Business intelligence</h3>
+            <ul>
+              <li>KPI dashboards</li>
+              <li>Reporting</li>
+              <li>Audit and compliance</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="about" aria-labelledby="about-heading">
+      <div class="wrap about-layout">
+        <div>
+          <p class="index-label">04 — About</p>
+          <h2 id="about-heading">Shop floor first. Then the number that runs the operation.</h2>
+          <div class="about-copy">
+            <p>I built demand forecasts and vendor analytics for an early-stage grocery delivery venture, and I now run billing, claims, and reimbursement audit analytics for a retail pharmacy.</p>
+            <p>The through-line is production systems. The engineering degree was on the shop floor. The MBA was business analytics. The work since then is finding the number that changes a purchasing, scheduling, or reimbursement decision.</p>
+            <p>Based in Jersey City. Open to supply chain, demand planning, and operations analyst roles across the NY/NJ metro.</p>
+          </div>
+        </div>
+        <div class="edu">
+          <div>
+            <h3>MBA, Business Analytics</h3>
+            <p>Pace University, Lubin School of Business</p>
+            <p>STEM concentration · GPA 3.75 · December 2024</p>
+          </div>
+          <div>
+            <h3>B.E., Production Engineering</h3>
+            <p>Dwarkadas J. Sanghvi College of Engineering, Mumbai</p>
+            <p>GPA 3.2 · July 2022</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="band" id="contact" aria-labelledby="contact-heading">
+      <div class="wrap contact-layout">
+        <div>
+          <p class="index-label">05 — Contact</p>
+          <h2 id="contact-heading">If the seat is supply chain, demand planning, or operations, send it.</h2>
+          <a class="email-link" href="mailto:galajainam21@gmail.com">galajainam21@gmail.com</a>
+          <div class="contact-links">
+            <a href="https://www.linkedin.com/in/jainamgala21/" rel="me" target="_blank">LinkedIn</a>
+            <a href="https://github.com/JaiGala2122" rel="me" target="_blank">GitHub</a>
+            <button class="button button-ghost" type="button" data-open-resume>Open resume</button>
+          </div>
+        </div>
+        <aside class="contact-aside">
+          <p>Jersey City, NJ</p>
+          <p>Supply chain, demand planning, and operations analyst roles in the NY/NJ metro.</p>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Jainam Gala</p>
+    <p>Jersey City</p>
+  </footer>
+
+  <dialog id="resume" aria-labelledby="resume-title">
+    <div class="resume-bar">
+      <h2 id="resume-title">Resume</h2>
+      <button type="button" data-close-resume>Close</button>
     </div>
-</div>
-            <div class="project-card">
-                <div class="project-image">🌐</div>
-                <div class="project-content">
-                    <h3>Real-Time E-Commerce Analytics Pipeline</h3>
-                    <p>Real-Time Retail Data Pipeline with Kafka & Spark</p>
-                   <a href="projects/realtime-analytics/index.html" class="project-link">View Project →</a>
-                </div>
-            </div>
-        </div>
-    </section>
+    <div class="resume-body">
+      <section>
+        <h3>Summary</h3>
+        <p>Operations and supply chain analyst with an MBA in Business Analytics and an engineering background in production systems. Built supplier sourcing, demand forecasting, and decision-support models for an early-stage grocery delivery venture, and currently runs billing, claims, and reimbursement audit analytics for a retail pharmacy. Works in SQL, advanced Excel and Power Query, Power BI, Tableau, and Python, with a consistent focus on finding where operational processes leak money.</p>
+      </section>
 
-    <!-- Contact Section -->
-    <section id="contact">
-        <h2>Get In Touch</h2>
-        <div class="contact-content">
-            <p>I'm always open to new opportunities and collaborations. Feel free to reach out!</p>
-            <div class="contact-links">
-                <a href="mailto:galajainam21@gmail.com" class="contact-link">
-                    📧 Email
-                </a>
-                <a href="https://github.com/JaiGala2122" class="contact-link" target="_blank">
-                    🔗 GitHub
-                </a>
-                <a href="https://www.linkedin.com/in/jainamgala21/" class="contact-link" target="_blank">
-                    💼 LinkedIn
-                </a>
-            </div>
-        </div>
-    </section>
+      <section>
+        <h3>Education</h3>
+        <article>
+          <h4>Masters of Business Administration (MBA)</h4>
+          <p class="meta">Pace University, Lubin School of Business | December 2024</p>
+          <p>Concentration: Business Analytics (STEM) | GPA: 3.75</p>
+        </article>
+        <article>
+          <h4>Bachelor of Engineering (B.E.)</h4>
+          <p class="meta">Dwarkadas J Sanghvi College of Engineering, Mumbai | July 2022</p>
+          <p>Concentration: Production Engineering | GPA: 3.2</p>
+        </article>
+      </section>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 Jainam Gala. All rights reserved.</p>
-    </footer>
+      <section>
+        <h3>Technical Skills</h3>
+        <ul>
+          <li><strong>Analytics and Reporting:</strong> Advanced Excel (Power Query, pivot models, lookups), SQL, Power BI, Tableau</li>
+          <li><strong>Operations and Supply Chain:</strong> Demand forecasting, inventory and purchasing planning, supplier sourcing and evaluation, variance analysis, process documentation, audit and compliance reporting</li>
+          <li><strong>Programming and Data:</strong> Python (pandas, NumPy, scikit-learn), R, MySQL, MongoDB</li>
+        </ul>
+      </section>
 
-    <script>
-        // Resume Modal Functions
-        function openResume() {
-            document.getElementById('resumeModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
+      <section>
+        <h3>Professional Experience</h3>
+        <article>
+          <h4>Audit and Data Analyst</h4>
+          <p class="meta">Novecks Pharmacy, North Bergen, NJ | January 2026 – Present</p>
+          <ul>
+            <li>Audit prescription transactions, billing records, and insurance reimbursement reports, identifying discrepancies and documentation gaps for resolution</li>
+            <li>Build recurring Excel reports on prescription volume, billing activity, and reimbursement amounts used by management for operational review</li>
+            <li>Reconcile claim records against payer documentation requirements to support compliance with insurance and pharmacy regulations</li>
+            <li>Analyze operational data to flag workflow bottlenecks and reporting gaps, and document findings for management</li>
+          </ul>
+        </article>
+        <article>
+          <h4>Business Analyst</h4>
+          <p class="meta">HL Gada LLC, New York, NY | February 2025 – January 2026</p>
+          <ul>
+            <li>Researched 3 established grocery-delivery competitors to design the demand-forecasting and sourcing model for the launch</li>
+            <li>Built and maintained the supplier and vendor database across 20 vendor relationships, sourcing and comparing wholesalers to support assortment, cost, and lead-time decisions</li>
+            <li>Analyzed competitor order and pricing data to model buying patterns and forecast order volume by category</li>
+            <li>Produced market and competitive research on the NY/NJ Indian grocery delivery segment to size the opportunity before committing capital</li>
+            <li>Tracked post-launch performance against forecast; the venture did not reach viable unit economics and was wound down after eleven months</li>
+          </ul>
+        </article>
+        <article>
+          <h4>Operations Management Intern</h4>
+          <p class="meta">Echaar Equipments Pvt. Ltd., Thane City, India | January 2022 – June 2022</p>
+          <ul>
+            <li>Tracked raw material inventory, machine maintenance logs, and project timelines to identify the recurring causes of production schedule slippage</li>
+            <li>Recommended sequencing and resource-allocation changes to reduce factory downtime, validating feasibility directly with shop-floor staff</li>
+            <li>Built Excel dashboards that made production bottlenecks visible to the planning team</li>
+            <li>Authored an internal research paper on shop floor fume extraction and workplace safety conditions</li>
+          </ul>
+        </article>
+        <article>
+          <h4>Supply Chain and Operations Intern</h4>
+          <p class="meta">Asian Synthetics Pvt Ltd, Mumbai, India | January 2019 – June 2019</p>
+          <ul>
+            <li>Supported dispatch and finished-goods logistics at a textile manufacturing unit</li>
+            <li>Sourced alternative wholesalers for embroidery machine parts, reducing single-supplier dependency and shortening repair lead times</li>
+            <li>Implemented a digital record system replacing manual dispatch tracking</li>
+          </ul>
+        </article>
+      </section>
 
-        function closeResume() {
-            document.getElementById('resumeModal').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
+      <section>
+        <h3>Projects</h3>
+        <article>
+          <h4>Customer Churn Prediction - Data Science</h4>
+          <ul>
+            <li>Built and compared logistic regression, random forest, and XGBoost classifiers on a customer dataset</li>
+            <li>Handled missing values, normalization, and feature engineering with pandas and NumPy</li>
+            <li>Selected the final model using cross-validated ROC-AUC</li>
+          </ul>
+        </article>
+        <article>
+          <h4>Car Company Database Project</h4>
+          <ul>
+            <li>Designed and normalized a relational schema consolidating vehicle data from over 10 sources, with defined table relationships and constraints</li>
+            <li>Wrote analytical SQL queries using joins, aggregations, and window functions to answer inventory and sales questions</li>
+          </ul>
+        </article>
+        <article>
+          <h4>Real-Time Data Pipeline and Analytics for E-commerce Platform</h4>
+          <ul>
+            <li>Built a real-time ingestion pipeline with Apache Kafka, streaming the UCI Online Retail dataset through a Kafka topic via a stream simulator</li>
+            <li>Aggregated the stream in Spark Structured Streaming, computing per-minute metrics by country</li>
+            <li>Landed results in Postgres and Parquet, with the full stack orchestrated locally via Docker Compose</li>
+          </ul>
+        </article>
+      </section>
+    </div>
+  </dialog>
 
-        // Close modal when clicking outside
-        document.getElementById('resumeModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeResume();
-            }
+  <script>
+const toggle = document.querySelector(".nav-toggle");
+const nav = document.querySelector("#site-nav");
+
+if (toggle && nav) {
+  toggle.addEventListener("click", () => {
+    const open = nav.classList.toggle("is-open");
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.textContent = open ? "Close" : "Menu";
+  });
+
+  nav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("is-open");
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.textContent = "Menu";
+    });
+  });
+}
+
+const resume = document.querySelector("#resume");
+
+if (resume) {
+  document.querySelectorAll("[data-open-resume]").forEach((button) => {
+    button.addEventListener("click", () => resume.showModal());
+  });
+
+  const close = resume.querySelector("[data-close-resume]");
+  if (close) close.addEventListener("click", () => resume.close());
+
+  resume.addEventListener("click", (event) => {
+    if (event.target === resume) resume.close();
+  });
+}
+
+const links = [...document.querySelectorAll('#site-nav a[href^="#"]')];
+const sections = links
+  .map((link) => document.querySelector(link.getAttribute("href")))
+  .filter(Boolean);
+
+if (sections.length && "IntersectionObserver" in window) {
+  const spy = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.id;
+        links.forEach((link) => {
+          link.classList.toggle("is-active", link.getAttribute("href") === `#${id}`);
         });
+      });
+    },
+    { rootMargin: "-45% 0px -45% 0px" }
+  );
 
-        // Close modal with Escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeResume();
-            }
-        });
+  sections.forEach((section) => spy.observe(section));
+}
 
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Add active class to navigation on scroll
-        window.addEventListener('scroll', () => {
-            let current = '';
-            const sections = document.querySelectorAll('section');
-            
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (scrollY >= (sectionTop - 200)) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            document.querySelectorAll('nav a').forEach(a => {
-                a.classList.remove('active');
-                if (a.getAttribute('href') && a.getAttribute('href').substring(1) === current) {
-                    a.classList.add('active');
-                }
-            });
-        });
-    </script>
+  </script>
 </body>
 </html>
