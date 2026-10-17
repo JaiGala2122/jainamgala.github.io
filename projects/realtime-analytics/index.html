@@ -296,6 +296,50 @@
                 max-width: 300px;
             }
         }
+
+        .sitebar {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.85rem 1.5rem;
+            background: #0e1c3f;
+            color: #f7f4ec;
+            font-family: "Public Sans", "Segoe UI", sans-serif;
+        }
+        .sitebar a {
+            color: #f7f4ec;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .sitebar-mark {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-family: Fraunces, Georgia, serif;
+            font-size: 1.15rem;
+            letter-spacing: -0.02em;
+        }
+        .monogram {
+            display: grid;
+            place-items: center;
+            width: 2rem;
+            height: 2rem;
+            border: 1px solid rgba(247, 244, 236, 0.35);
+            font-family: Fraunces, Georgia, serif;
+            font-size: 0.78rem;
+            letter-spacing: 0.04em;
+        }
+        .sitebar nav {
+            display: flex;
+            gap: 1.15rem;
+            font-size: 0.92rem;
+        }
+        .sitebar nav a { color: rgba(247, 244, 236, 0.82); }
+        .sitebar nav a:hover { color: #f5c518; }
     </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -304,7 +348,7 @@
 </head>
 <body>
 <header class="sitebar">
-  <a class="sitebar-mark" href="../../index.html">Jainam Gala</a>
+  <a class="sitebar-mark" href="../../index.html"><span class="monogram" aria-hidden="true">JG</span>Jainam Gala</a>
   <nav aria-label="Primary">
     <a href="../../index.html#experience">Experience</a>
     <a href="../../index.html#work">Work</a>
