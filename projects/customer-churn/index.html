@@ -26,7 +26,7 @@
 
         /* Header */
         .project-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #16315f 0%, #0e1c3f 100%);
             color: white;
             padding: 60px 20px;
             text-align: center;
@@ -70,7 +70,7 @@
             display: inline-block;
             padding: 12px 30px;
             background: white;
-            color: #667eea;
+            color: #16315f;
             text-decoration: none;
             border-radius: 5px;
             font-weight: 600;
@@ -90,7 +90,7 @@
 
         .btn-secondary:hover {
             background: white;
-            color: #667eea;
+            color: #16315f;
         }
 
         /* Content Sections */
@@ -103,10 +103,10 @@
         }
 
         .section h2 {
-            color: #667eea;
+            color: #16315f;
             margin-bottom: 20px;
             font-size: 1.8rem;
-            border-bottom: 3px solid #667eea;
+            border-bottom: 3px solid #16315f;
             padding-bottom: 10px;
         }
 
@@ -126,7 +126,7 @@
         }
 
         .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #16315f 0%, #0e1c3f 100%);
             color: white;
             padding: 25px;
             border-radius: 8px;
@@ -170,7 +170,7 @@
         /* Code blocks */
         .code-snippet {
             background: #f8f9fa;
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #16315f;
             padding: 15px;
             margin: 20px 0;
             border-radius: 4px;
@@ -196,7 +196,7 @@
         .back-link {
             display: inline-block;
             margin-bottom: 20px;
-            color: #667eea;
+            color: #16315f;
             text-decoration: none;
             font-weight: 600;
         }
@@ -231,8 +231,21 @@
             }
         }
     </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../assets/projects.css">
 </head>
 <body>
+<header class="sitebar">
+  <a class="sitebar-mark" href="../../index.html">Jainam Gala</a>
+  <nav aria-label="Primary">
+    <a href="../../index.html#experience">Experience</a>
+    <a href="../../index.html#work">Work</a>
+    <a href="../../index.html#contact">Contact</a>
+  </nav>
+</header>
+
     <div class="project-header">
         <div class="container">
             <h1>Customer Churn Prediction</h1>
@@ -452,69 +465,7 @@
             </div>
         </div>
 
-        <!-- Comments Section -->
-        <div class="section">
-            <h2>Comments & Feedback</h2>
-            <p style="text-align: center; margin-bottom: 30px;">Have questions or feedback about this project? I'd love to hear from you!</p>
-            
-            <form id="commentForm" style="max-width: 600px; margin: 0 auto;">
-                <div style="margin-bottom: 20px;">
-                    <label for="name" style="display: block; margin-bottom: 8px; font-weight: 600; color: #555;">Name:</label>
-                    <input type="text" id="name" name="name" required 
-                           style="width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 5px; font-size: 1rem; font-family: inherit;">
-                </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <label for="email" style="display: block; margin-bottom: 8px; font-weight: 600; color: #555;">Email:</label>
-                    <input type="email" id="email" name="email" required 
-                           style="width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 5px; font-size: 1rem; font-family: inherit;">
-                </div>
-                
-                <div style="margin-bottom: 20px;">
-                    <label for="comment" style="display: block; margin-bottom: 8px; font-weight: 600; color: #555;">Your Comment:</label>
-                    <textarea id="comment" name="comment" rows="5" required 
-                              style="width: 100%; padding: 12px; border: 2px solid #e9ecef; border-radius: 5px; font-size: 1rem; font-family: inherit; resize: vertical;"></textarea>
-                </div>
-                
-                <button type="submit" class="btn" style="width: 100%; cursor: pointer; border: none; font-size: 1rem;">
-                    💬 Send Comment
-                </button>
-            </form>
-            
-            <div id="formMessage" style="margin-top: 20px; padding: 15px; border-radius: 5px; display: none; text-align: center;"></div>
-        </div>
-
         <a href="../../index.html" class="back-link">← Back to Portfolio</a>
     </div>
-
-    <script>
-        // Handle comment form submission
-        document.getElementById('commentForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const comment = document.getElementById('comment').value;
-            
-            // Create mailto link with pre-filled content
-            const subject = encodeURIComponent('Comment on Customer Churn Prediction Project');
-            const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nComment:\n${comment}`);
-            const mailtoLink = `mailto:jainamgala21@outlook.com?subject=${subject}&body=${body}`;
-            
-            // Open email client
-            window.location.href = mailtoLink;
-            
-            // Show success message
-            const messageDiv = document.getElementById('formMessage');
-            messageDiv.style.display = 'block';
-            messageDiv.style.background = '#d4edda';
-            messageDiv.style.color = '#155724';
-            messageDiv.style.border = '1px solid #c3e6cb';
-            messageDiv.innerHTML = '✅ Opening your email client... Please send the email to submit your comment!';
-            
-            // Reset form
-            this.reset();
-        });
-    </script>
 </body>
 </html>
