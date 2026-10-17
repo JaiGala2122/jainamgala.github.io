@@ -12,10 +12,10 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: "Public Sans", "Segoe UI", sans-serif;
             line-height: 1.6;
             color: #333;
-            background-color: #f8f9fa;
+            background-color: #f4f7fb;
         }
 
         .container {
@@ -24,7 +24,49 @@
             padding: 20px;
         }
 
-        /* Header */
+        .sitebar {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.85rem 1.5rem;
+            background: #0e1c3f;
+            color: #f7f4ec;
+        }
+        .sitebar a {
+            color: #f7f4ec;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .sitebar-mark {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-family: Fraunces, Georgia, serif;
+            font-size: 1.15rem;
+            letter-spacing: -0.02em;
+        }
+        .monogram {
+            display: grid;
+            place-items: center;
+            width: 2rem;
+            height: 2rem;
+            border: 1px solid rgba(247, 244, 236, 0.35);
+            font-family: Fraunces, Georgia, serif;
+            font-size: 0.78rem;
+            letter-spacing: 0.04em;
+        }
+        .sitebar nav {
+            display: flex;
+            gap: 1.15rem;
+            font-size: 0.92rem;
+        }
+        .sitebar nav a { color: rgba(247, 244, 236, 0.82); }
+        .sitebar nav a:hover { color: #f5c518; }
+
         .project-header {
             background: linear-gradient(135deg, #16315f 0%, #0e1c3f 100%);
             color: white;
@@ -34,6 +76,7 @@
         }
 
         .project-header h1 {
+            font-family: Fraunces, Georgia, serif;
             font-size: 2.5rem;
             margin-bottom: 10px;
         }
@@ -74,7 +117,6 @@
             text-decoration: none;
             border-radius: 5px;
             font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .btn:hover {
@@ -82,18 +124,6 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid white;
-        }
-
-        .btn-secondary:hover {
-            background: white;
-            color: #16315f;
-        }
-
-        /* Content Sections */
         .section {
             background: white;
             padding: 40px;
@@ -103,6 +133,7 @@
         }
 
         .section h2 {
+            font-family: Fraunces, Georgia, serif;
             color: #16315f;
             margin-bottom: 20px;
             font-size: 1.8rem;
@@ -117,7 +148,6 @@
             font-size: 1.3rem;
         }
 
-        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -145,18 +175,6 @@
             margin-top: 5px;
         }
 
-        /* Image placeholder */
-        .image-placeholder {
-            background: #e9ecef;
-            border: 2px dashed #adb5bd;
-            padding: 60px 20px;
-            text-align: center;
-            border-radius: 8px;
-            margin: 20px 0;
-            color: #6c757d;
-        }
-
-        /* Lists */
         ul, ol {
             margin-left: 20px;
             margin-top: 15px;
@@ -167,36 +185,33 @@
             line-height: 1.8;
         }
 
-        /* Code blocks */
         .code-snippet {
             background: #f8f9fa;
             border-left: 4px solid #16315f;
             padding: 15px;
             margin: 20px 0;
             border-radius: 4px;
-            font-family: 'Courier New', monospace;
+            font-family: Consolas, monospace;
             font-size: 0.9rem;
             overflow-x: auto;
         }
 
-        /* Key findings */
         .key-finding {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
+            background: #fff6e8;
+            border-left: 4px solid #f5c518;
             padding: 20px;
             margin: 20px 0;
             border-radius: 4px;
         }
 
         .key-finding strong {
-            color: #856404;
+            color: #9a3412;
         }
 
-        /* Back button */
         .back-link {
             display: inline-block;
             margin-bottom: 20px;
-            color: #16315f;
+            color: #c2410c;
             text-decoration: none;
             font-weight: 600;
         }
@@ -205,40 +220,21 @@
             text-decoration: underline;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
-            .project-header h1 {
-                font-size: 2rem;
-            }
-            
-            .section {
-                padding: 25px;
-            }
-
-            .metadata {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .btn-group {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .btn {
-                width: 100%;
-                max-width: 300px;
-            }
+            .project-header h1 { font-size: 2rem; }
+            .section { padding: 25px; }
+            .metadata { flex-direction: column; gap: 10px; }
+            .sitebar { padding: 0.85rem 1rem; }
+            .sitebar nav { gap: 0.8rem; }
         }
     </style>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../assets/projects.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 <header class="sitebar">
-  <a class="sitebar-mark" href="../../index.html">Jainam Gala</a>
+  <a class="sitebar-mark" href="../../index.html"><span class="monogram" aria-hidden="true">JG</span>Jainam Gala</a>
   <nav aria-label="Primary">
     <a href="../../index.html#experience">Experience</a>
     <a href="../../index.html#work">Work</a>
@@ -261,11 +257,10 @@
     <div class="container">
         <a href="../../index.html" class="back-link">← Back to Portfolio</a>
 
-        <!-- Executive Summary -->
         <div class="section">
             <h2>Executive Summary</h2>
             <p><strong>Business Problem:</strong> A bank experiences 20.37% annual customer churn, resulting in significant revenue loss. This project develops a machine learning model to identify at-risk customers before they leave.</p>
-            
+
             <div class="stats-grid">
                 <div class="stat-card">
                     <span class="stat-number">87%</span>
@@ -282,7 +277,6 @@
             </div>
         </div>
 
-        <!-- The Challenge -->
         <div class="section">
             <h2>The Challenge</h2>
             <p>Banks invest heavily in customer acquisition, but retaining existing customers is more cost-effective. The dataset revealed:</p>
@@ -299,10 +293,9 @@
             </div>
         </div>
 
-        <!-- Key Findings -->
         <div class="section">
             <h2>Key Findings</h2>
-            
+
             <div class="key-finding">
                 <strong>Finding #1:</strong> Customers aged 50+ have a 44.6% churn rate - more than double the overall average of 20.37%.
             </div>
@@ -321,10 +314,9 @@
             </div>
         </div>
 
-        <!-- Methodology -->
         <div class="section">
             <h2>Technical Approach</h2>
-            
+
             <h3>1. Data Preprocessing</h3>
             <ul>
                 <li>Cleaned dataset of 10,000 customers with 14 features</li>
@@ -337,7 +329,7 @@
             <div class="code-snippet">
 # Created new features for better prediction:
 - BalanceToSalary: Ratio of account balance to estimated salary
-- TenureAgeRatio: Relationship between tenure and age  
+- TenureAgeRatio: Relationship between tenure and age
 - IsZeroBalance: Binary flag for zero balance accounts
 - AgeGroup: Categorical age brackets (Young, Middle, Senior, Elderly)
             </div>
@@ -364,10 +356,9 @@
             </ul>
         </div>
 
-        <!-- Results -->
         <div class="section">
             <h2>Results & Impact</h2>
-            
+
             <h3>Model Performance</h3>
             <ul>
                 <li><strong>87% ROC-AUC score</strong> on test data - Excellent discrimination ability</li>
@@ -386,15 +377,14 @@
             </ol>
 
             <div style="text-align: center; margin: 20px 0;">
-        <img src="images/feature_importance.png" alt="Feature Importance Chart" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-        <p style="margin-top: 10px; color: #666; font-style: italic;">Top 10 Feature Importances: Age (36.5%) and NumOfProducts (29.8%) are strongest predictors</p>
-    </div>
-</div>
+                <img src="images/feature_importance.png" alt="Feature Importance Chart" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                <p style="margin-top: 10px; color: #666; font-style: italic;">Top 10 Feature Importances: Age (36.5%) and NumOfProducts (29.8%) are strongest predictors</p>
+            </div>
+        </div>
 
-        <!-- Business Recommendations -->
         <div class="section">
             <h2>Business Recommendations</h2>
-            
+
             <h3>Immediate Actions Based on Data:</h3>
             <ol>
                 <li><strong>Target 50+ age group</strong> with specialized retention campaigns - this segment shows 44.6% churn rate compared to overall 20.37%</li>
@@ -407,7 +397,7 @@
             <h3>Long-term Strategy:</h3>
             <ul>
                 <li>Implement automated monthly churn scoring system using the trained model</li>
-                <li>Create tiered intervention programs: High-risk (>70% churn probability), Medium-risk (40-70%), Low-risk (<40%)</li>
+                <li>Create tiered intervention programs: High-risk (&gt;70% churn probability), Medium-risk (40-70%), Low-risk (&lt;40%)</li>
                 <li>A/B test retention offers specifically designed for identified high-risk segments</li>
                 <li>Monitor active membership status - 11.4% feature importance indicates engagement is crucial</li>
                 <li>Retrain model quarterly with new data to maintain accuracy as customer behavior evolves</li>
@@ -424,10 +414,9 @@
             </ul>
         </div>
 
-        <!-- What I Learned -->
         <div class="section">
             <h2>Challenges & Learning</h2>
-            
+
             <h3>Key Challenges:</h3>
             <ul>
                 <li><strong>Class imbalance:</strong> Initial model predicted "no churn" for everyone (80% accurate but useless). Solved using SMOTE and adjusting class weights.</li>
@@ -444,7 +433,6 @@
             </ul>
         </div>
 
-        <!-- Next Steps -->
         <div class="section">
             <h2>Future Improvements</h2>
             <ul>
@@ -456,12 +444,11 @@
             </ul>
         </div>
 
-        <!-- Links -->
         <div class="section" style="text-align: center;">
             <h2>Project Resources</h2>
             <div class="btn-group">
-                <a href="https://github.com/JaiGala2122/credit-card-customer-churn-prediction/blob/main/customer_churn_analysis.ipynb" class="btn" target="_blank">🐍 View Python Script</a>
-        <a href="https://github.com/JaiGala2122/credit-card-customer-churn-prediction" class="btn" target="_blank">📂 View GitHub Repository</a>
+                <a href="https://github.com/JaiGala2122/credit-card-customer-churn-prediction/blob/main/customer_churn_analysis.ipynb" class="btn" target="_blank">View Python Script</a>
+                <a href="https://github.com/JaiGala2122/credit-card-customer-churn-prediction" class="btn" target="_blank">View GitHub Repository</a>
             </div>
         </div>
 
