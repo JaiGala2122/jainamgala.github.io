@@ -440,6 +440,15 @@ section { scroll-margin-top: calc(var(--header) + 1rem); }
   font-weight: 600;
 }
 
+.wip-flag {
+  margin: 0 0 0.35rem;
+  color: var(--copper);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 .case-link {
   align-self: start;
   justify-self: end;
@@ -930,6 +939,7 @@ section { scroll-margin-top: calc(var(--header) + 1rem); }
         <article class="case">
           <p class="case-index">04</p>
           <div class="case-body">
+            <p class="wip-flag">Work in progress</p>
             <h3>Real-Time E-Commerce Analytics Pipeline</h3>
             <p>Per-minute sales by country. Kafka took the UCI Online Retail stream, Spark aggregated it, and Postgres and Parquet stored it. The stack ran locally in Docker Compose.</p>
             <ul class="chips">
