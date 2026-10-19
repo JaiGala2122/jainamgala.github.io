@@ -939,13 +939,12 @@ section { scroll-margin-top: calc(var(--header) + 1rem); }
         <article class="case">
           <p class="case-index">04</p>
           <div class="case-body">
-            <p class="wip-flag">Work in progress</p>
             <h3>Real-Time E-Commerce Analytics Pipeline</h3>
-            <p>Per-minute sales by country. Kafka took the UCI Online Retail stream, Spark aggregated it, and Postgres and Parquet stored it. The stack ran locally in Docker Compose.</p>
+            <p>536,639 sales lines streamed into Postgres with none lost. Revenue matched the source file to the penny, and new rows arrived in about 1 second.</p>
             <ul class="chips">
-              <li>Kafka · Spark</li>
-              <li>Postgres · Parquet</li>
-              <li>Docker Compose</li>
+              <li>536,639 lines</li>
+              <li>Spark · Postgres</li>
+              <li>1.1 s median</li>
             </ul>
           </div>
           <a class="case-link" href="projects/realtime-analytics/index.html">Read the case</a>

@@ -1,1266 +1,335 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real-Time E-Commerce Analytics Pipeline | Data Engineering Project</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f8f9fa;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Header */
-        .project-header {
-            background: linear-gradient(135deg, #16315f 0%, #0e1c3f 100%);
-            color: white;
-            padding: 60px 20px;
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .project-header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .project-header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        .metadata {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-top: 20px;
-            flex-wrap: wrap;
-        }
-
-        .metadata span {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-        }
-
-        .metadata span.wip-pill {
-            background: #f5c518;
-            color: #0e1c3f;
-            font-weight: 700;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 25px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background: white;
-            color: #16315f;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 2px solid white;
-        }
-
-        .btn-secondary:hover {
-            background: white;
-            color: #16315f;
-        }
-
-        /* Content Sections */
-        .section {
-            background: white;
-            padding: 40px;
-            margin-bottom: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .section h2 {
-            color: #16315f;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-            border-bottom: 3px solid #16315f;
-            padding-bottom: 10px;
-        }
-
-        .section h3 {
-            color: #555;
-            margin-top: 25px;
-            margin-bottom: 15px;
-            font-size: 1.3rem;
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, #16315f 0%, #0e1c3f 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            display: block;
-        }
-
-        .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            margin-top: 5px;
-        }
-
-        /* Image placeholder */
-        .image-placeholder {
-            background: #e9ecef;
-            border: 2px dashed #adb5bd;
-            padding: 60px 20px;
-            text-align: center;
-            border-radius: 8px;
-            margin: 20px 0;
-            color: #6c757d;
-        }
-
-        /* Lists */
-        ul, ol {
-            margin-left: 20px;
-            margin-top: 15px;
-        }
-
-        li {
-            margin-bottom: 10px;
-            line-height: 1.8;
-        }
-
-        /* Code blocks */
-        .code-snippet {
-            background: #1e293b;
-            color: #e2e8f0;
-            border-left: 4px solid #16315f;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-            overflow-x: auto;
-            line-height: 1.6;
-        }
-
-        .code-snippet .comment { color: #94a3b8; }
-        .code-snippet .keyword { color: #60a5fa; }
-        .code-snippet .string { color: #fbbf24; }
-
-        /* Key findings */
-        .key-finding {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 4px;
-        }
-
-        .key-finding strong {
-            color: #856404;
-        }
-
-        /* Architecture diagram */
-        .architecture-layers {
-            margin: 30px 0;
-        }
-
-        .layer {
-            background: linear-gradient(135deg, #16315f 0%, #0e1c3f 100%);
-            color: white;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            transition: transform 0.3s;
-        }
-
-        .layer:hover {
-            transform: translateX(10px);
-        }
-
-        .layer-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .layer-tech {
-            opacity: 0.9;
-            font-size: 0.95rem;
-        }
-
-        /* Tech stack grid */
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .tech-category {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            border: 2px solid #e9ecef;
-        }
-
-        .tech-category h4 {
-            color: #16315f;
-            margin-bottom: 15px;
-        }
-
-        .tech-category ul {
-            list-style: none;
-            margin-left: 0;
-        }
-
-        .tech-category ul li:before {
-            content: "✓ ";
-            color: #10b981;
-            font-weight: bold;
-        }
-
-        /* Back button */
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: #16315f;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .project-header h1 {
-                font-size: 2rem;
-            }
-            
-            .section {
-                padding: 25px;
-            }
-
-            .metadata {
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .btn-group {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .btn {
-                width: 100%;
-                max-width: 300px;
-            }
-        }
-
-        .sitebar {
-            position: sticky;
-            top: 0;
-            z-index: 40;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            padding: 0.85rem 1.5rem;
-            background: #0e1c3f;
-            color: #f7f4ec;
-            font-family: "Public Sans", "Segoe UI", sans-serif;
-        }
-        .sitebar a {
-            color: #f7f4ec;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .sitebar-mark {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.7rem;
-            font-family: Fraunces, Georgia, serif;
-            font-size: 1.15rem;
-            letter-spacing: -0.02em;
-        }
-        .monogram {
-            display: grid;
-            place-items: center;
-            width: 2rem;
-            height: 2rem;
-            border: 1px solid rgba(247, 244, 236, 0.35);
-            font-family: Fraunces, Georgia, serif;
-            font-size: 0.78rem;
-            letter-spacing: 0.04em;
-        }
-        .sitebar nav {
-            display: flex;
-            gap: 1.15rem;
-            font-size: 0.92rem;
-        }
-        .sitebar nav a { color: rgba(247, 244, 236, 0.82); }
-        .sitebar nav a:hover { color: #f5c518; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Real-Time E-Commerce Analytics Pipeline | Jainam Gala</title>
+  <meta name="description" content="536,639 sales lines streamed into Postgres with none lost. Revenue matched the source file to the penny, and new rows arrived in about 1 second.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../assets/projects.css">
+  <style>
+    :root {
+      --ink: #152033;
+      --muted: #5d6b82;
+      --line: #d5deea;
+      --paper: #f4f7fb;
+      --cream: #f7f4ec;
+      --navy: #0e1c3f;
+      --navy-2: #16315f;
+      --gold: #f5c518;
+      --copper: #c2410c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Public Sans", "Segoe UI", sans-serif;
+      font-size: 1.05rem;
+      line-height: 1.65;
+    }
+    a { color: var(--copper); }
+    :focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
+    .sitebar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
+      padding: 0.85rem 1.5rem;
+      background: var(--navy);
+      color: var(--cream);
+    }
+    .sitebar a { color: var(--cream); text-decoration: none; font-weight: 500; }
+    .sitebar-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      font-family: Fraunces, Georgia, serif;
+      font-size: 1.15rem;
+    }
+    .monogram {
+      display: grid;
+      place-items: center;
+      width: 2rem;
+      height: 2rem;
+      border: 1px solid rgba(247, 244, 236, 0.35);
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+    }
+    .sitebar nav { display: flex; gap: 1.15rem; font-size: 0.92rem; }
+    .sitebar nav a { color: rgba(247, 244, 236, 0.82); }
+    .sitebar nav a:hover { color: var(--gold); }
+    .hero {
+      padding: 3.5rem 1.5rem 2.5rem;
+      background:
+        radial-gradient(720px 320px at 100% 0%, rgba(245, 197, 24, 0.2), transparent 60%),
+        var(--navy);
+      color: var(--cream);
+    }
+    .wrap { width: min(920px, 100%); margin: 0 auto; }
+    .kicker {
+      margin: 0 0 0.8rem;
+      color: var(--gold);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3 { font-family: Fraunces, Georgia, serif; font-weight: 560; letter-spacing: -0.03em; }
+    h1 { margin: 0; font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: 1.05; }
+    .lede { max-width: 42rem; margin: 1rem 0 0; font-size: 1.2rem; color: rgba(247, 244, 236, 0.88); }
+    .proof {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 0;
+      padding: 1.1rem 0 0;
+      list-style: none;
+      border-top: 1px solid rgba(247, 244, 236, 0.16);
+    }
+    .proof strong {
+      display: block;
+      color: var(--gold);
+      font-family: Fraunces, Georgia, serif;
+      font-size: 1.45rem;
+      font-weight: 560;
+      line-height: 1.1;
+    }
+    .proof li { color: rgba(247, 244, 236, 0.78); font-size: 0.92rem; }
+    main { padding: 1.5rem 1.5rem 3rem; }
+    section {
+      margin: 0 auto 1.25rem;
+      padding: 1.6rem 1.5rem 1.7rem;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+    h2 {
+      margin: 0 0 0.9rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid var(--navy);
+      color: var(--navy);
+      font-size: 1.7rem;
+    }
+    h3 { margin: 1.4rem 0 0.4rem; color: var(--navy); font-size: 1.2rem; }
+    p { margin: 0.55rem 0 0; }
+    ol { margin: 0.6rem 0 0; padding-left: 1.2rem; }
+    li + li { margin-top: 0.45rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.9rem; font-size: 0.98rem; }
+    th, td { padding: 0.6rem 0.45rem; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--navy); font-size: 0.78rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    td:last-child, th:last-child { text-align: right; }
+    .note {
+      margin-top: 0.9rem;
+      padding: 0.85rem 0.95rem;
+      background: #fff6e8;
+      border-left: 3px solid var(--gold);
+    }
+    .figure { margin: 1.1rem 0 0.2rem; padding: 0.8rem; background: var(--paper); border: 1px solid var(--line); }
+    .figure svg { display: block; width: 100%; height: auto; }
+    .figure figcaption { margin-top: 0.45rem; color: var(--muted); font-size: 0.92rem; }
+    .btn {
+      display: inline-block;
+      margin-top: 0.4rem;
+      padding: 0.7rem 1rem;
+      background: var(--gold);
+      color: var(--navy);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .btn:hover { background: #ffd84d; }
+    .back { display: inline-block; margin: 0 0 1rem; font-weight: 700; text-decoration: none; }
+    @media (max-width: 720px) {
+      .proof { grid-template-columns: 1fr 1fr; }
+      section { padding: 1.2rem 1rem; }
+      td:last-child, th:last-child { text-align: left; }
+    }
+  </style>
 </head>
 <body>
-<header class="sitebar">
-  <a class="sitebar-mark" href="../../index.html"><span class="monogram" aria-hidden="true">JG</span>Jainam Gala</a>
-  <nav aria-label="Primary">
-    <a href="../../index.html#experience">Experience</a>
-    <a href="../../index.html#work">Work</a>
-    <a href="../../index.html#contact">Contact</a>
-  </nav>
-</header>
+  <header class="sitebar">
+    <a class="sitebar-mark" href="../../index.html"><span class="monogram" aria-hidden="true">JG</span>Jainam Gala</a>
+    <nav aria-label="Primary">
+      <a href="../../index.html#experience">Experience</a>
+      <a href="../../index.html#work">Work</a>
+      <a href="../../index.html#contact">Contact</a>
+    </nav>
+  </header>
 
-    <div class="project-header">
-        <div class="container">
-            <h1>Real-Time E-Commerce Analytics Pipeline</h1>
-            <p>Processing 1M+ daily transactions with sub-10 second latency using Apache Kafka and Spark Streaming</p>
-            <div class="metadata">
-                <span>Kafka | Spark | PostgreSQL | Elasticsearch | Redis</span>
-                <span>Scale: 1M+ transactions/day</span>
-                <span class="wip-pill">Work in progress</span>
-            </div>
-        </div>
+  <header class="hero">
+    <div class="wrap">
+      <p class="kicker">ETL case study · Spark · Postgres</p>
+      <h1>Real-Time E-Commerce Analytics Pipeline</h1>
+      <p class="lede">All 536,639 cleaned sales lines streamed through Spark into Parquet and Postgres with none lost. Postgres revenue matched the source file to the penny, and new data reached the table in about 1 second.</p>
+      <ul class="proof">
+        <li><strong>536,639</strong> lines streamed, 100% saved</li>
+        <li><strong>£10,642,110.80</strong> revenue, matched to the penny</li>
+        <li><strong>1.1 s</strong> median time from event to Postgres</li>
+        <li><strong>38</strong> countries in the hourly table</li>
+      </ul>
     </div>
+  </header>
 
-    <div class="container">
-        <a href="../../index.html" class="back-link">← Back to Portfolio</a>
+  <main class="wrap">
+    <a class="back" href="../../index.html">← Back to Portfolio</a>
 
-        <!-- Executive Summary -->
-        <div class="section">
-            <h2>Executive Summary</h2>
-            <p><strong>Business Problem:</strong> Traditional batch ETL processes introduced 4-8 hour delays in reporting, preventing real-time business decisions on inventory, fraud detection, and customer behavior. This project delivers a production-grade streaming pipeline that processes over 1 million daily transactions with 5-second end-to-end latency.</p>
-            
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <span class="stat-number">5s</span>
-                    <span class="stat-label">End-to-End Latency</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number">1M+</span>
-                    <span class="stat-label">Transactions/Day</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number">99.9%</span>
-                    <span class="stat-label">Uptime SLA</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number">25%</span>
-                    <span class="stat-label">Query Improvement</span>
-                </div>
-            </div>
-        </div>
+    <section>
+      <h2>Summary</h2>
+      <p>The data shows a business that depends on UK customers and on the September to November season. Its headline returns figure is inflated by fees and order-entry errors.</p>
+    </section>
 
-        <!-- The Challenge -->
-        <div class="section">
-            <h2>The Challenge</h2>
-            <p>E-commerce platforms generate massive transaction volumes that require real-time processing. The existing batch-based system had critical limitations:</p>
-            <ul>
-                <li><strong>4-8 hour delays</strong> - Batch ETL jobs ran overnight, making dashboards stale by morning</li>
-                <li><strong>Scalability bottleneck</strong> - System struggled during flash sales and peak shopping periods</li>
-                <li><strong>Data quality issues</strong> - 24.9% of transactions had missing customer IDs, 2% were returns</li>
-                <li><strong>No real-time insights</strong> - Business teams couldn't respond to fraud, inventory issues, or trends as they happened</li>
-                <li><strong>High operational costs</strong> - Inefficient batch processing consuming $3,500/month in infrastructure</li>
-            </ul>
+    <section>
+      <h2>Pipeline results</h2>
+      <p>One full run on a 2-core machine, using the folder source.</p>
+      <table>
+        <thead>
+          <tr><th>Measure</th><th>Result</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Events streamed</td><td>536,639 in 107 s (5,000 per second)</td></tr>
+          <tr><td>Events saved to Parquet</td><td>536,639 (100%)</td></tr>
+          <tr><td>Order lines in Postgres</td><td>536,639 (100%)</td></tr>
+          <tr><td>Sales revenue, Postgres vs source</td><td>£10,642,110.80 vs £10,642,110.80</td></tr>
+          <tr><td>Time from event sent to row in Postgres</td><td>median 1.1 s, 95th percentile 1.7 s, worst 6.0 s (Spark warm-up)</td></tr>
+          <tr><td>Spark speed per batch</td><td>about 9,000 rows per second</td></tr>
+          <tr><td>Rows in the hourly table</td><td>4,944 country-hours across 38 countries</td></tr>
+        </tbody>
+      </table>
+      <figure class="figure">
+        <svg viewBox="0 0 640 180" role="img" aria-label="Latency from event sent to a Postgres row">
+          <text x="0" y="22" fill="#0e1c3f" font-family="Fraunces, Georgia, serif" font-size="18">Event to Postgres row</text>
+          <text x="0" y="62" fill="#5d6b82" font-size="13">Median 1.1 s</text>
+          <rect x="170" y="46" width="88" height="22" fill="#0e1c3f"/>
+          <text x="0" y="102" fill="#5d6b82" font-size="13">95th percentile 1.7 s</text>
+          <rect x="170" y="86" width="136" height="22" fill="#16315f"/>
+          <text x="0" y="142" fill="#5d6b82" font-size="13">Worst 6.0 s</text>
+          <rect x="170" y="126" width="450" height="22" fill="#c2410c"/>
+        </svg>
+        <figcaption>The worst case is the Spark warm-up, not the steady pace of the run.</figcaption>
+      </figure>
+    </section>
 
-            <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin: 30px 0;">
-                <svg viewBox="0 0 800 500" style="width: 100%; height: auto;">
-                    <!-- Background -->
-                    <rect width="800" height="500" fill="#f8f9fa"/>
-                    
-                    <!-- Title -->
-                    <text x="400" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#16315f">System Architecture Overview</text>
-                    
-                    <!-- Layer 1: Ingestion -->
-                    <rect x="50" y="60" width="700" height="70" rx="8" fill="url(#grad1)"/>
-                    <text x="400" y="85" text-anchor="middle" font-size="16" font-weight="bold" fill="white">1. Streaming Ingestion Layer</text>
-                    <text x="400" y="110" text-anchor="middle" font-size="13" fill="white">Apache Kafka • 3 Brokers • 12 Partitions • 3x Replication</text>
-                    
-                    <!-- Arrow -->
-                    <path d="M 400 130 L 400 150" stroke="#16315f" stroke-width="3" marker-end="url(#arrowhead)"/>
-                    
-                    <!-- Layer 2: Processing -->
-                    <rect x="50" y="150" width="700" height="70" rx="8" fill="url(#grad2)"/>
-                    <text x="400" y="175" text-anchor="middle" font-size="16" font-weight="bold" fill="white">2. Real-Time Processing Engine</text>
-                    <text x="400" y="200" text-anchor="middle" font-size="13" fill="white">Spark Structured Streaming • Windowed Aggregations</text>
-                    
-                    <!-- Arrow -->
-                    <path d="M 400 220 L 400 240" stroke="#16315f" stroke-width="3" marker-end="url(#arrowhead)"/>
-                    
-                    <!-- Layer 3: Storage (split into 3) -->
-                    <g>
-                        <rect x="50" y="240" width="220" height="70" rx="8" fill="url(#grad3)"/>
-                        <text x="160" y="265" text-anchor="middle" font-size="14" font-weight="bold" fill="white">PostgreSQL</text>
-                        <text x="160" y="290" text-anchor="middle" font-size="11" fill="white">Aggregated Metrics</text>
-                        
-                        <rect x="290" y="240" width="220" height="70" rx="8" fill="url(#grad3)"/>
-                        <text x="400" y="265" text-anchor="middle" font-size="14" font-weight="bold" fill="white">Elasticsearch</text>
-                        <text x="400" y="290" text-anchor="middle" font-size="11" fill="white">Event Logs</text>
-                        
-                        <rect x="530" y="240" width="220" height="70" rx="8" fill="url(#grad3)"/>
-                        <text x="640" y="265" text-anchor="middle" font-size="14" font-weight="bold" fill="white">Redis</text>
-                        <text x="640" y="290" text-anchor="middle" font-size="11" fill="white">Hot Cache</text>
-                    </g>
-                    
-                    <!-- Arrows from storage -->
-                    <path d="M 160 310 L 160 350 L 400 350" stroke="#16315f" stroke-width="2" marker-end="url(#arrowhead)"/>
-                    <path d="M 400 310 L 400 350" stroke="#16315f" stroke-width="2" marker-end="url(#arrowhead)"/>
-                    <path d="M 640 310 L 640 350 L 400 350" stroke="#16315f" stroke-width="2" marker-end="url(#arrowhead)"/>
-                    
-                    <!-- Layer 4: Analytics -->
-                    <rect x="50" y="350" width="700" height="60" rx="8" fill="url(#grad4)"/>
-                    <text x="400" y="375" text-anchor="middle" font-size="16" font-weight="bold" fill="white">4. Analytics & Visualization Layer</text>
-                    <text x="400" y="395" text-anchor="middle" font-size="13" fill="white">Grafana Dashboards • FastAPI • <2s Query Response</text>
-                    
-                    <!-- Arrow -->
-                    <path d="M 400 410 L 400 430" stroke="#16315f" stroke-width="3" marker-end="url(#arrowhead)"/>
-                    
-                    <!-- Layer 5: Monitoring -->
-                    <rect x="50" y="430" width="700" height="60" rx="8" fill="url(#grad5)"/>
-                    <text x="400" y="455" text-anchor="middle" font-size="16" font-weight="bold" fill="white">5. Monitoring & Operations</text>
-                    <text x="400" y="475" text-anchor="middle" font-size="13" fill="white">Prometheus • AlertManager • 20+ Alerts • PagerDuty</text>
-                    
-                    <!-- Gradients -->
-                    <defs>
-                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#16315f;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#0e1c3f;stop-opacity:1" />
-                        </linearGradient>
-                        <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#16315f;stop-opacity:0.9" />
-                            <stop offset="100%" style="stop-color:#0e1c3f;stop-opacity:0.9" />
-                        </linearGradient>
-                        <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#16315f;stop-opacity:0.8" />
-                            <stop offset="100%" style="stop-color:#0e1c3f;stop-opacity:0.8" />
-                        </linearGradient>
-                        <linearGradient id="grad4" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#16315f;stop-opacity:0.7" />
-                            <stop offset="100%" style="stop-color:#0e1c3f;stop-opacity:0.7" />
-                        </linearGradient>
-                        <linearGradient id="grad5" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#16315f;stop-opacity:0.6" />
-                            <stop offset="100%" style="stop-color:#0e1c3f;stop-opacity:0.6" />
-                        </linearGradient>
-                        <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
-                            <polygon points="0 0, 10 5, 0 10" fill="#16315f" />
-                        </marker>
-                    </defs>
-                </svg>
-                <p style="text-align: center; margin-top: 15px; color: #666; font-style: italic;">5-Layer Architecture: From ingestion to monitoring</p>
-            </div>
-        </div>
+    <section>
+      <h2>Data quality</h2>
+      <table>
+        <thead>
+          <tr><th>Check</th><th>Rows</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Raw rows</td><td>541,909</td></tr>
+          <tr><td>Exact duplicates removed</td><td>5,268</td></tr>
+          <tr><td>Negative-price adjustments removed</td><td>2</td></tr>
+          <tr><td>Rows kept</td><td>536,639</td></tr>
+          <tr><td>Missing customer ID (kept, flagged)</td><td>135,035 (25%)</td></tr>
+          <tr><td>Return lines (kept, flagged)</td><td>10,587</td></tr>
+        </tbody>
+      </table>
+    </section>
 
-        <!-- Key Findings -->
-        <div class="section">
-            <h2>Key Achievements</h2>
-            
-            <div class="key-finding">
-                <strong>Achievement #1:</strong> Reduced end-to-end latency from 4 hours to 5 seconds - a 2,880x improvement enabling real-time business decisions.
-            </div>
+    <section>
+      <h2>Business findings</h2>
+      <h3>1. The UK is 85% of revenue</h3>
+      <p>£9.0M of £10.6M in sales. The next markets are the Netherlands (2.7%), Ireland (2.7%), Germany (2.1%) and France (2.0%).</p>
+      <figure class="figure">
+        <svg viewBox="0 0 640 210" role="img" aria-label="Share of sales revenue by country">
+          <text x="0" y="18" fill="#5d6b82" font-size="13">United Kingdom, 85%</text>
+          <rect x="180" y="4" width="440" height="20" fill="#0e1c3f"/>
+          <text x="0" y="58" fill="#5d6b82" font-size="13">Netherlands, 2.7%</text>
+          <rect x="180" y="44" width="14" height="20" fill="#16315f"/>
+          <text x="0" y="98" fill="#5d6b82" font-size="13">Ireland, 2.7%</text>
+          <rect x="180" y="84" width="14" height="20" fill="#16315f"/>
+          <text x="0" y="138" fill="#5d6b82" font-size="13">Germany, 2.1%</text>
+          <rect x="180" y="124" width="11" height="20" fill="#8b97ab"/>
+          <text x="0" y="178" fill="#5d6b82" font-size="13">France, 2.0%</text>
+          <rect x="180" y="164" width="10" height="20" fill="#8b97ab"/>
+        </svg>
+        <figcaption>Export markets are real, and they are still a small slice of the £10.6M.</figcaption>
+      </figure>
 
-            <div class="key-finding">
-                <strong>Achievement #2:</strong> Achieved 99.9% uptime SLA with fault-tolerant architecture using 3x replication across Kafka, Spark, and storage layers.
-            </div>
+      <h3>2. Sales nearly double in the autumn</h3>
+      <p>September to November 2011 averaged £1.24M a month, against £684K a month from January to August. November alone was £1.50M.</p>
+      <figure class="figure">
+        <svg viewBox="0 0 640 160" role="img" aria-label="Monthly sales, January to August versus autumn">
+          <text x="0" y="28" fill="#5d6b82" font-size="13">Jan–Aug average, £684K</text>
+          <rect x="210" y="10" width="192" height="26" fill="#8b97ab"/>
+          <text x="0" y="78" fill="#5d6b82" font-size="13">Sep–Nov average, £1.24M</text>
+          <rect x="210" y="60" width="347" height="26" fill="#16315f"/>
+          <text x="0" y="128" fill="#5d6b82" font-size="13">November, £1.50M</text>
+          <rect x="210" y="110" width="420" height="26" fill="#0e1c3f"/>
+        </svg>
+        <figcaption>Autumn demand runs about 1.8 times the rest of the year.</figcaption>
+      </figure>
 
-            <div class="key-finding">
-                <strong>Achievement #3:</strong> Improved query performance by 25% through hybrid storage strategy (PostgreSQL + Elasticsearch + Redis caching).
-            </div>
+      <h3>3. Orders arrive in office hours on weekdays</h3>
+      <p>74% of revenue comes between 10:00 and 16:00. Tuesday and Thursday are the biggest days, about 20% each. There are no Saturday sales in the data.</p>
 
-            <div class="key-finding">
-                <strong>Achievement #4:</strong> Reduced infrastructure costs by 48% ($3,500 → $1,800/month) while handling 10x higher throughput.
-            </div>
-        </div>
+      <h3>4. The returns figure is misleading</h3>
+      <p>Returns total £894K, 8.4% of sales, but most of that is not customers returning products.</p>
+      <table>
+        <thead>
+          <tr><th>Part of the returns figure</th><th>Value</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Fees and manual adjustments (Amazon fees £235K, manual £147K, postage and others)</td><td>£418K</td></tr>
+          <tr><td>Two order-entry errors, each ordered and cancelled the same day (80,995 and 74,215 units)</td><td>£246K</td></tr>
+          <tr><td>Product returns</td><td>£230K, about 2% of product sales</td></tr>
+        </tbody>
+      </table>
+      <figure class="figure">
+        <svg viewBox="0 0 640 150" role="img" aria-label="What makes up the 894 thousand pound returns figure">
+          <text x="0" y="28" fill="#5d6b82" font-size="13">Fees and adjustments, £418K</text>
+          <rect x="230" y="10" width="390" height="26" fill="#c2410c"/>
+          <text x="0" y="78" fill="#5d6b82" font-size="13">Order-entry errors, £246K</text>
+          <rect x="230" y="60" width="229" height="26" fill="#16315f"/>
+          <text x="0" y="128" fill="#5d6b82" font-size="13">Product returns, £230K</text>
+          <rect x="230" y="110" width="214" height="26" fill="#0e1c3f"/>
+        </svg>
+        <figcaption>The product return rate is about 2%, not the 8.4% headline.</figcaption>
+      </figure>
 
-        <!-- System Architecture -->
-        <div class="section">
-            <h2>System Architecture</h2>
-            <p>Designed a 5-layer production architecture handling millions of events with sub-10 second latency:</p>
-            
-            <div class="architecture-layers">
-                <div class="layer">
-                    <div class="layer-title">1️⃣ Streaming Ingestion Layer</div>
-                    <div class="layer-tech">Apache Kafka • 3-broker cluster • 12 partitions • 3x replication • Exactly-once semantics</div>
-                </div>
-                <div class="layer">
-                    <div class="layer-title">2️⃣ Real-Time Processing Engine</div>
-                    <div class="layer-tech">Spark Structured Streaming • Windowed aggregations (1-min, 5-min, 1-hour) • Watermarking • Deduplication</div>
-                </div>
-                <div class="layer">
-                    <div class="layer-title">3️⃣ Hybrid Storage Layer</div>
-                    <div class="layer-tech">PostgreSQL (aggregated metrics) • Elasticsearch (event logs) • Redis (hot cache with 95% hit rate)</div>
-                </div>
-                <div class="layer">
-                    <div class="layer-title">4️⃣ Analytics & Visualization</div>
-                    <div class="layer-tech">Grafana dashboards • FastAPI REST endpoints • Sub-2s query response time</div>
-                </div>
-                <div class="layer">
-                    <div class="layer-title">5️⃣ Monitoring & Operations</div>
-                    <div class="layer-tech">Prometheus (20+ alerts) • AlertManager • PagerDuty integration • 60% faster MTTR</div>
-                </div>
-            </div>
+      <h3>5. A quarter of order lines have no customer ID</h3>
+      <p>These lines carry 16.5% of revenue. They cannot be used for customer-level analysis such as repeat purchase or churn.</p>
+    </section>
 
-            <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin: 30px 0;">
-                <svg viewBox="0 0 900 400" style="width: 100%; height: auto;">
-                    <!-- Background -->
-                    <rect width="900" height="400" fill="#f8f9fa"/>
-                    
-                    <!-- Title -->
-                    <text x="450" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#16315f">Real-Time Data Flow</text>
-                    
-                    <!-- E-commerce App -->
-                    <rect x="20" y="60" width="120" height="280" rx="8" fill="#10b981" opacity="0.9"/>
-                    <text x="80" y="90" text-anchor="middle" font-size="14" font-weight="bold" fill="white">E-Commerce</text>
-                    <text x="80" y="110" text-anchor="middle" font-size="14" font-weight="bold" fill="white">Application</text>
-                    <text x="80" y="180" text-anchor="middle" font-size="12" fill="white">Transactions</text>
-                    <text x="80" y="200" text-anchor="middle" font-size="12" fill="white">Orders</text>
-                    <text x="80" y="220" text-anchor="middle" font-size="12" fill="white">Customers</text>
-                    <text x="80" y="260" text-anchor="middle" font-size="24" font-weight="bold" fill="white">1M+/day</text>
-                    <text x="80" y="280" text-anchor="middle" font-size="11" fill="white">transactions</text>
-                    
-                    <!-- Arrow to Kafka -->
-                    <path d="M 140 200 L 190 200" stroke="#16315f" stroke-width="4" marker-end="url(#arrow)"/>
-                    <text x="165" y="190" text-anchor="middle" font-size="11" fill="#16315f" font-weight="bold">Stream</text>
-                    
-                    <!-- Kafka -->
-                    <rect x="190" y="60" width="140" height="280" rx="8" fill="url(#kafkaGrad)"/>
-                    <text x="260" y="90" text-anchor="middle" font-size="16" font-weight="bold" fill="white">Apache Kafka</text>
-                    <text x="260" y="130" text-anchor="middle" font-size="12" fill="white">⚡ 3 Brokers</text>
-                    <text x="260" y="155" text-anchor="middle" font-size="12" fill="white">📊 12 Partitions</text>
-                    <text x="260" y="180" text-anchor="middle" font-size="12" fill="white">🔄 3x Replication</text>
-                    <text x="260" y="220" text-anchor="middle" font-size="11" fill="white">Topics:</text>
-                    <text x="260" y="238" text-anchor="middle" font-size="10" fill="white">• transactions.raw</text>
-                    <text x="260" y="254" text-anchor="middle" font-size="10" fill="white">• transactions.validated</text>
-                    <text x="260" y="270" text-anchor="middle" font-size="10" fill="white">• transactions.enriched</text>
-                    <text x="260" y="310" text-anchor="middle" font-size="20" font-weight="bold" fill="white">&lt;1s</text>
-                    <text x="260" y="327" text-anchor="middle" font-size="10" fill="white">ingestion</text>
-                    
-                    <!-- Arrow to Spark -->
-                    <path d="M 330 200 L 380 200" stroke="#16315f" stroke-width="4" marker-end="url(#arrow)"/>
-                    <text x="355" y="190" text-anchor="middle" font-size="11" fill="#16315f" font-weight="bold">Process</text>
-                    
-                    <!-- Spark -->
-                    <rect x="380" y="60" width="140" height="280" rx="8" fill="url(#sparkGrad)"/>
-                    <text x="450" y="90" text-anchor="middle" font-size="16" font-weight="bold" fill="white">Spark</text>
-                    <text x="450" y="110" text-anchor="middle" font-size="16" font-weight="bold" fill="white">Streaming</text>
-                    <text x="450" y="145" text-anchor="middle" font-size="12" fill="white">🔍 Validate</text>
-                    <text x="450" y="165" text-anchor="middle" font-size="12" fill="white">✨ Enrich</text>
-                    <text x="450" y="185" text-anchor="middle" font-size="12" fill="white">🔄 Deduplicate</text>
-                    <text x="450" y="205" text-anchor="middle" font-size="12" fill="white">📊 Aggregate</text>
-                    <text x="450" y="240" text-anchor="middle" font-size="11" fill="white">Windows:</text>
-                    <text x="450" y="258" text-anchor="middle" font-size="10" fill="white">1-min | 5-min | 1-hour</text>
-                    <text x="450" y="295" text-anchor="middle" font-size="20" font-weight="bold" fill="white">~3s</text>
-                    <text x="450" y="312" text-anchor="middle" font-size="10" fill="white">processing</text>
-                    
-                    <!-- Arrow to Storage -->
-                    <path d="M 520 200 L 570 200" stroke="#16315f" stroke-width="4" marker-end="url(#arrow)"/>
-                    <text x="545" y="190" text-anchor="middle" font-size="11" fill="#16315f" font-weight="bold">Store</text>
-                    
-                    <!-- Storage (3 databases) -->
-                    <g>
-                        <rect x="570" y="60" width="140" height="85" rx="8" fill="#6366f1" opacity="0.9"/>
-                        <text x="640" y="85" text-anchor="middle" font-size="14" font-weight="bold" fill="white">PostgreSQL</text>
-                        <text x="640" y="105" text-anchor="middle" font-size="11" fill="white">Aggregated</text>
-                        <text x="640" y="120" text-anchor="middle" font-size="11" fill="white">Metrics</text>
-                        <text x="640" y="138" text-anchor="middle" font-size="10" fill="white">&lt;800ms query</text>
-                        
-                        <rect x="570" y="157" width="140" height="85" rx="8" fill="#8b5cf6" opacity="0.9"/>
-                        <text x="640" y="182" text-anchor="middle" font-size="14" font-weight="bold" fill="white">Elasticsearch</text>
-                        <text x="640" y="202" text-anchor="middle" font-size="11" fill="white">Event Logs</text>
-                        <text x="640" y="217" text-anchor="middle" font-size="11" fill="white">Full Search</text>
-                        <text x="640" y="235" text-anchor="middle" font-size="10" fill="white">&lt;500ms query</text>
-                        
-                        <rect x="570" y="254" width="140" height="85" rx="8" fill="#a855f7" opacity="0.9"/>
-                        <text x="640" y="279" text-anchor="middle" font-size="14" font-weight="bold" fill="white">Redis Cache</text>
-                        <text x="640" y="299" text-anchor="middle" font-size="11" fill="white">Hot Data</text>
-                        <text x="640" y="314" text-anchor="middle" font-size="11" fill="white">95% hit rate</text>
-                        <text x="640" y="332" text-anchor="middle" font-size="10" fill="white">&lt;200ms query</text>
-                    </g>
-                    
-                    <!-- Arrow to Dashboard -->
-                    <path d="M 710 200 L 760 200" stroke="#16315f" stroke-width="4" marker-end="url(#arrow)"/>
-                    <text x="735" y="190" text-anchor="middle" font-size="11" fill="#16315f" font-weight="bold">Visualize</text>
-                    
-                    <!-- Dashboard -->
-                    <rect x="760" y="60" width="120" height="280" rx="8" fill="#f59e0b" opacity="0.9"/>
-                    <text x="820" y="90" text-anchor="middle" font-size="14" font-weight="bold" fill="white">Real-Time</text>
-                    <text x="820" y="110" text-anchor="middle" font-size="14" font-weight="bold" fill="white">Dashboards</text>
-                    <text x="820" y="150" text-anchor="middle" font-size="12" fill="white">📊 Grafana</text>
-                    <text x="820" y="175" text-anchor="middle" font-size="12" fill="white">📈 Metrics</text>
-                    <text x="820" y="200" text-anchor="middle" font-size="12" fill="white">🎯 Alerts</text>
-                    <text x="820" y="245" text-anchor="middle" font-size="11" fill="white">100+ users</text>
-                    <text x="820" y="280" text-anchor="middle" font-size="20" font-weight="bold" fill="white">5s</text>
-                    <text x="820" y="297" text-anchor="middle" font-size="10" fill="white">total latency</text>
-                    
-                    <!-- Total time indicator -->
-                    <rect x="20" y="360" width="860" height="30" rx="5" fill="#e9ecef"/>
-                    <rect x="20" y="360" width="860" height="30" rx="5" fill="url(#timeGrad)" opacity="0.3"/>
-                    <text x="450" y="380" text-anchor="middle" font-size="14" font-weight="bold" fill="#16315f">⚡ Total End-to-End: ~5 seconds (2,880x faster than batch)</text>
-                    
-                    <!-- Gradients -->
-                    <defs>
-                        <linearGradient id="kafkaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#16315f;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#0e1c3f;stop-opacity:1" />
-                        </linearGradient>
-                        <linearGradient id="sparkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#6366f1;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#8b5cf6;stop-opacity:1" />
-                        </linearGradient>
-                        <linearGradient id="timeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" style="stop-color:#16315f;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
-                        </linearGradient>
-                        <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
-                            <polygon points="0 0, 10 5, 0 10" fill="#16315f" />
-                        </marker>
-                    </defs>
-                </svg>
-                <p style="text-align: center; margin-top: 15px; color: #666; font-style: italic;">Complete data flow from transaction to dashboard in ~5 seconds</p>
-            </div>
-        </div>
+    <section>
+      <h2>Recommendations</h2>
+      <h3>For the business</h3>
+      <ol>
+        <li><strong>Plan stock and staffing for September to November.</strong> Demand runs about 1.8 times higher than the rest of the year.</li>
+        <li><strong>Report product returns separately from fees and adjustments.</strong> The real product return rate is about 2%, not 8.4%.</li>
+        <li><strong>Add a check for unusually large orders.</strong> Two keying errors moved £246K in and out of the books.</li>
+        <li><strong>Capture a customer ID on every order.</strong> It would make 16.5% more revenue usable for customer analysis.</li>
+        <li><strong>Test growth outside the UK.</strong> The Netherlands, Ireland and Germany are already the largest export markets.</li>
+      </ol>
+      <h3>For the pipeline</h3>
+      <ol>
+        <li>Split the gold table's returns column into product returns and adjustments.</li>
+        <li>Benchmark the Kafka path. This run used the folder source.</li>
+        <li>Add a Grafana dashboard on the Postgres table.</li>
+        <li>Add automatic tests for row counts and revenue reconciliation.</li>
+        <li>Use an exact distinct count for invoices. The current count is approximate.</li>
+      </ol>
+    </section>
 
-        <!-- Technical Implementation -->
-        <div class="section">
-            <h2>Technical Implementation</h2>
-            
-            <h3>1. Streaming Ingestion (Apache Kafka)</h3>
-            <div class="code-snippet">
-<span class="comment"># Kafka Producer Configuration - Exactly-Once Semantics</span>
-<span class="keyword">from</span> kafka <span class="keyword">import</span> KafkaProducer
+    <section>
+      <h2>Limits</h2>
+      <ul>
+        <li>One run on one machine, not a production system.</li>
+        <li>The data covers one retailer from December 2010 to December 2011. December 2011 is a partial month.</li>
+        <li>The Kafka path is built but has not been measured.</li>
+      </ul>
+      <p class="note">The measured path is the folder source into Spark, then Parquet and Postgres. Kafka is in the design and is not part of these timings.</p>
+    </section>
 
-producer = KafkaProducer(
-    bootstrap_servers=[<span class="string">'kafka-1:9092'</span>, <span class="string">'kafka-2:9092'</span>, <span class="string">'kafka-3:9092'</span>],
-    enable_idempotence=<span class="keyword">True</span>,      <span class="comment"># Exactly-once delivery</span>
-    acks=<span class="string">'all'</span>,                     <span class="comment"># Wait for all replicas</span>
-    compression_type=<span class="string">'snappy'</span>,     <span class="comment"># 30% bandwidth reduction</span>
-    max_in_flight_requests_per_connection=5
-)
-            </div>
-            <ul>
-                <li>3-broker Kafka cluster with 12 partitions per topic for parallel processing</li>
-                <li>Configured 3x replication factor for fault tolerance</li>
-                <li>Implemented exactly-once semantics preventing duplicate transactions</li>
-                <li>Partition key based on customer_id for ordered processing per customer</li>
-            </ul>
+    <section>
+      <h2>Project resources</h2>
+      <a class="btn" href="https://github.com/JaiGala2122/ecommerce-realtime-analytics" target="_blank" rel="noopener">View GitHub repository</a>
+    </section>
 
-            <h3>2. Real-Time Processing (Spark Structured Streaming)</h3>
-            <div class="code-snippet">
-<span class="comment"># Spark Streaming Job - Windowed Aggregations</span>
-<span class="keyword">from</span> pyspark.sql <span class="keyword">import</span> SparkSession
-<span class="keyword">from</span> pyspark.sql.functions <span class="keyword">import</span> *
-
-<span class="comment"># Read from Kafka</span>
-raw_stream = spark.readStream \
-    .format(<span class="string">"kafka"</span>) \
-    .option(<span class="string">"kafka.bootstrap.servers"</span>, <span class="string">"kafka-1:9092"</span>) \
-    .option(<span class="string">"subscribe"</span>, <span class="string">"transactions.raw"</span>) \
-    .load()
-
-<span class="comment"># 1-minute windowed aggregations with watermarking</span>
-metrics = parsed_stream \
-    .withWatermark(<span class="string">"event_time"</span>, <span class="string">"2 minutes"</span>) \
-    .groupBy(
-        window(col(<span class="string">"event_time"</span>), <span class="string">"1 minute"</span>),
-        col(<span class="string">"country"</span>)
-    ) \
-    .agg(
-        count(<span class="string">"*"</span>).alias(<span class="string">"transaction_count"</span>),
-        sum(<span class="string">"revenue"</span>).alias(<span class="string">"total_revenue"</span>),
-        avg(<span class="string">"revenue"</span>).alias(<span class="string">"avg_revenue"</span>)
-    )
-            </div>
-            <ul>
-                <li>Implemented 5-minute watermarking to handle late-arriving data</li>
-                <li>Created 1-minute, 5-minute, and 1-hour tumbling windows for different analytics needs</li>
-                <li>Built deduplication logic to handle Kafka's at-least-once delivery guarantee</li>
-                <li>Added schema validation catching 24.9% of invalid transactions before processing</li>
-            </ul>
-
-            <h3>3. Data Quality Framework</h3>
-            <ul>
-                <li><strong>Schema Validation:</strong> Enforced strict schema preventing malformed data</li>
-                <li><strong>Business Logic:</strong> Filtered cancelled invoices (9,288 transactions), flagged returns</li>
-                <li><strong>Deduplication:</strong> Event-level dedup with 5-minute window achieving 99.5% accuracy</li>
-                <li><strong>Dead Letter Queue:</strong> Routed invalid transactions for later investigation</li>
-                <li><strong>Anomaly Detection:</strong> Statistical checks for unusual revenue values or quantities</li>
-            </ul>
-
-            <h3>4. Hybrid Storage Strategy</h3>
-            <div class="tech-grid">
-                <div class="tech-category">
-                    <h4>PostgreSQL (TimescaleDB)</h4>
-                    <ul>
-                        <li>Time-series aggregated metrics</li>
-                        <li>Monthly partitioning for performance</li>
-                        <li>Materialized views for dashboards</li>
-                        <li>Query time: <800ms (p95)</li>
-                    </ul>
-                </div>
-                <div class="tech-category">
-                    <h4>Elasticsearch</h4>
-                    <ul>
-                        <li>Full transaction event logs</li>
-                        <li>Full-text search capability</li>
-                        <li>90-day retention with ILM</li>
-                        <li>Query time: <500ms</li>
-                    </ul>
-                </div>
-                <div class="tech-category">
-                    <h4>Redis Cache</h4>
-                    <ul>
-                        <li>Hot data with 5-min TTL</li>
-                        <li>95% cache hit rate</li>
-                        <li>Top products, real-time KPIs</li>
-                        <li>Query time: <200ms</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); margin: 30px 0;">
-                <svg viewBox="0 0 800 450" style="width: 100%; height: auto;">
-                    <!-- Background -->
-                    <rect width="800" height="450" fill="#f8f9fa"/>
-                    
-                    <!-- Title -->
-                    <text x="400" y="35" text-anchor="middle" font-size="22" font-weight="bold" fill="#16315f">Performance: Batch vs Real-Time</text>
-                    <text x="400" y="60" text-anchor="middle" font-size="14" fill="#666">Before and After Comparison</text>
-                    
-                    <!-- Y-axis labels -->
-                    <text x="40" y="100" text-anchor="end" font-size="12" fill="#666">4 hours</text>
-                    <line x1="50" y1="95" x2="750" y2="95" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="5,5"/>
-                    
-                    <text x="40" y="175" text-anchor="end" font-size="12" fill="#666">3 hours</text>
-                    <line x1="50" y1="170" x2="750" y2="170" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="5,5"/>
-                    
-                    <text x="40" y="250" text-anchor="end" font-size="12" fill="#666">2 hours</text>
-                    <line x1="50" y1="245" x2="750" y2="245" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="5,5"/>
-                    
-                    <text x="40" y="325" text-anchor="end" font-size="12" fill="#666">1 hour</text>
-                    <line x1="50" y1="320" x2="750" y2="320" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="5,5"/>
-                    
-                    <text x="40" y="400" text-anchor="end" font-size="12" fill="#666">5 sec</text>
-                    <line x1="50" y1="395" x2="750" y2="395" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="5,5"/>
-                    
-                    <!-- X-axis -->
-                    <line x1="50" y1="410" x2="750" y2="410" stroke="#333" stroke-width="2"/>
-                    
-                    <!-- BEFORE Bar -->
-                    <rect x="150" y="100" width="180" height="310" rx="8" fill="#ef4444" opacity="0.8"/>
-                    <text x="240" y="250" text-anchor="middle" font-size="40" font-weight="bold" fill="white">4 hrs</text>
-                    <text x="240" y="280" text-anchor="middle" font-size="14" fill="white">Batch ETL</text>
-                    <text x="240" y="300" text-anchor="middle" font-size="12" fill="white">(Overnight Jobs)</text>
-                    
-                    <!-- BEFORE Label -->
-                    <text x="240" y="430" text-anchor="middle" font-size="16" font-weight="bold" fill="#ef4444">BEFORE</text>
-                    
-                    <!-- AFTER Bar -->
-                    <rect x="470" y="395" width="180" height="15" rx="8" fill="#10b981" opacity="0.9"/>
-                    <text x="560" y="260" text-anchor="middle" font-size="40" font-weight="bold" fill="#10b981">5s</text>
-                    <text x="560" y="290" text-anchor="middle" font-size="14" fill="#10b981">Real-Time</text>
-                    <text x="560" y="310" text-anchor="middle" font-size="12" fill="#10b981">(Streaming)</text>
-                    
-                    <!-- AFTER Label -->
-                    <text x="560" y="430" text-anchor="middle" font-size="16" font-weight="bold" fill="#10b981">AFTER</text>
-                    
-                    <!-- Improvement indicator -->
-                    <rect x="200" y="80" width="400" height="0" fill="none"/>
-                    <path d="M 330 80 L 470 80" stroke="#16315f" stroke-width="3" marker-end="url(#arrowImprove)"/>
-                    <text x="400" y="75" text-anchor="middle" font-size="16" font-weight="bold" fill="#16315f">2,880x FASTER</text>
-                    
-                    <!-- Additional metrics boxes -->
-                    <g>
-                        <rect x="60" y="130" width="80" height="60" rx="5" fill="white" stroke="#ef4444" stroke-width="2"/>
-                        <text x="100" y="152" text-anchor="middle" font-size="12" font-weight="bold" fill="#ef4444">Stale Data</text>
-                        <text x="100" y="168" text-anchor="middle" font-size="10" fill="#666">Reports</text>
-                        <text x="100" y="182" text-anchor="middle" font-size="10" fill="#666">outdated</text>
-                        
-                        <rect x="60" y="200" width="80" height="60" rx="5" fill="white" stroke="#ef4444" stroke-width="2"/>
-                        <text x="100" y="222" text-anchor="middle" font-size="12" font-weight="bold" fill="#ef4444">$3,500</text>
-                        <text x="100" y="238" text-anchor="middle" font-size="10" fill="#666">Monthly</text>
-                        <text x="100" y="252" text-anchor="middle" font-size="10" fill="#666">cost</text>
-                        
-                        <rect x="660" y="130" width="80" height="60" rx="5" fill="white" stroke="#10b981" stroke-width="2"/>
-                        <text x="700" y="152" text-anchor="middle" font-size="12" font-weight="bold" fill="#10b981">Real-Time</text>
-                        <text x="700" y="168" text-anchor="middle" font-size="10" fill="#666">Instant</text>
-                        <text x="700" y="182" text-anchor="middle" font-size="10" fill="#666">insights</text>
-                        
-                        <rect x="660" y="200" width="80" height="60" rx="5" fill="white" stroke="#10b981" stroke-width="2"/>
-                        <text x="700" y="222" text-anchor="middle" font-size="12" font-weight="bold" fill="#10b981">$1,800</text>
-                        <text x="700" y="238" text-anchor="middle" font-size="10" fill="#666">Monthly</text>
-                        <text x="700" y="252" text-anchor="middle" font-size="10" fill="#666">cost</text>
-                    </g>
-                    
-                    <!-- Defs -->
-                    <defs>
-                        <marker id="arrowImprove" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
-                            <polygon points="0 0, 12 6, 0 12" fill="#16315f" />
-                        </marker>
-                    </defs>
-                </svg>
-                <p style="text-align: center; margin-top: 15px; color: #666; font-style: italic;">Dramatic latency reduction: 4 hours → 5 seconds, plus 48% cost savings</p>
-            </div>
-        </div>
-
-        <!-- Performance Optimizations -->
-        <div class="section">
-            <h2>Performance Optimizations</h2>
-            
-            <h3>Kafka Optimization (140% throughput increase):</h3>
-            <ul>
-                <li>Increased partitions from 6 to 12 for better parallelism</li>
-                <li>Configured Snappy compression reducing bandwidth by 30%</li>
-                <li>Tuned <code>max.in.flight.requests</code> for optimal throughput/latency balance</li>
-                <li>Implemented customer_id partition keys for ordered processing</li>
-            </ul>
-
-            <h3>Spark Optimization (67% latency reduction):</h3>
-            <ul>
-                <li><strong>Broadcast joins</strong> for dimension tables - reduced shuffle by 40%</li>
-                <li><strong>Executor tuning:</strong> 4GB memory per executor, 2 cores each</li>
-                <li><strong>Checkpoint optimization:</strong> Incremental vs full snapshots</li>
-                <li><strong>Partition coalescing:</strong> Reduced small files before write operations</li>
-                <li>Result: Processing latency improved from 15s to 5s average</li>
-            </ul>
-
-            <h3>Database Optimization (25% query improvement):</h3>
-            <ul>
-                <li><strong>Time-based partitioning:</strong> Monthly partitions on metrics tables</li>
-                <li><strong>Strategic indexing:</strong> Covering indexes on (window_start, country)</li>
-                <li><strong>Materialized views:</strong> Pre-aggregated last-hour data, refreshed every minute</li>
-                <li><strong>Connection pooling:</strong> PgBouncer with 25 connections per pool</li>
-                <li>Result: Dashboard queries improved from 2.5s to <2s (p95)</li>
-            </ul>
-
-            <h3>Caching Strategy (95% hit rate):</h3>
-            <ul>
-                <li><strong>L1 Cache (Redis):</strong> Hot data with 5-minute TTL</li>
-                <li><strong>L2 Cache (Materialized Views):</strong> Warm data with 1-minute refresh</li>
-                <li><strong>Cache warming:</strong> Pre-populate on deployment to avoid cold starts</li>
-                <li>Result: 95% of dashboard queries served from cache in <200ms</li>
-            </ul>
-        </div>
-
-        <!-- Results & Impact -->
-        <div class="section">
-            <h2>Results & Business Impact</h2>
-            
-            <h3>Performance Metrics:</h3>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <span class="stat-number">2,880x</span>
-                    <span class="stat-label">Faster (4hr → 5s)</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number">10x</span>
-                    <span class="stat-label">Throughput Increase</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number">48%</span>
-                    <span class="stat-label">Cost Reduction</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number">60%</span>
-                    <span class="stat-label">Faster MTTR</span>
-                </div>
-            </div>
-
-            <h3>Technical Achievements:</h3>
-            <ul>
-                <li><strong>5-second latency:</strong> End-to-end processing time from ingestion to dashboard</li>
-                <li><strong>1M+ transactions/day:</strong> Sustained throughput with room for 10x spikes</li>
-                <li><strong>99.9% uptime:</strong> Fault-tolerant architecture with automated failover</li>
-                <li><strong>99.5% accuracy:</strong> Comprehensive data validation and quality checks</li>
-                <li><strong>95% cache hit rate:</strong> Optimized caching delivering sub-200ms queries</li>
-                <li><strong>$0.06 per 1M transactions:</strong> Cost-efficient at scale</li>
-            </ul>
-
-            <h3>Business Outcomes:</h3>
-            <ul>
-                <li><strong>Real-time fraud detection:</strong> Prevented estimated $200K annual losses</li>
-                <li><strong>Inventory optimization:</strong> Business responds to stockouts within minutes vs hours</li>
-                <li><strong>Flash sale monitoring:</strong> Real-time performance tracking during peak events</li>
-                <li><strong>Customer behavior insights:</strong> Immediate visibility into trends and patterns</li>
-                <li><strong>Cost savings:</strong> 48% infrastructure cost reduction ($1,700/month saved)</li>
-                <li><strong>Faster decisions:</strong> 100+ business users access real-time dashboards</li>
-            </ul>
-
-            <div style="background: #1e1e1e; padding: 20px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); margin: 30px 0;">
-                <svg viewBox="0 0 1000 600" style="width: 100%; height: auto;">
-                    <!-- Dashboard Background -->
-                    <rect width="1000" height="600" fill="#1e1e1e"/>
-                    
-                    <!-- Header Bar -->
-                    <rect x="0" y="0" width="1000" height="50" fill="#2a2a2a"/>
-                    <text x="20" y="32" font-size="20" font-weight="bold" fill="#f59e0b">📊 E-Commerce Real-Time Analytics</text>
-                    <text x="900" y="32" font-size="14" fill="#10b981">● LIVE</text>
-                    <text x="820" y="32" font-size="12" fill="#999">Last update: 2s ago</text>
-                    
-                    <!-- Top Stats Row -->
-                    <g>
-                        <!-- Revenue Card -->
-                        <rect x="20" y="70" width="230" height="120" rx="8" fill="#2a2a2a"/>
-                        <text x="135" y="95" text-anchor="middle" font-size="12" fill="#999">Total Revenue (Today)</text>
-                        <text x="135" y="135" text-anchor="middle" font-size="36" font-weight="bold" fill="#10b981">$48,392</text>
-                        <text x="135" y="165" text-anchor="middle" font-size="11" fill="#10b981">↑ 12.5% vs yesterday</text>
-                        
-                        <!-- Transactions Card -->
-                        <rect x="270" y="70" width="230" height="120" rx="8" fill="#2a2a2a"/>
-                        <text x="385" y="95" text-anchor="middle" font-size="12" fill="#999">Transactions (Last Hour)</text>
-                        <text x="385" y="135" text-anchor="middle" font-size="36" font-weight="bold" fill="#60a5fa">1,247</text>
-                        <text x="385" y="165" text-anchor="middle" font-size="11" fill="#60a5fa">↑ 8.2% increase</text>
-                        
-                        <!-- Active Users Card -->
-                        <rect x="520" y="70" width="230" height="120" rx="8" fill="#2a2a2a"/>
-                        <text x="635" y="95" text-anchor="middle" font-size="12" fill="#999">Active Customers</text>
-                        <text x="635" y="135" text-anchor="middle" font-size="36" font-weight="bold" fill="#a855f7">342</text>
-                        <text x="635" y="165" text-anchor="middle" font-size="11" fill="#a855f7">Shopping now</text>
-                        
-                        <!-- Avg Order Value Card -->
-                        <rect x="770" y="70" width="210" height="120" rx="8" fill="#2a2a2a"/>
-                        <text x="875" y="95" text-anchor="middle" font-size="12" fill="#999">Avg Order Value</text>
-                        <text x="875" y="135" text-anchor="middle" font-size="36" font-weight="bold" fill="#f59e0b">$38.79</text>
-                        <text x="875" y="165" text-anchor="middle" font-size="11" fill="#f59e0b">↑ 3.1% up</text>
-                    </g>
-                    
-                    <!-- Revenue Chart -->
-                    <g>
-                        <rect x="20" y="210" width="630" height="260" rx="8" fill="#2a2a2a"/>
-                        <text x="30" y="235" font-size="14" font-weight="bold" fill="#fff">Revenue per Minute (Last Hour)</text>
-                        <text x="600" y="235" font-size="11" fill="#10b981">Real-time</text>
-                        
-                        <!-- Chart Grid -->
-                        <line x1="50" y1="250" x2="50" y2="450" stroke="#444" stroke-width="1"/>
-                        <line x1="50" y1="450" x2="630" y2="450" stroke="#444" stroke-width="1"/>
-                        
-                        <!-- Y-axis labels -->
-                        <text x="45" y="260" text-anchor="end" font-size="10" fill="#999">$80</text>
-                        <text x="45" y="310" text-anchor="end" font-size="10" fill="#999">$60</text>
-                        <text x="45" y="360" text-anchor="end" font-size="10" fill="#999">$40</text>
-                        <text x="45" y="410" text-anchor="end" font-size="10" fill="#999">$20</text>
-                        <text x="45" y="455" text-anchor="end" font-size="10" fill="#999">$0</text>
-                        
-                        <!-- Revenue Line Chart -->
-                        <polyline points="50,380 90,360 130,340 170,370 210,330 250,310 290,340 330,320 370,300 410,330 450,310 490,290 530,310 570,280 610,300" 
-                                  fill="none" stroke="#10b981" stroke-width="3"/>
-                        <polyline points="50,450 90,360 130,340 170,370 210,330 250,310 290,340 330,320 370,300 410,330 450,310 490,290 530,310 570,280 610,300 610,450" 
-                                  fill="url(#revenueGradient)" opacity="0.3"/>
-                        
-                        <!-- X-axis time labels -->
-                        <text x="90" y="465" text-anchor="middle" font-size="9" fill="#999">:00</text>
-                        <text x="250" y="465" text-anchor="middle" font-size="9" fill="#999">:15</text>
-                        <text x="410" y="465" text-anchor="middle" font-size="9" fill="#999">:30</text>
-                        <text x="570" y="465" text-anchor="middle" font-size="9" fill="#999">:45</text>
-                    </g>
-                    
-                    <!-- Top Countries -->
-                    <g>
-                        <rect x="670" y="210" width="310" height="260" rx="8" fill="#2a2a2a"/>
-                        <text x="680" y="235" font-size="14" font-weight="bold" fill="#fff">Top Countries (Today)</text>
-                        
-                        <!-- Country bars -->
-                        <rect x="680" y="255" width="280" height="35" rx="4" fill="#3a3a3a"/>
-                        <rect x="680" y="255" width="250" height="35" rx="4" fill="#16315f" opacity="0.8"/>
-                        <text x="690" y="277" font-size="13" font-weight="bold" fill="#fff">🇬🇧 United Kingdom</text>
-                        <text x="945" y="277" text-anchor="end" font-size="13" font-weight="bold" fill="#fff">$28,450</text>
-                        
-                        <rect x="680" y="300" width="280" height="35" rx="4" fill="#3a3a3a"/>
-                        <rect x="680" y="300" width="180" height="35" rx="4" fill="#8b5cf6" opacity="0.8"/>
-                        <text x="690" y="322" font-size="13" font-weight="bold" fill="#fff">🇩🇪 Germany</text>
-                        <text x="945" y="322" text-anchor="end" font-size="13" font-weight="bold" fill="#fff">$8,230</text>
-                        
-                        <rect x="680" y="345" width="280" height="35" rx="4" fill="#3a3a3a"/>
-                        <rect x="680" y="345" width="160" height="35" rx="4" fill="#a855f7" opacity="0.8"/>
-                        <text x="690" y="367" font-size="13" font-weight="bold" fill="#fff">🇫🇷 France</text>
-                        <text x="945" y="367" text-anchor="end" font-size="13" font-weight="bold" fill="#fff">$6,890</text>
-                        
-                        <rect x="680" y="390" width="280" height="35" rx="4" fill="#3a3a3a"/>
-                        <rect x="680" y="390" width="110" height="35" rx="4" fill="#c084fc" opacity="0.8"/>
-                        <text x="690" y="412" font-size="13" font-weight="bold" fill="#fff">🇪🇸 Spain</text>
-                        <text x="945" y="412" text-anchor="end" font-size="13" font-weight="bold" fill="#fff">$3,120</text>
-                        
-                        <rect x="680" y="435" width="280" height="35" rx="4" fill="#3a3a3a"/>
-                        <rect x="680" y="435" width="90" height="35" rx="4" fill="#d8b4fe" opacity="0.8"/>
-                        <text x="690" y="457" font-size="13" font-weight="bold" fill="#fff">🇳🇱 Netherlands</text>
-                        <text x="945" y="457" text-anchor="end" font-size="13" font-weight="bold" fill="#fff">$1,702</text>
-                    </g>
-                    
-                    <!-- System Health Indicators -->
-                    <g>
-                        <rect x="20" y="490" width="960" height="90" rx="8" fill="#2a2a2a"/>
-                        <text x="30" y="515" font-size="14" font-weight="bold" fill="#fff">System Health</text>
-                        
-                        <!-- Health metrics -->
-                        <rect x="30" y="525" width="180" height="45" rx="4" fill="#1e1e1e"/>
-                        <text x="40" y="543" font-size="11" fill="#999">Kafka Lag</text>
-                        <text x="40" y="560" font-size="18" font-weight="bold" fill="#10b981">124 msgs</text>
-                        <circle cx="200" cy="547" r="5" fill="#10b981"/>
-                        
-                        <rect x="230" y="525" width="180" height="45" rx="4" fill="#1e1e1e"/>
-                        <text x="240" y="543" font-size="11" fill="#999">Processing Time</text>
-                        <text x="240" y="560" font-size="18" font-weight="bold" fill="#10b981">4.2s</text>
-                        <circle cx="400" cy="547" r="5" fill="#10b981"/>
-                        
-                        <rect x="430" y="525" width="180" height="45" rx="4" fill="#1e1e1e"/>
-                        <text x="440" y="543" font-size="11" fill="#999">Query Time (p95)</text>
-                        <text x="440" y="560" font-size="18" font-weight="bold" fill="#10b981">1.8s</text>
-                        <circle cx="600" cy="547" r="5" fill="#10b981"/>
-                        
-                        <rect x="630" y="525" width="180" height="45" rx="4" fill="#1e1e1e"/>
-                        <text x="640" y="543" font-size="11" fill="#999">Cache Hit Rate</text>
-                        <text x="640" y="560" font-size="18" font-weight="bold" fill="#10b981">95.2%</text>
-                        <circle cx="800" cy="547" r="5" fill="#10b981"/>
-                        
-                        <rect x="830" y="525" width="140" height="45" rx="4" fill="#1e1e1e"/>
-                        <text x="840" y="543" font-size="11" fill="#999">Uptime</text>
-                        <text x="840" y="560" font-size="18" font-weight="bold" fill="#10b981">99.9%</text>
-                        <circle cx="960" cy="547" r="5" fill="#10b981"/>
-                    </g>
-                    
-                    <!-- Gradients -->
-                    <defs>
-                        <linearGradient id="revenueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#10b981;stop-opacity:0" />
-                        </linearGradient>
-                    </defs>
-                </svg>
-                <p style="text-align: center; margin-top: 15px; color: #999; font-style: italic;">Live Grafana dashboard with <2s query response and 5s refresh rate</p>
-            </div>
-        </div>
-
-        <!-- Monitoring & Reliability -->
-        <div class="section">
-            <h2>Monitoring & Reliability</h2>
-            
-            <h3>Comprehensive Observability:</h3>
-            <ul>
-                <li><strong>20+ Prometheus alerts</strong> covering all pipeline components</li>
-                <li><strong>12 Grafana dashboards</strong> for real-time system monitoring</li>
-                <li><strong>Custom metrics</strong> tracking data quality, latency, and throughput</li>
-                <li><strong>PagerDuty integration</strong> for critical incident escalation</li>
-                <li><strong>60% faster MTTR:</strong> Incident detection improved from 30min to 12min</li>
-            </ul>
-
-            <h3>Key Alerts Configured:</h3>
-            <ul>
-                <li>Kafka consumer lag >10K messages (warning) / >50K (critical)</li>
-                <li>Spark processing delay >60 seconds</li>
-                <li>API p95 latency >2 seconds</li>
-                <li>Data quality: Invalid transaction rate >5%</li>
-                <li>No data ingested for 10 minutes (critical)</li>
-            </ul>
-
-            <h3>Incident Response Example:</h3>
-            <p><strong>Black Friday Traffic Spike:</strong> Consumer lag spiked to 50K messages during peak traffic. Auto-scaling kicked in, adding 3 additional Spark workers. Lag cleared in 12 minutes with zero data loss. This validated our fault-tolerant design under real production stress.</p>
-        </div>
-
-        <!-- Technology Stack -->
-        <div class="section">
-            <h2>Technology Stack</h2>
-            
-            <div class="tech-grid">
-                <div class="tech-category">
-                    <h4>Streaming & Processing</h4>
-                    <ul>
-                        <li>Apache Kafka 3.5</li>
-                        <li>Apache Spark 3.5</li>
-                        <li>Spark Structured Streaming</li>
-                        <li>Kafka Connect</li>
-                    </ul>
-                </div>
-                <div class="tech-category">
-                    <h4>Storage Layer</h4>
-                    <ul>
-                        <li>PostgreSQL + TimescaleDB</li>
-                        <li>Elasticsearch 8.10</li>
-                        <li>Redis 7</li>
-                        <li>PgBouncer (connection pooling)</li>
-                    </ul>
-                </div>
-                <div class="tech-category">
-                    <h4>Monitoring & Observability</h4>
-                    <ul>
-                        <li>Prometheus</li>
-                        <li>Grafana</li>
-                        <li>AlertManager</li>
-                        <li>Kafka Exporter</li>
-                    </ul>
-                </div>
-                <div class="tech-category">
-                    <h4>Infrastructure & DevOps</h4>
-                    <ul>
-                        <li>Docker & Docker Compose</li>
-                        <li>Kubernetes (production)</li>
-                        <li>Apache Airflow</li>
-                        <li>Nginx (load balancing)</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Challenges & Solutions -->
-        <div class="section">
-            <h2>Challenges & Solutions</h2>
-            
-            <h3>Challenge 1: Kafka Consumer Lag During Peak Hours</h3>
-            <p><strong>Problem:</strong> During Black Friday, consumer lag spiked to 50K+ messages causing dashboard delays.</p>
-            <p><strong>Solution:</strong></p>
-            <ul>
-                <li>Implemented auto-scaling for Spark workers (2 → 5 workers during peaks)</li>
-                <li>Rebalanced Kafka partitions from 6 to 12 for better parallelism</li>
-                <li>Optimized checkpoint frequency reducing overhead</li>
-                <li><strong>Result:</strong> Eliminated lag spikes, system now handles 10x traffic gracefully</li>
-            </ul>
-
-            <h3>Challenge 2: Query Performance Degradation</h3>
-            <p><strong>Problem:</strong> Dashboard queries degraded from 800ms to 5+ seconds after 6 months of data accumulation.</p>
-            <p><strong>Solution:</strong></p>
-            <ul>
-                <li>Implemented time-based table partitioning (monthly partitions)</li>
-                <li>Added covering indexes on frequently queried columns</li>
-                <li>Created materialized views for dashboard queries</li>
-                <li>Implemented multi-layer caching (Redis + PostgreSQL)</li>
-                <li><strong>Result:</strong> Query time improved to <2s (p95), 95% served from cache in <200ms</li>
-            </ul>
-
-            <h3>Challenge 3: Data Quality Issues</h3>
-            <p><strong>Problem:</strong> 24.9% of transactions had missing customer IDs, 2% were returns, causing inaccurate reporting.</p>
-            <p><strong>Solution:</strong></p>
-            <ul>
-                <li>Built comprehensive validation framework with schema enforcement</li>
-                <li>Implemented guest user handling for missing customer IDs</li>
-                <li>Separate tracking for returns vs new orders</li>
-                <li>Dead letter queue for invalid transactions requiring investigation</li>
-                <li><strong>Result:</strong> Data accuracy improved from 92% to 99.5%</li>
-            </ul>
-
-            <h3>Challenge 4: Exactly-Once Processing</h3>
-            <p><strong>Problem:</strong> Kafka's at-least-once delivery causing duplicate transactions in aggregations.</p>
-            <p><strong>Solution:</strong></p>
-            <ul>
-                <li>Enabled Kafka idempotent producers</li>
-                <li>Implemented event-level deduplication in Spark with 5-minute window</li>
-                <li>Used upsert pattern in PostgreSQL (INSERT ... ON CONFLICT)</li>
-                <li>Daily reconciliation jobs comparing streaming vs source system counts</li>
-                <li><strong>Result:</strong> Achieved 100% accuracy in 90-day testing period</li>
-            </ul>
-        </div>
-
-        <!-- What I Learned -->
-        <div class="section">
-            <h2>Key Learnings & Skills Developed</h2>
-            
-            <h3>Technical Skills:</h3>
-            <ul>
-                <li><strong>Distributed Systems:</strong> Designed fault-tolerant architecture with Kafka and Spark</li>
-                <li><strong>Stream Processing:</strong> Mastered Spark Structured Streaming with watermarking and windowing</li>
-                <li><strong>Performance Optimization:</strong> Reduced latency by 67% through systematic tuning</li>
-                <li><strong>Database Design:</strong> Implemented hybrid storage strategy optimized for different query patterns</li>
-                <li><strong>Observability:</strong> Built comprehensive monitoring with Prometheus and Grafana</li>
-                <li><strong>DevOps:</strong> Containerized deployment with Docker and Kubernetes orchestration</li>
-            </ul>
-
-            <h3>System Design Principles:</h3>
-            <ul>
-                <li><strong>Fail fast with POCs:</strong> Validated unproven technologies early (learned when Spark MLlib couldn't meet latency requirements)</li>
-                <li><strong>Measure everything:</strong> Custom metrics enabled data-driven optimization decisions</li>
-                <li><strong>Design for failure:</strong> 3x replication and automated failover prevented production incidents</li>
-                <li><strong>Optimize incrementally:</strong> Started simple, profiled bottlenecks, optimized systematically</li>
-                <li><strong>Right tool for the job:</strong> Hybrid storage strategy leveraged strengths of each database</li>
-            </ul>
-
-            <h3>Collaboration & Communication:</h3>
-            <ul>
-                <li>Coordinated across 5 teams (Backend, Data Platform, Analytics, DevOps, Business)</li>
-                <li>Translated technical metrics into business impact for stakeholders</li>
-                <li>Created runbooks and documentation enabling 3-day team onboarding</li>
-                <li>Conducted blameless post-mortems improving system reliability</li>
-            </ul>
-        </div>
-
-        <!-- Future Enhancements -->
-        <div class="section">
-            <h2>Future Enhancements</h2>
-            
-            <h3>Short-term (Next Quarter):</h3>
-            <ul>
-                <li><strong>Machine Learning Integration:</strong> Real-time fraud detection and customer segmentation</li>
-                <li><strong>Advanced Analytics:</strong> Cohort analysis, customer lifetime value calculations</li>
-                <li><strong>Schema Registry:</strong> Centralized schema management with Confluent Schema Registry</li>
-                <li><strong>Cost Optimization:</strong> Implement tiered storage moving cold data to S3</li>
-            </ul>
-
-            <h3>Long-term (Next Year):</h3>
-            <ul>
-                <li><strong>Multi-Region Deployment:</strong> Active-active replication for disaster recovery</li>
-                <li><strong>Flink Migration:</strong> Evaluate Apache Flink for complex event processing</li>
-                <li><strong>Data Mesh:</strong> Domain-oriented decentralized data architecture</li>
-                <li><strong>Real-time Recommendations:</strong> Personalized product recommendations during checkout</li>
-                <li><strong>Predictive Analytics:</strong> Demand forecasting and inventory optimization</li>
-            </ul>
-        </div>
-
-        <!-- Links -->
-        <div class="section" style="text-align: center;">
-            <h2>Project Resources</h2>
-            <div class="btn-group">
-                <a href="https://github.com/JaiGala2122/ecommerce-realtime-analytics" class="btn" target="_blank">📂 View GitHub Repository</a>
-            </div>
-        </div>
-
-        <a href="../../index.html" class="back-link">← Back to Portfolio</a>
-    </div>
+    <a class="back" href="../../index.html">← Back to Portfolio</a>
+  </main>
 </body>
 </html>
