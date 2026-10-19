@@ -158,6 +158,16 @@
       font-weight: 700;
       text-decoration: none;
     }
+    .btn {
+      display: inline-block;
+      margin-top: 0.4rem;
+      padding: 0.7rem 1rem;
+      background: var(--gold);
+      color: var(--navy);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .btn:hover { background: #ffd84d; }
     footer {
       padding: 1.2rem 1.5rem 1.6rem;
       background: #091428;
@@ -519,28 +529,8 @@
     </section>
 
     <section>
-      <h2>Project files and running</h2>
-      <table>
-        <thead>
-          <tr><th>Files</th><th>Purpose</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>README.md, images/</td><td>Project story, decision trees, and five charts</td></tr>
-          <tr><td>Supply chain logisitcs problem.xlsx</td><td>Original seven-table data</td></tr>
-          <tr><td>supply chain analysis.xlsx</td><td>Excel and Power Query workflow</td></tr>
-          <tr><td>supply chain analysis.py</td><td>Automated checks, model, and exports</td></tr>
-          <tr><td>requirements.txt, .gitignore</td><td>Dependencies and excluded working files</td></tr>
-          <tr><td>starting_plan_orders.csv, best_plan_orders.csv</td><td>Initial and retained order assignments</td></tr>
-          <tr><td>starting_plan_daily_capacity.csv, best_plan_daily_capacity.csv</td><td>Daily warehouse workloads</td></tr>
-          <tr><td>starting_plan_freight_groups.csv, best_plan_freight_groups.csv</td><td>Group weights, bands, and freight charges</td></tr>
-          <tr><td>starting_plan_cost.json, best_plan_cost.json</td><td>Cost totals</td></tr>
-          <tr><td>solve_summary.json, solver.log</td><td>Settings, status, runtime, bound, and gap</td></tr>
-        </tbody>
-      </table>
-      <p>Keep the script beside the original workbook.</p>
-      <pre>python -m pip install -r requirements.txt
-python "supply chain analysis.py"</pre>
-      <p>Each run creates a timestamped folder under shipping_results/. Keep its ten outputs together. The final search uses a 300-second budget and a 1% gap target.</p>
+      <h2>Project files</h2>
+      <a class="btn" href="https://github.com/JaiGala2122/chip_warehousing_and_shipping_optiization" target="_blank" rel="noopener">View the GitHub repository</a>
     </section>
   </main>
 
