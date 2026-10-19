@@ -1,823 +1,356 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory and Sales Analytics | Jainam Gala</title>
-    <style>
-        :root {
-            --ink: #152033;
-            --navy: #0e1c3f;
-            --navy-2: #16315f;
-            --gold: #f5c518;
-            --copper: #c2410c;
-            --line: #d5deea;
-            --paper: #f4f7fb;
-            --muted: #52627a;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: "Public Sans", "Segoe UI", sans-serif;
-            line-height: 1.65;
-            color: var(--ink);
-            background: var(--paper);
-        }
-        .sitebar {
-            position: sticky; top: 0; z-index: 20;
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 14px 7vw; background: rgba(244,247,251,.94);
-            border-bottom: 1px solid var(--line); backdrop-filter: blur(10px);
-        }
-        .sitebar-mark { color: var(--navy); font-weight: 700; text-decoration: none; letter-spacing: .01em; }
-        .sitebar nav { display: flex; gap: 22px; }
-        .sitebar nav a { color: var(--navy); text-decoration: none; font-size: .92rem; font-weight: 600; }
-        .sitebar nav a:hover { color: var(--copper); }
-        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
-        .project-header {
-            background:
-                radial-gradient(circle at 88% 12%, rgba(245,197,24,.22), transparent 28%),
-                linear-gradient(160deg, var(--navy-2), var(--navy) 58%);
-            color: white; padding: 72px 20px 56px; margin-bottom: 28px;
-        }
-        .project-header h1 {
-            font-family: Fraunces, Georgia, serif;
-            font-size: clamp(2.2rem, 5vw, 3.4rem);
-            font-weight: 560; letter-spacing: -.03em; line-height: 1.05; margin-bottom: 12px;
-        }
-        .project-header p { font-size: 1.12rem; max-width: 640px; color: #d7e0ee; }
-        .metadata { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
-        .metadata span {
-            border: 1px solid rgba(255,255,255,.28);
-            padding: 6px 12px; border-radius: 999px; font-size: .82rem; letter-spacing: .04em;
-        }
-        .section {
-            background: white; padding: 36px; margin-bottom: 22px;
-            border: 1px solid var(--line);
-        }
-        .section h2 {
-            font-family: Fraunces, Georgia, serif;
-            color: var(--navy); margin-bottom: 16px; font-size: 1.7rem; font-weight: 560;
-            border-bottom: 2px solid var(--navy); padding-bottom: 8px;
-        }
-        .section h3 { color: var(--navy); margin-top: 26px; margin-bottom: 10px; font-size: 1.08rem; }
-        .stats-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px; margin: 24px 0;
-        }
-        .stat-card { background: var(--navy); color: white; padding: 22px; text-align: left; }
-        .stat-number { font-family: Fraunces, Georgia, serif; font-size: 2.3rem; display: block; letter-spacing: -.03em; }
-        .stat-label { font-size: .82rem; color: #d7e0ee; margin-top: 4px; display: block; }
-        ul, ol { margin-left: 20px; margin-top: 12px; }
-        li { margin-bottom: 8px; }
-        .sql-block {
-            background: #12203a; color: #d7e0ee; border-left: 4px solid var(--gold);
-            padding: 18px; margin: 18px 0; font-family: ui-monospace, Consolas, monospace;
-            font-size: .82rem; overflow-x: auto; line-height: 1.55;
-        }
-        .sql-keyword { color: var(--gold); font-weight: 700; }
-        .sql-comment { color: #8b97ab; font-style: italic; }
-        .key-finding {
-            background: #fff6e8; border-left: 4px solid var(--gold);
-            padding: 16px 18px; margin: 18px 0;
-        }
-        .key-finding strong { color: #9a3412; }
-        .schema-box { background: #f7f4ec; border: 1px solid var(--navy); padding: 16px; margin: 18px 0; }
-        .table-def { background: white; padding: 14px; margin: 10px 0; border-left: 4px solid var(--navy-2); font-family: ui-monospace, Consolas, monospace; font-size: .88rem; }
-        .btn-group { display: flex; gap: 12px; justify-content: flex-start; margin-top: 18px; flex-wrap: wrap; }
-        .btn {
-            display: inline-block; padding: 12px 18px; background: var(--gold); color: var(--navy);
-            text-decoration: none; font-weight: 700; border: 0; cursor: pointer;
-        }
-        .btn:hover { background: #ffd84d; }
-        .back-link { display: inline-block; margin-bottom: 16px; color: var(--copper); text-decoration: none; font-weight: 700; }
-        .back-link:hover { text-decoration: underline; }
-        input, textarea {
-            width: 100%; padding: 12px; border: 1px solid var(--line); font: inherit; color: var(--ink); background: white;
-        }
-        input:focus, textarea:focus { outline: 2px solid var(--gold); border-color: transparent; }
-        label { display: block; margin-bottom: 8px; font-weight: 700; color: var(--navy); }
-        @media (max-width: 768px) {
-            .section { padding: 22px; }
-            .sitebar { padding: 12px 18px; }
-            .sitebar nav { gap: 14px; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>US Used Car Market Warehouse | Jainam Gala</title>
+  <meta name="description" content="Salvage titles sell for 87% less: $2,425 vs $18,000 median. A MySQL star schema of 2,499 auction listings and 41,804 EPA records.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #152033; --muted: #5d6b82; --line: #d5deea; --paper: #f4f7fb;
+      --cream: #f7f4ec; --navy: #0e1c3f; --navy-2: #16315f; --gold: #f5c518; --copper: #c2410c;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Public Sans", "Segoe UI", sans-serif; font-size: 1.05rem; line-height: 1.65; }
+    a { color: var(--copper); }
+    :focus-visible { outline: 2px solid var(--copper); outline-offset: 3px; }
+    .sitebar { position: sticky; top: 0; z-index: 20; display: flex; justify-content: space-between; gap: 1rem; align-items: center; padding: 0.85rem 1.5rem; background: var(--navy); color: var(--cream); }
+    .sitebar a { color: var(--cream); text-decoration: none; font-weight: 500; }
+    .sitebar-mark { display: inline-flex; align-items: center; gap: 0.7rem; font-family: Fraunces, Georgia, serif; font-size: 1.15rem; }
+    .monogram { display: grid; place-items: center; width: 2rem; height: 2rem; border: 1px solid rgba(247,244,236,.35); font-size: 0.78rem; letter-spacing: 0.04em; }
+    .sitebar nav { display: flex; gap: 1.15rem; font-size: 0.92rem; }
+    .sitebar nav a { color: rgba(247,244,236,.82); }
+    .sitebar nav a:hover { color: var(--gold); }
+    .hero { padding: 3.5rem 1.5rem 2.5rem; background: radial-gradient(720px 320px at 100% 0%, rgba(245,197,24,.2), transparent 60%), var(--navy); color: var(--cream); }
+    .wrap { width: min(920px, 100%); margin: 0 auto; }
+    .kicker { margin: 0 0 0.8rem; color: var(--gold); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+    h1, h2, h3 { font-family: Fraunces, Georgia, serif; font-weight: 560; letter-spacing: -0.03em; }
+    h1 { margin: 0; font-size: clamp(2.2rem, 5vw, 3.4rem); line-height: 1.05; }
+    .lede { max-width: 42rem; margin: 1rem 0 0; font-size: 1.2rem; color: rgba(247,244,236,.88); }
+    .proof { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0 0; padding: 1.1rem 0 0; list-style: none; border-top: 1px solid rgba(247,244,236,.16); }
+    .proof strong { display: block; color: var(--gold); font-family: Fraunces, Georgia, serif; font-size: 1.35rem; font-weight: 560; line-height: 1.1; }
+    .proof li { color: rgba(247,244,236,.78); font-size: 0.92rem; }
+    main { padding: 1.5rem 1.5rem 3rem; }
+    section { margin: 0 auto 1.25rem; padding: 1.6rem 1.5rem 1.7rem; background: #fff; border: 1px solid var(--line); }
+    h2 { margin: 0 0 0.9rem; padding-bottom: 0.4rem; border-bottom: 2px solid var(--navy); color: var(--navy); font-size: 1.7rem; }
+    h3 { margin: 1.5rem 0 0.35rem; color: var(--navy); font-size: 1.2rem; }
+    p { margin: 0.55rem 0 0; }
+    ul { margin: 0.6rem 0 0; padding-left: 1.2rem; }
+    li + li { margin-top: 0.45rem; }
+    table { width: 100%; border-collapse: collapse; margin-top: 0.9rem; font-size: 0.98rem; }
+    th, td { padding: 0.6rem 0.45rem; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: var(--navy); font-size: 0.78rem; letter-spacing: 0.04em; text-transform: uppercase; }
+    td:last-child, th:last-child, .num { text-align: right; }
+    .figure { margin: 1.1rem 0 0.2rem; padding: 0.9rem; background: var(--paper); border: 1px solid var(--line); }
+    .figure svg { display: block; width: 100%; height: auto; }
+    .figure figcaption { margin-top: 0.55rem; color: var(--muted); font-size: 0.92rem; }
+    .chart-split { display: grid; grid-template-columns: 220px 1fr; gap: 1.25rem; align-items: center; }
+    .legend { margin: 0; padding: 0; list-style: none; }
+    .legend li { display: flex; align-items: center; gap: 0.55rem; margin: 0.35rem 0 0; font-size: 0.95rem; }
+    .swatch { width: 0.8rem; height: 0.8rem; flex: none; }
+    .note { margin-top: 0.9rem; padding: 0.85rem 0.95rem; background: #fff6e8; border-left: 3px solid var(--gold); }
+    .btn { display: inline-block; margin: 0.4rem 0.5rem 0 0; padding: 0.7rem 1rem; background: var(--gold); color: var(--navy); font-weight: 700; text-decoration: none; }
+    .btn:hover { background: #ffd84d; }
+    .back { display: inline-block; margin: 0 0 1rem; font-weight: 700; text-decoration: none; }
+    @media (max-width: 720px) {
+      .proof, .chart-split { grid-template-columns: 1fr; }
+      section { padding: 1.2rem 1rem; }
+      td:last-child, th:last-child, .num { text-align: left; }
+    }
+  </style>
 </head>
 <body>
-<header class="sitebar">
-  <a class="sitebar-mark" href="../../index.html">Jainam Gala</a>
-  <nav aria-label="Primary">
-    <a href="../../index.html#experience">Experience</a>
-    <a href="../../index.html#work">Work</a>
-    <a href="../../index.html#contact">Contact</a>
-  </nav>
-</header>
+  <header class="sitebar">
+    <a class="sitebar-mark" href="../../index.html"><span class="monogram" aria-hidden="true">JG</span>Jainam Gala</a>
+    <nav aria-label="Primary">
+      <a href="../../index.html#experience">Experience</a>
+      <a href="../../index.html#work">Work</a>
+      <a href="../../index.html#contact">Contact</a>
+    </nav>
+  </header>
 
-    <div class="project-header">
-        <div class="container">
-            <p style="letter-spacing:.14em;text-transform:uppercase;font-size:.78rem;color:#f5c518;font-weight:700;margin-bottom:10px;">SQL case study</p>
-            <h1>Inventory and Sales Analytics</h1>
-            <p>A vehicle data warehouse. MySQL schema and advanced queries across sales listings, maintenance, and telemetry.</p>
-            <div class="metadata">
-                <span>MySQL</span>
-                <span>Complex Queries</span>
-                <span>Database Design</span>
-            </div>
-        </div>
+  <header class="hero">
+    <div class="wrap">
+      <p class="kicker">SQL case study · MySQL 8.0</p>
+      <h1>US Used Car Market Warehouse</h1>
+      <p class="lede">Salvage titles sell for 87% less: $2,425 versus an $18,000 median. The warehouse is a star schema of 2,499 auction listings and 41,804 EPA records, with every removed row logged.</p>
+      <ul class="proof">
+        <li><strong>2,413</strong> clean listings from 2,499</li>
+        <li><strong>86.5%</strong> lower median on a salvage title</li>
+        <li><strong>99.96%</strong> matched to EPA make and year</li>
+        <li><strong>r = −0.33</strong> price versus mileage</li>
+      </ul>
     </div>
+  </header>
 
-    <div class="container">
-        <a href="../../index.html" class="back-link">← Back to Portfolio</a>
+  <main class="wrap">
+    <a class="back" href="../../index.html">← Back to Portfolio</a>
 
-        <div class="section">
-            <h2>Project Overview</h2>
-            <p><strong>Objective:</strong> Design and implement a MySQL data warehouse that consolidates vehicle specifications, used car listings, maintenance records, and telemetry data - then write advanced SQL queries to extract business insights.</p>
+    <section>
+      <h2>The data</h2>
+      <table>
+        <thead><tr><th>Source</th><th class="num">Rows</th><th>What it adds</th></tr></thead>
+        <tbody>
+          <tr><td>US Cars auction listings</td><td class="num">2,499</td><td>Price, mileage, model year, title status, state</td></tr>
+          <tr><td>EPA fuel economy data</td><td class="num">41,804</td><td>Fuel economy, vehicle class and fuel type for every make and model year, 1984–2020</td></tr>
+        </tbody>
+      </table>
+      <p><code>fact_listings</code> holds one clean listing. <code>dim_location</code> holds state and Census region. <code>dim_make_year</code> holds EPA specs rolled up to make and model year. <code>dq_removed_rows</code> logs every removed row and the reason.</p>
+      <figure class="figure">
+        <svg viewBox="0 0 720 250" role="img" aria-label="Star schema. Staging tables flow through transform.sql into fact_listings, which links to dim_location and dim_make_year. Removed rows go to dq_removed_rows.">
+          <rect x="8" y="28" width="150" height="44" fill="#fff" stroke="#0e1c3f"/>
+          <text x="83" y="55" text-anchor="middle" fill="#0e1c3f" font-size="13">stg_listings</text>
+          <rect x="8" y="100" width="150" height="44" fill="#fff" stroke="#0e1c3f"/>
+          <text x="83" y="127" text-anchor="middle" fill="#0e1c3f" font-size="13">stg_epa_vehicles</text>
+          <rect x="210" y="64" width="130" height="44" fill="#f5c518" stroke="#0e1c3f"/>
+          <text x="275" y="91" text-anchor="middle" fill="#0e1c3f" font-size="13" font-weight="700">transform.sql</text>
+          <rect x="400" y="48" width="160" height="76" fill="#0e1c3f"/>
+          <text x="480" y="82" text-anchor="middle" fill="#f7f4ec" font-size="15" font-weight="700">fact_listings</text>
+          <text x="480" y="102" text-anchor="middle" fill="#f5c518" font-size="12">one clean listing</text>
+          <rect x="400" y="168" width="160" height="48" fill="#fff" stroke="#c2410c"/>
+          <text x="480" y="197" text-anchor="middle" fill="#c2410c" font-size="13">dq_removed_rows</text>
+          <rect x="600" y="16" width="112" height="48" fill="#16315f"/>
+          <text x="656" y="45" text-anchor="middle" fill="#f7f4ec" font-size="13">dim_location</text>
+          <rect x="600" y="108" width="112" height="48" fill="#16315f"/>
+          <text x="656" y="137" text-anchor="middle" fill="#f7f4ec" font-size="13">dim_make_year</text>
+          <line x1="158" y1="50" x2="210" y2="78" stroke="#8b97ab" stroke-width="2"/>
+          <line x1="158" y1="122" x2="210" y2="94" stroke="#8b97ab" stroke-width="2"/>
+          <line x1="340" y1="86" x2="400" y2="86" stroke="#0e1c3f" stroke-width="2"/>
+          <line x1="480" y1="124" x2="480" y2="168" stroke="#c2410c" stroke-width="2"/>
+          <line x1="560" y1="70" x2="600" y2="40" stroke="#16315f" stroke-width="2"/>
+          <line x1="560" y1="102" x2="600" y2="132" stroke="#16315f" stroke-width="2"/>
+        </svg>
+        <figcaption>Staging tables on the left. The gold step is the cleaning script. The fact table sits in the center of the star.</figcaption>
+      </figure>
+    </section>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <span class="stat-number">1M+</span>
-                    <span class="stat-label">Records Analyzed</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number">4</span>
-                    <span class="stat-label">Integrated Tables</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-number">15+</span>
-                    <span class="stat-label">Complex SQL Queries</span>
-                </div>
-            </div>
+    <section>
+      <h2>Cleaning</h2>
+      <table>
+        <thead><tr><th>Step</th><th class="num">Rows</th></tr></thead>
+        <tbody>
+          <tr><td>Raw listings</td><td class="num">2,499</td></tr>
+          <tr><td>Placeholder prices under $100, such as $0 and $25 opening bids</td><td class="num">−64</td></tr>
+          <tr><td>Non-passenger vehicles (Peterbilt, Harley-Davidson, Heartland RVs)</td><td class="num">−10</td></tr>
+          <tr><td>Canadian listings</td><td class="num">−7</td></tr>
+          <tr><td>Impossible mileage (0 miles or over 500,000)</td><td class="num">−4</td></tr>
+          <tr><td>Duplicate rows</td><td class="num">−1</td></tr>
+          <tr><td><strong>Clean listings</strong></td><td class="num"><strong>2,413</strong></td></tr>
+        </tbody>
+      </table>
+      <figure class="figure">
+        <svg viewBox="0 0 720 280" role="img" aria-label="Waterfall from 2,499 raw listings down to 2,413 clean listings. The axis starts at 2,380.">
+          <line x1="36" y1="36" x2="36" y2="200" stroke="#d5deea"/>
+          <line x1="36" y1="200" x2="690" y2="200" stroke="#d5deea"/>
+          <text x="32" y="40" text-anchor="end" fill="#5d6b82" font-size="11">2,520</text>
+          <text x="32" y="204" text-anchor="end" fill="#5d6b82" font-size="11">2,380</text>
+          <rect x="58" y="64" width="62" height="136" fill="#0e1c3f"/>
+          <rect x="148" y="137" width="62" height="63" fill="#c2410c"/>
+          <rect x="238" y="149" width="62" height="51" fill="#c2410c"/>
+          <rect x="328" y="157" width="62" height="43" fill="#c2410c"/>
+          <rect x="418" y="161" width="62" height="39" fill="#c2410c"/>
+          <rect x="508" y="162" width="62" height="38" fill="#c2410c"/>
+          <rect x="598" y="162" width="62" height="38" fill="#16315f"/>
+          <g fill="#0e1c3f" font-size="12" font-weight="700" text-anchor="middle">
+            <text x="89" y="56">2,499</text>
+            <text x="179" y="129">−64</text>
+            <text x="269" y="141">−10</text>
+            <text x="359" y="149">−7</text>
+            <text x="449" y="153">−4</text>
+            <text x="539" y="154">−1</text>
+            <text x="629" y="154">2,413</text>
+          </g>
+          <g fill="#5d6b82" font-size="11" text-anchor="middle">
+            <text x="89" y="222">Raw</text>
+            <text x="179" y="222">Price</text>
+            <text x="269" y="222">Not a car</text>
+            <text x="359" y="222">Canada</text>
+            <text x="449" y="222">Mileage</text>
+            <text x="539" y="222">Duplicate</text>
+            <text x="629" y="222">Clean</text>
+          </g>
+        </svg>
+        <figcaption>The axis starts at 2,380 so the 86 removed rows are visible. Navy is the start and the 2,413 rows kept.</figcaption>
+      </figure>
+      <p>Two columns were left out of the analysis. <code>condition</code> is auction time left, such as “2 days left” (832 rows) and “21 hours left” (492 rows). <code>model</code> is unreliable: its most common values are “door” (651), “doors” (148) and “mpv” (87). The EPA join uses make and model year.</p>
+      <p>2,412 of 2,413 clean listings matched on make and year. The miss is a 1973 Chevrolet, older than the EPA file, which starts in 1984.</p>
+    </section>
+
+    <section>
+      <h2>Findings</h2>
+
+      <h3>Title status is the biggest price gap</h3>
+      <p>A salvage title cuts the median from $18,000 to $2,425, a drop of 86.5%. That is a wider gap than any mileage band or model year. Clean titles are 2,318 listings. Salvage titles are 95.</p>
+      <figure class="figure">
+        <svg viewBox="0 0 640 240" role="img" aria-label="Column chart. Clean title median 18,000 dollars. Salvage title median 2,425 dollars.">
+          <line x1="80" y1="20" x2="80" y2="180" stroke="#d5deea"/>
+          <line x1="80" y1="180" x2="560" y2="180" stroke="#d5deea"/>
+          <text x="74" y="24" text-anchor="end" fill="#5d6b82" font-size="12">$20K</text>
+          <text x="74" y="184" text-anchor="end" fill="#5d6b82" font-size="12">$0</text>
+          <rect x="170" y="50" width="90" height="130" fill="#0e1c3f"/>
+          <rect x="360" y="162" width="90" height="18" fill="#c2410c"/>
+          <text x="215" y="74" text-anchor="middle" fill="#f5c518" font-size="14" font-weight="700">$18,000</text>
+          <text x="405" y="154" text-anchor="middle" fill="#0e1c3f" font-size="14" font-weight="700">$2,425</text>
+          <text x="215" y="204" text-anchor="middle" fill="#5d6b82" font-size="13">Clean</text>
+          <text x="215" y="222" text-anchor="middle" fill="#5d6b82" font-size="12">n = 2,318</text>
+          <text x="405" y="204" text-anchor="middle" fill="#5d6b82" font-size="13">Salvage</text>
+          <text x="405" y="222" text-anchor="middle" fill="#5d6b82" font-size="12">n = 95</text>
+        </svg>
+        <figcaption>Column height is the median price. The results give medians and counts, not the quartile spread, so this is a median comparison rather than a box plot.</figcaption>
+      </figure>
+
+      <h3>Price falls with mileage, steepest in the first 50,000 miles</h3>
+      <p>On clean titles, the first extra 25,000 miles take about $8,200, or 33%, off the median. After 100,000 miles the price flattens. Across individual listings the correlation is r = −0.33.</p>
+      <table>
+        <thead><tr><th>Mileage</th><th class="num">Listings</th><th class="num">Median price</th></tr></thead>
+        <tbody>
+          <tr><td>Under 25K</td><td class="num">729</td><td class="num">$24,700</td></tr>
+          <tr><td>25K–50K</td><td class="num">948</td><td class="num">$16,500</td></tr>
+          <tr><td>50K–100K</td><td class="num">431</td><td class="num">$13,200</td></tr>
+          <tr><td>100K–150K</td><td class="num">168</td><td class="num">$7,800</td></tr>
+          <tr><td>150K+</td><td class="num">42</td><td class="num">$7,160</td></tr>
+        </tbody>
+      </table>
+      <figure class="figure">
+        <svg viewBox="0 0 640 250" role="img" aria-label="Line of median price by mileage band. 24,700 dollars under 25,000 miles, falling to 7,160 dollars past 150,000 miles.">
+          <line x1="50" y1="24" x2="50" y2="190" stroke="#d5deea"/>
+          <line x1="50" y1="190" x2="600" y2="190" stroke="#d5deea"/>
+          <text x="44" y="28" text-anchor="end" fill="#5d6b82" font-size="12">$28K</text>
+          <text x="44" y="194" text-anchor="end" fill="#5d6b82" font-size="12">$0</text>
+          <polyline fill="none" stroke="#c2410c" stroke-width="3" points="90,51 210,104 330,125 450,160 570,164"/>
+          <g fill="#c2410c">
+            <circle cx="90" cy="51" r="5"/><circle cx="210" cy="104" r="5"/><circle cx="330" cy="125" r="5"/><circle cx="450" cy="160" r="5"/><circle cx="570" cy="164" r="5"/>
+          </g>
+          <text x="150" y="70" fill="#0e1c3f" font-size="13" font-weight="700">−$8,200</text>
+          <g fill="#5d6b82" font-size="12" text-anchor="middle">
+            <text x="90" y="214">Under 25K</text><text x="90" y="232">$24,700</text>
+            <text x="210" y="214">25–50K</text><text x="210" y="232">$16,500</text>
+            <text x="330" y="214">50–100K</text><text x="330" y="232">$13,200</text>
+            <text x="450" y="214">100–150K</text><text x="450" y="232">$7,800</text>
+            <text x="570" y="214">150K+</text><text x="570" y="232">$7,160</text>
+          </g>
+        </svg>
+        <figcaption>Each point is the median for that mileage band, clean titles only. The listing-level correlation is r = −0.33. Individual cars are not plotted, because the results note gives the five medians rather than every listing.</figcaption>
+      </figure>
+
+      <h3>Depreciation by age</h3>
+      <p>On clean titles, the steep drops are year 2 (−27.6%) and years 6 and 7 (−27.3% and −34.4%). Age 0 is cheaper than age 1, and only 47 cars are 2020 models, so that bump is noise.</p>
+      <figure class="figure">
+        <svg viewBox="0 0 780 270" role="img" aria-label="Median price by vehicle age. It peaks at age 1, then drops sharply at age 2 and again at ages 6 and 7.">
+          <line x1="48" y1="24" x2="48" y2="200" stroke="#d5deea"/>
+          <line x1="48" y1="200" x2="700" y2="200" stroke="#d5deea"/>
+          <text x="42" y="28" text-anchor="end" fill="#5d6b82" font-size="12">$25K</text>
+          <text x="42" y="204" text-anchor="end" fill="#5d6b82" font-size="12">$0</text>
+          <polyline fill="none" stroke="#0e1c3f" stroke-width="3" points="64,72 148,56 232,101 316,106 400,98 484,109 568,139 652,167 736,172"/>
+          <g fill="#0e1c3f">
+            <circle cx="64" cy="72" r="4.5"/><circle cx="148" cy="56" r="4.5"/><circle cx="232" cy="101" r="5.5" fill="#c2410c"/><circle cx="316" cy="106" r="4.5"/><circle cx="400" cy="98" r="4.5"/><circle cx="484" cy="109" r="4.5"/><circle cx="568" cy="139" r="4.5"/><circle cx="652" cy="167" r="5.5" fill="#c2410c"/><circle cx="736" cy="172" r="4.5"/>
+          </g>
+          <text x="232" y="92" text-anchor="middle" fill="#c2410c" font-size="12" font-weight="700">−27.6%</text>
+          <text x="652" y="158" text-anchor="middle" fill="#c2410c" font-size="12" font-weight="700">−34.4%</text>
+          <g fill="#5d6b82" font-size="12" text-anchor="middle">
+            <text x="64" y="222">0</text><text x="148" y="222">1</text><text x="232" y="222">2</text><text x="316" y="222">3</text><text x="400" y="222">4</text><text x="484" y="222">5</text><text x="568" y="222">6</text><text x="652" y="222">7</text><text x="720" y="222">8+</text>
+          </g>
+        </svg>
+        <figcaption>Median price by age in years, clean titles. Copper marks the two steep drops. Age 8+ is $6,700. The y-axis runs from $0 to $25,000.</figcaption>
+      </figure>
+
+      <h3>The Midwest premium is a mix of newer, lower-mileage cars</h3>
+      <p>Midwest listings average $23,147, about $5,400 above the South. Those Midwest cars average 36,000 miles and 2.5 years old. Texas, the cheapest state in the file at $14,460, averages 68,000 miles and 3.8 years. The gap is which cars are listed where.</p>
+      <figure class="figure">
+        <svg viewBox="0 0 640 200" role="img" aria-label="Average clean-title price by region. Midwest 23,147 dollars, Northeast 20,759, West 19,520, South 17,697.">
+          <text x="0" y="28" fill="#5d6b82" font-size="13">Midwest, n = 556</text>
+          <rect x="170" y="12" width="400" height="22" fill="#0e1c3f"/>
+          <text x="178" y="28" fill="#f5c518" font-size="13" font-weight="700">$23,147</text>
+          <text x="0" y="70" fill="#5d6b82" font-size="13">Northeast, n = 489</text>
+          <rect x="170" y="54" width="359" height="22" fill="#16315f"/>
+          <text x="178" y="70" fill="#f7f4ec" font-size="13">$20,759</text>
+          <text x="0" y="112" fill="#5d6b82" font-size="13">West, n = 358</text>
+          <rect x="170" y="96" width="337" height="22" fill="#1f4b8a"/>
+          <text x="178" y="112" fill="#f7f4ec" font-size="13">$19,520</text>
+          <text x="0" y="154" fill="#5d6b82" font-size="13">South, n = 915</text>
+          <rect x="170" y="138" width="306" height="22" fill="#8b97ab"/>
+          <text x="178" y="154" fill="#0e1c3f" font-size="13">$17,697</text>
+        </svg>
+        <figcaption>Average price, clean titles. Bar length is dollars, scaled to the Midwest. A state map is not drawn: the results note gives these four regions and Texas, not a price for every state.</figcaption>
+      </figure>
+
+      <h3>Nissan is young and cheap</h3>
+      <p>Among brands with 30 or more clean listings, Nissan cars are the youngest and least driven, and still about $10,000 below Ford. A brand’s EPA lineup fuel economy has only a weak link to price (r = −0.15). Price tracks mileage (r = −0.33) and model year (r = +0.23) more closely.</p>
+      <figure class="figure">
+        <svg viewBox="0 0 640 300" role="img" aria-label="Bubble chart. Nissan has low mileage and a low average price. Ford has a higher price and the largest bubble.">
+          <line x1="70" y1="30" x2="70" y2="240" stroke="#d5deea"/>
+          <line x1="70" y1="240" x2="580" y2="240" stroke="#d5deea"/>
+          <text x="64" y="34" text-anchor="end" fill="#5d6b82" font-size="12">$26K</text>
+          <text x="64" y="244" text-anchor="end" fill="#5d6b82" font-size="12">$10K</text>
+          <text x="70" y="268" fill="#5d6b82" font-size="12">35K miles</text>
+          <text x="500" y="268" fill="#5d6b82" font-size="12">58K miles</text>
+          <circle cx="306" cy="81" r="30" fill="#0e1c3f" opacity="0.9"/>
+          <circle cx="186" cy="142" r="21" fill="#16315f"/>
+          <circle cx="483" cy="113" r="16" fill="#1f4b8a"/>
+          <circle cx="139" cy="214" r="18" fill="#c2410c"/>
+          <circle cx="415" cy="223" r="10" fill="#8b97ab"/>
+          <text x="306" y="44" text-anchor="middle" fill="#0e1c3f" font-size="13" font-weight="700">Ford</text>
+          <text x="186" y="112" text-anchor="middle" fill="#0e1c3f" font-size="13" font-weight="700">Dodge</text>
+          <text x="483" y="88" text-anchor="middle" fill="#0e1c3f" font-size="13" font-weight="700">Chevrolet</text>
+          <text x="139" y="198" text-anchor="middle" fill="#c2410c" font-size="13" font-weight="700">Nissan</text>
+          <text x="448" y="226" fill="#5d6b82" font-size="13">GMC</text>
+        </svg>
+        <figcaption>Horizontal position is average mileage. Height is average price. Bubble size is the number of clean listings. Nissan sits low despite low mileage.</figcaption>
+      </figure>
+      <figure class="figure">
+        <div class="chart-split">
+          <svg viewBox="0 0 220 220" role="img" aria-label="Donut of clean listings. Ford is 50 percent.">
+            <circle cx="110" cy="110" r="70" fill="none" stroke="#e7eef8" stroke-width="28"/>
+            <circle cx="110" cy="110" r="70" fill="none" stroke="#0e1c3f" stroke-width="28" stroke-dasharray="219.91 219.91" transform="rotate(-90 110 110)"/>
+            <circle cx="110" cy="110" r="70" fill="none" stroke="#16315f" stroke-width="28" stroke-dasharray="76.97 362.85" stroke-dashoffset="-219.91" transform="rotate(-90 110 110)"/>
+            <circle cx="110" cy="110" r="70" fill="none" stroke="#c2410c" stroke-width="28" stroke-dasharray="56.74 383.08" stroke-dashoffset="-296.88" transform="rotate(-90 110 110)"/>
+            <circle cx="110" cy="110" r="70" fill="none" stroke="#1f4b8a" stroke-width="28" stroke-dasharray="49.70 390.12" stroke-dashoffset="-353.62" transform="rotate(-90 110 110)"/>
+            <circle cx="110" cy="110" r="70" fill="none" stroke="#f5c518" stroke-width="28" stroke-dasharray="36.50 403.32" stroke-dashoffset="-403.32" transform="rotate(-90 110 110)"/>
+            <text x="110" y="106" text-anchor="middle" fill="#0e1c3f" font-family="Fraunces, Georgia, serif" font-size="26">50%</text>
+            <text x="110" y="128" text-anchor="middle" fill="#5d6b82" font-size="13">Ford</text>
+          </svg>
+          <ul class="legend">
+            <li><span class="swatch" style="background:#0e1c3f"></span>Ford, 50.0%</li>
+            <li><span class="swatch" style="background:#16315f"></span>Dodge, 17.5%</li>
+            <li><span class="swatch" style="background:#c2410c"></span>Nissan, 12.9%</li>
+            <li><span class="swatch" style="background:#1f4b8a"></span>Chevrolet, 11.3%</li>
+            <li><span class="swatch" style="background:#f5c518"></span>All others, 8.3%</li>
+          </ul>
         </div>
+        <figcaption>Share of clean listings. Half the file is Ford, so brand and regional averages lean that way.</figcaption>
+      </figure>
+    </section>
 
-        <div class="section">
-            <h2>Database Schema Design</h2>
+    <section>
+      <h2>Limits</h2>
+      <ul>
+        <li>Half the listings are Ford (50%), so brand and regional averages lean toward Ford.</li>
+        <li>These are auction listings, not dealer retail prices. Many are insurance and fleet disposals.</li>
+        <li>The model field is unreliable, so results stay at the brand level.</li>
+        <li>The regional gaps are not adjusted for mileage, age or brand. A regression would be the next step.</li>
+      </ul>
+    </section>
 
-            <p>Implemented a <strong>star schema</strong> optimized for analytical queries, with one dimension table and three fact tables:</p>
+    <section>
+      <h2>What the SQL demonstrates</h2>
+      <ul>
+        <li>Staging tables, cleaning rules in <code>transform.sql</code>, and a star schema, with every removed row logged.</li>
+        <li>A median from <code>ROW_NUMBER()</code> and <code>COUNT() OVER</code>, because MySQL has no <code>PERCENTILE_CONT</code>.</li>
+        <li>Year-over-year change with <code>LAG()</code>, rank within region with <code>RANK()</code>, and share of total with <code>SUM() OVER ()</code>.</li>
+        <li>Pearson correlation from <code>AVG</code> and <code>STDDEV_POP</code>.</li>
+        <li>A join of two public datasets on normalized keys, including lowercase make and “land” to Land Rover.</li>
+      </ul>
+    </section>
 
-            <div class="schema-box">
-                <div class="table-def">
-                    <strong>dim_vehicle</strong> (Dimension Table)<br>
-                    - vehicle_key INT (PK)<br>
-                    - make VARCHAR(64)<br>
-                    - model VARCHAR(128)<br>
-                    - year INT<br>
-                    - engine VARCHAR(64)<br>
-                    - fuel_type VARCHAR(64)
-                </div>
+    <section>
+      <h2>Project files</h2>
+      <a class="btn" href="https://github.com/JaiGala2122/used_cars_warehouse" target="_blank" rel="noopener">View the GitHub repository</a>
+    </section>
 
-                <div class="table-def">
-                    <strong>fact_sales_listings</strong> (Fact Table)<br>
-                    - listing_id BIGINT (PK, AUTO_INCREMENT)<br>
-                    - vehicle_key INT (FK → dim_vehicle)<br>
-                    - price DECIMAL(10,2)<br>
-                    - mileage INT<br>
-                    - state VARCHAR(32)<br>
-                    - listed_at DATETIME<br>
-                    - INDEX: idx_sales_vehicle (vehicle_key)
-                </div>
-
-                <div class="table-def">
-                    <strong>fact_maintenance</strong> (Fact Table)<br>
-                    - maint_id BIGINT (PK, AUTO_INCREMENT)<br>
-                    - vehicle_key INT (FK)<br>
-                    - component VARCHAR(64)<br>
-                    - dtc_code VARCHAR(32)<br>
-                    - cost DECIMAL(10,2)<br>
-                    - needs_maintenance TINYINT<br>
-                    - event_date DATE<br>
-                    - INDEX: idx_maint_vehicle (vehicle_key)
-                </div>
-
-                <div class="table-def">
-                    <strong>fact_telematics</strong> (Fact Table)<br>
-                    - telem_id BIGINT (PK, AUTO_INCREMENT)<br>
-                    - vehicle_key INT (FK)<br>
-                    - ts DATETIME<br>
-                    - speed DOUBLE<br>
-                    - rpm DOUBLE<br>
-                    - energy_kwh DOUBLE<br>
-                    - INDEX: idx_telem_vehicle (vehicle_key)
-                </div>
-            </div>
-
-            <h3>Key Design Decisions</h3>
-            <ul>
-                <li><strong>Star schema:</strong> Single dimension table for fast joins and simple queries</li>
-                <li><strong>Surrogate keys:</strong> Integer vehicle_key for efficient indexing vs. composite natural keys</li>
-                <li><strong>Nullable FKs:</strong> Maintenance and telemetry tables allow NULL vehicle_key when exact match unavailable</li>
-                <li><strong>Strategic indexes:</strong> Composite indexes on frequently queried columns (make, model, year)</li>
-                <li><strong>Appropriate data types:</strong> DECIMAL for prices, DATETIME for timestamps, proper VARCHAR lengths</li>
-            </ul>
-
-            <h3>Entity Relationship Diagram</h3>
-            <div style="background: white; border: 1px solid #ddd; padding: 50px 20px; margin: 20px 0; overflow-x: auto;">
-                <div style="position: relative; min-width: 800px; height: 500px; margin: 0 auto;">
-                    <div style="position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: 220px; border: 2px solid #0e1c3f; background: white;">
-                        <div style="background: #16315f; color: white; padding: 8px; text-align: center; font-weight: bold; border-bottom: 2px solid #0e1c3f;">
-                            dim_vehicle
-                        </div>
-                        <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px; width: 30px; background: #f0f0f0;">PK</td>
-                                <td style="padding: 4px 8px;">vehicle_key</td>
-                                <td style="padding: 4px 8px; text-align: right;">INT</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px;"></td>
-                                <td style="padding: 4px 8px;">make</td>
-                                <td style="padding: 4px 8px; text-align: right;">VARCHAR</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px;"></td>
-                                <td style="padding: 4px 8px;">model</td>
-                                <td style="padding: 4px 8px; text-align: right;">VARCHAR</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px;"></td>
-                                <td style="padding: 4px 8px;">year</td>
-                                <td style="padding: 4px 8px; text-align: right;">INT</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px;"></td>
-                                <td style="padding: 4px 8px;">engine</td>
-                                <td style="padding: 4px 8px; text-align: right;">VARCHAR</td>
-                            </tr>
-                            <tr>
-                                <td style="padding: 4px 8px;"></td>
-                                <td style="padding: 4px 8px;">fuel_type</td>
-                                <td style="padding: 4px 8px; text-align: right;">VARCHAR</td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <div style="position: absolute; left: 50%; top: 185px; width: 2px; height: 60px; background: #0e1c3f;"></div>
-                    <div style="position: absolute; left: calc(50% - 8px); top: 185px; width: 16px; height: 2px; background: #0e1c3f;"></div>
-                    <div style="position: absolute; left: 50%; top: 245px; width: 80px; height: 2px; background: #0e1c3f; transform: translateX(-50%);"></div>
-                    <div style="position: absolute; left: 15%; top: 245px; width: 35%; height: 2px; background: #0e1c3f;"></div>
-                    <div style="position: absolute; left: 85%; top: 245px; width: 15%; height: 2px; background: #0e1c3f; transform: translateX(-100%);"></div>
-                    <div style="position: absolute; left: 15%; top: 245px; width: 2px; height: 40px; background: #0e1c3f;"></div>
-                    <div style="position: absolute; left: 50%; top: 245px; width: 2px; height: 40px; background: #0e1c3f;"></div>
-                    <div style="position: absolute; left: 85%; top: 245px; width: 2px; height: 40px; background: #0e1c3f;"></div>
-                    <div style="position: absolute; left: calc(15% - 6px); top: 285px; width: 12px; height: 2px; background: #0e1c3f;"></div>
-                    <div style="position: absolute; left: calc(15% - 8px); top: 283px; width: 2px; height: 8px; background: #0e1c3f; transform: rotate(-30deg); transform-origin: bottom;"></div>
-                    <div style="position: absolute; left: calc(15% + 6px); top: 283px; width: 2px; height: 8px; background: #0e1c3f; transform: rotate(30deg); transform-origin: bottom;"></div>
-                    <div style="position: absolute; left: calc(50% - 6px); top: 285px; width: 12px; height: 2px; background: #0e1c3f;"></div>
-                    <div style="position: absolute; left: calc(50% - 8px); top: 283px; width: 2px; height: 8px; background: #0e1c3f; transform: rotate(-30deg); transform-origin: bottom;"></div>
-                    <div style="position: absolute; left: calc(50% + 6px); top: 283px; width: 2px; height: 8px; background: #0e1c3f; transform: rotate(30deg); transform-origin: bottom;"></div>
-                    <div style="position: absolute; left: calc(85% - 6px); top: 285px; width: 12px; height: 2px; background: #0e1c3f;"></div>
-                    <div style="position: absolute; left: calc(85% - 8px); top: 283px; width: 2px; height: 8px; background: #0e1c3f; transform: rotate(-30deg); transform-origin: bottom;"></div>
-                    <div style="position: absolute; left: calc(85% + 6px); top: 283px; width: 2px; height: 8px; background: #0e1c3f; transform: rotate(30deg); transform-origin: bottom;"></div>
-
-                    <div style="position: absolute; left: 5%; top: 290px; width: 220px; border: 2px solid #0e1c3f; background: white;">
-                        <div style="background: #16315f; color: white; padding: 8px; text-align: center; font-weight: bold; border-bottom: 2px solid #0e1c3f;">
-                            fact_sales_listings
-                        </div>
-                        <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px; width: 30px; background: #f0f0f0;">PK</td>
-                                <td style="padding: 4px 8px;">listing_id</td>
-                                <td style="padding: 4px 8px; text-align: right;">BIGINT</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px; background: #f0f0f0;">FK</td>
-                                <td style="padding: 4px 8px;">vehicle_key</td>
-                                <td style="padding: 4px 8px; text-align: right;">INT</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">price</td><td style="padding: 4px 8px; text-align: right;">DECIMAL</td></tr>
-                            <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">mileage</td><td style="padding: 4px 8px; text-align: right;">INT</td></tr>
-                            <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">state</td><td style="padding: 4px 8px; text-align: right;">VARCHAR</td></tr>
-                            <tr><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">listed_at</td><td style="padding: 4px 8px; text-align: right;">DATETIME</td></tr>
-                        </table>
-                    </div>
-
-                    <div style="position: absolute; left: 50%; top: 290px; transform: translateX(-50%); width: 220px; border: 2px solid #0e1c3f; background: white;">
-                        <div style="background: #16315f; color: white; padding: 8px; text-align: center; font-weight: bold; border-bottom: 2px solid #0e1c3f;">
-                            fact_maintenance
-                        </div>
-                        <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px; width: 30px; background: #f0f0f0;">PK</td>
-                                <td style="padding: 4px 8px;">maint_id</td>
-                                <td style="padding: 4px 8px; text-align: right;">BIGINT</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px; background: #f0f0f0;">FK</td>
-                                <td style="padding: 4px 8px;">vehicle_key</td>
-                                <td style="padding: 4px 8px; text-align: right;">INT</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">component</td><td style="padding: 4px 8px; text-align: right;">VARCHAR</td></tr>
-                            <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">dtc_code</td><td style="padding: 4px 8px; text-align: right;">VARCHAR</td></tr>
-                            <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">cost</td><td style="padding: 4px 8px; text-align: right;">DECIMAL</td></tr>
-                            <tr><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">event_date</td><td style="padding: 4px 8px; text-align: right;">DATE</td></tr>
-                        </table>
-                    </div>
-
-                    <div style="position: absolute; right: 5%; top: 290px; width: 220px; border: 2px solid #0e1c3f; background: white;">
-                        <div style="background: #16315f; color: white; padding: 8px; text-align: center; font-weight: bold; border-bottom: 2px solid #0e1c3f;">
-                            fact_telematics
-                        </div>
-                        <table style="width: 100%; font-size: 0.85rem; border-collapse: collapse;">
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px; width: 30px; background: #f0f0f0;">PK</td>
-                                <td style="padding: 4px 8px;">telem_id</td>
-                                <td style="padding: 4px 8px; text-align: right;">BIGINT</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 4px 8px; background: #f0f0f0;">FK</td>
-                                <td style="padding: 4px 8px;">vehicle_key</td>
-                                <td style="padding: 4px 8px; text-align: right;">INT</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">ts</td><td style="padding: 4px 8px; text-align: right;">DATETIME</td></tr>
-                            <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">speed</td><td style="padding: 4px 8px; text-align: right;">DOUBLE</td></tr>
-                            <tr style="border-bottom: 1px solid #ddd;"><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">rpm</td><td style="padding: 4px 8px; text-align: right;">DOUBLE</td></tr>
-                            <tr><td style="padding: 4px 8px;"></td><td style="padding: 4px 8px;">energy_kwh</td><td style="padding: 4px 8px; text-align: right;">DOUBLE</td></tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-            <h3>Sample Data Snippets</h3>
-
-            <p><strong>dim_vehicle table:</strong></p>
-            <div style="overflow-x: auto; margin: 15px 0;">
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; background: white;">
-                    <thead>
-                        <tr style="background: #16315f; color: white;">
-                            <th style="padding: 10px; border: 1px solid #ddd;">vehicle_key</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">make</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">model</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">year</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">engine</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">fuel_type</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="padding: 10px; border: 1px solid #ddd;">1001</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Toyota</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Camry</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">2018</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">2.5L I4</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Gasoline</td>
-                        </tr>
-                        <tr style="background: #f4f7fb;">
-                            <td style="padding: 10px; border: 1px solid #ddd;">1002</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Honda</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Accord</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">2019</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">1.5L Turbo</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Gasoline</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 10px; border: 1px solid #ddd;">1003</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Tesla</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Model 3</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">2020</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Electric</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Electric</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <p><strong>fact_sales_listings table:</strong></p>
-            <div style="overflow-x: auto; margin: 15px 0;">
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; background: white;">
-                    <thead>
-                        <tr style="background: #16315f; color: white;">
-                            <th style="padding: 10px; border: 1px solid #ddd;">listing_id</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">vehicle_key</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">price</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">mileage</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">state</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">listed_at</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="padding: 10px; border: 1px solid #ddd;">50001</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">1001</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">$18,500</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">42,000</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">CA</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">2024-01-15</td>
-                        </tr>
-                        <tr style="background: #f4f7fb;">
-                            <td style="padding: 10px; border: 1px solid #ddd;">50002</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">1002</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">$22,800</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">28,500</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">TX</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">2024-02-03</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 10px; border: 1px solid #ddd;">50003</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">1003</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">$35,900</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">15,200</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">NY</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">2024-03-12</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <p><strong>fact_maintenance table:</strong></p>
-            <div style="overflow-x: auto; margin: 15px 0;">
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; background: white;">
-                    <thead>
-                        <tr style="background: #c2410c; color: white;">
-                            <th style="padding: 10px; border: 1px solid #ddd;">maint_id</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">vehicle_key</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">component</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">dtc_code</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">cost</th>
-                            <th style="padding: 10px; border: 1px solid #ddd;">event_date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td style="padding: 10px; border: 1px solid #ddd;">7001</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">1001</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Brake Pads</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">P0420</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">$285.00</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">2023-11-20</td>
-                        </tr>
-                        <tr style="background: #f4f7fb;">
-                            <td style="padding: 10px; border: 1px solid #ddd;">7002</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">1002</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Oil Change</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">NULL</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">$55.00</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">2024-01-08</td>
-                        </tr>
-                        <tr>
-                            <td style="padding: 10px; border: 1px solid #ddd;">7003</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">1001</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">Battery</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">P0562</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">$175.00</td>
-                            <td style="padding: 10px; border: 1px solid #ddd;">2024-02-15</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="sql-block">
-<span class="sql-comment">-- Creating the dimension table</span>
-<span class="sql-keyword">CREATE TABLE</span> dim_vehicle (
-    vehicle_key <span class="sql-keyword">INT PRIMARY KEY</span>,
-    make <span class="sql-keyword">VARCHAR</span>(64),
-    model <span class="sql-keyword">VARCHAR</span>(128),
-    year <span class="sql-keyword">INT</span>,
-    engine <span class="sql-keyword">VARCHAR</span>(64),
-    fuel_type <span class="sql-keyword">VARCHAR</span>(64)
-);
-
-<span class="sql-comment">-- Creating indexed fact table</span>
-<span class="sql-keyword">CREATE TABLE</span> fact_sales_listings (
-    listing_id <span class="sql-keyword">BIGINT AUTO_INCREMENT PRIMARY KEY</span>,
-    vehicle_key <span class="sql-keyword">INT</span>,
-    price <span class="sql-keyword">DECIMAL</span>(10,2),
-    mileage <span class="sql-keyword">INT</span>,
-    state <span class="sql-keyword">VARCHAR</span>(32),
-    listed_at <span class="sql-keyword">DATETIME</span>,
-    <span class="sql-keyword">INDEX</span> idx_sales_vehicle (vehicle_key),
-    <span class="sql-keyword">FOREIGN KEY</span> (vehicle_key) <span class="sql-keyword">REFERENCES</span> dim_vehicle(vehicle_key)
-);
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>Advanced SQL Query Examples</h2>
-
-            <h3>1. Median Price Analysis with Stratification</h3>
-            <p><strong>Business Question:</strong> What is the median listing price for each model-year combination, stratified by mileage brackets?</p>
-            <p><strong>SQL Techniques Used:</strong> CTE, CASE statements, PERCENTILE_CONT window function, GROUP BY</p>
-
-            <div class="sql-block">
-<span class="sql-comment">-- Calculate median prices by model, year, and mileage bracket</span>
-<span class="sql-keyword">WITH</span> priced <span class="sql-keyword">AS</span> (
-  <span class="sql-keyword">SELECT</span>
-    <span class="sql-keyword">CONCAT</span>(make, <span class="sql-keyword">' '</span>, model) <span class="sql-keyword">AS</span> model_name,
-    year,
-    price,
-    <span class="sql-keyword">CASE</span>
-      <span class="sql-keyword">WHEN</span> mileage <span class="sql-keyword">IS NULL THEN</span> <span class="sql-keyword">'unknown'</span>
-      <span class="sql-keyword">WHEN</span> mileage < 25000 <span class="sql-keyword">THEN</span> <span class="sql-keyword">'<25k'</span>
-      <span class="sql-keyword">WHEN</span> mileage < 50000 <span class="sql-keyword">THEN</span> <span class="sql-keyword">'25-50k'</span>
-      <span class="sql-keyword">WHEN</span> mileage < 100000 <span class="sql-keyword">THEN</span> <span class="sql-keyword">'50-100k'</span>
-      <span class="sql-keyword">ELSE</span> <span class="sql-keyword">'100k+'</span>
-    <span class="sql-keyword">END AS</span> mileage_bucket
-  <span class="sql-keyword">FROM</span> fact_sales_listings
-  <span class="sql-keyword">WHERE</span> price <span class="sql-keyword">IS NOT NULL</span>
-    <span class="sql-keyword">AND</span> year <span class="sql-keyword">BETWEEN</span> 2005 <span class="sql-keyword">AND YEAR</span>(<span class="sql-keyword">CURDATE</span>())
-)
-<span class="sql-keyword">SELECT</span>
-  model_name,
-  year,
-  mileage_bucket,
-  <span class="sql-keyword">PERCENTILE_CONT</span>(0.5) <span class="sql-keyword">WITHIN GROUP</span> (<span class="sql-keyword">ORDER BY</span> price) <span class="sql-keyword">AS</span> median_price,
-  <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> listing_count
-<span class="sql-keyword">FROM</span> priced
-<span class="sql-keyword">GROUP BY</span> model_name, year, mileage_bucket
-<span class="sql-keyword">ORDER BY</span> year <span class="sql-keyword">DESC</span>, model_name, mileage_bucket;
-            </div>
-
-            <div class="key-finding">
-                <strong>Key Insight:</strong> This query reveals how depreciation curves differ by mileage tier, helping buyers identify value opportunities and dealers optimize inventory pricing.
-            </div>
-
-            <h3>2. Reliability vs. Market Price Correlation</h3>
-            <p><strong>Business Question:</strong> How does maintenance frequency correlate with used car pricing? Do more reliable models command premium prices?</p>
-            <p><strong>SQL Techniques Used:</strong> Multiple CTEs, JOIN, AVG aggregation, subquery optimization</p>
-
-            <div class="sql-block">
-<span class="sql-comment">-- Correlate maintenance rates with median market prices</span>
-<span class="sql-keyword">WITH</span> median_prices <span class="sql-keyword">AS</span> (
-  <span class="sql-keyword">SELECT</span>
-    make, model, year,
-    <span class="sql-keyword">PERCENTILE_CONT</span>(0.5) <span class="sql-keyword">WITHIN GROUP</span> (<span class="sql-keyword">ORDER BY</span> price) <span class="sql-keyword">AS</span> median_price,
-    <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> listings
-  <span class="sql-keyword">FROM</span> fact_sales_listings
-  <span class="sql-keyword">WHERE</span> price <span class="sql-keyword">IS NOT NULL</span>
-  <span class="sql-keyword">GROUP BY</span> make, model, year
-),
-maintenance_rates <span class="sql-keyword">AS</span> (
-  <span class="sql-keyword">SELECT</span>
-    make, model, year,
-    <span class="sql-keyword">AVG</span>(needs_maintenance) <span class="sql-keyword">AS</span> maint_rate,
-    <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> events
-  <span class="sql-keyword">FROM</span> fact_maintenance
-  <span class="sql-keyword">GROUP BY</span> make, model, year
-  <span class="sql-keyword">HAVING COUNT</span>(*) >= 20  <span class="sql-comment">-- Minimum sample size</span>
-)
-<span class="sql-keyword">SELECT</span>
-  mp.make,
-  mp.model,
-  mp.year,
-  mp.median_price,
-  mr.maint_rate,
-  mp.listings,
-  mr.events,
-  <span class="sql-comment">-- Calculate "reliability premium"</span>
-  mp.median_price * (1 - mr.maint_rate) <span class="sql-keyword">AS</span> reliability_adjusted_value
-<span class="sql-keyword">FROM</span> median_prices mp
-<span class="sql-keyword">JOIN</span> maintenance_rates mr
-  <span class="sql-keyword">USING</span> (make, model, year)
-<span class="sql-keyword">WHERE</span> mp.listings >= 50  <span class="sql-comment">-- Ensure statistical significance</span>
-<span class="sql-keyword">ORDER BY</span> mp.year <span class="sql-keyword">DESC</span>, mp.median_price <span class="sql-keyword">DESC</span>;
-            </div>
-
-            <div class="key-finding">
-                <strong>Key Insight:</strong> Models with maintenance rates below 15% command 8-12% higher median prices, quantifying the "reliability premium" in the used car market.
-            </div>
-
-            <h3>3. Telemetry Efficiency Analysis</h3>
-            <p><strong>Business Question:</strong> What is the energy efficiency (kWh per km) for each vehicle series over time?</p>
-            <p><strong>SQL Techniques Used:</strong> Aggregation, NULLIF for division safety, date filtering, GROUP BY</p>
-
-            <div class="sql-block">
-<span class="sql-comment">-- Calculate energy efficiency from telemetry data</span>
-<span class="sql-keyword">SELECT</span>
-  series_id,
-  <span class="sql-keyword">ROUND</span>(<span class="sql-keyword">SUM</span>(energy_kwh) / <span class="sql-keyword">NULLIF</span>(<span class="sql-keyword">SUM</span>(speed), 0), 4) <span class="sql-keyword">AS</span> energy_per_km,
-  <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> data_points,
-  <span class="sql-keyword">AVG</span>(speed) <span class="sql-keyword">AS</span> avg_speed,
-  <span class="sql-keyword">AVG</span>(rpm) <span class="sql-keyword">AS</span> avg_rpm
-<span class="sql-keyword">FROM</span> fact_telematics
-<span class="sql-keyword">WHERE</span> ts <span class="sql-keyword">BETWEEN</span> <span class="sql-keyword">'2024-05-01'</span> <span class="sql-keyword">AND</span> <span class="sql-keyword">'2024-06-01'</span>
-  <span class="sql-keyword">AND</span> speed > 0  <span class="sql-comment">-- Filter out stationary readings</span>
-<span class="sql-keyword">GROUP BY</span> series_id
-<span class="sql-keyword">ORDER BY</span> energy_per_km <span class="sql-keyword">DESC</span>;
-            </div>
-
-            <div class="key-finding">
-                <strong>Key Insight:</strong> NULLIF prevents division-by-zero errors, ensuring robust queries even with incomplete telemetry data.
-            </div>
-
-            <h3>4. Monthly Maintenance Trends</h3>
-            <p><strong>Business Question:</strong> How is component failure frequency trending month-over-month?</p>
-            <p><strong>SQL Techniques Used:</strong> Window functions (LAG), DATE_FORMAT, PARTITION BY, trend calculation</p>
-
-            <div class="sql-block">
-<span class="sql-comment">-- Track maintenance trends by component over time</span>
-<span class="sql-keyword">SELECT</span>
-  component,
-  <span class="sql-keyword">DATE_FORMAT</span>(event_date, <span class="sql-keyword">'%Y-%m'</span>) <span class="sql-keyword">AS</span> month,
-  <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> events,
-  <span class="sql-keyword">LAG</span>(<span class="sql-keyword">COUNT</span>(*)) <span class="sql-keyword">OVER</span> (
-    <span class="sql-keyword">PARTITION BY</span> component
-    <span class="sql-keyword">ORDER BY DATE_FORMAT</span>(event_date, <span class="sql-keyword">'%Y-%m'</span>)
-  ) <span class="sql-keyword">AS</span> prev_month,
-  <span class="sql-keyword">COUNT</span>(*) - <span class="sql-keyword">LAG</span>(<span class="sql-keyword">COUNT</span>(*)) <span class="sql-keyword">OVER</span> (
-    <span class="sql-keyword">PARTITION BY</span> component
-    <span class="sql-keyword">ORDER BY DATE_FORMAT</span>(event_date, <span class="sql-keyword">'%Y-%m'</span>)
-  ) <span class="sql-keyword">AS</span> change
-<span class="sql-keyword">FROM</span> fact_maintenance
-<span class="sql-keyword">GROUP BY</span> component, <span class="sql-keyword">DATE_FORMAT</span>(event_date, <span class="sql-keyword">'%Y-%m'</span>)
-<span class="sql-keyword">ORDER BY</span> component, month;
-            </div>
-
-            <div class="key-finding">
-                <strong>Key Insight:</strong> LAG window function enables month-over-month comparisons without complex self-joins, showing which components are degrading faster over time.
-            </div>
-
-            <h3>5. Top Vehicles by Market Demand</h3>
-            <p><strong>Business Question:</strong> Which vehicle models have the highest listing volume, and how do they rank within each year?</p>
-            <p><strong>SQL Techniques Used:</strong> ROW_NUMBER window function, PARTITION BY, HAVING clause, ranking</p>
-
-            <div class="sql-block">
-<span class="sql-comment">-- Rank vehicles by listing volume within each year</span>
-<span class="sql-keyword">SELECT</span>
-  make,
-  model,
-  year,
-  <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">AS</span> listings,
-  <span class="sql-keyword">ROUND</span>(<span class="sql-keyword">AVG</span>(price), 0) <span class="sql-keyword">AS</span> avg_price,
-  <span class="sql-keyword">ROW_NUMBER</span>() <span class="sql-keyword">OVER</span> (
-    <span class="sql-keyword">PARTITION BY</span> year
-    <span class="sql-keyword">ORDER BY COUNT</span>(*) <span class="sql-keyword">DESC</span>
-  ) <span class="sql-keyword">AS</span> rank_in_year
-<span class="sql-keyword">FROM</span> fact_sales_listings
-<span class="sql-keyword">GROUP BY</span> make, model, year
-<span class="sql-keyword">HAVING COUNT</span>(*) > 20  <span class="sql-comment">-- Minimum sample size</span>
-<span class="sql-keyword">ORDER BY</span> year <span class="sql-keyword">DESC</span>, rank_in_year;
-            </div>
-
-            <div class="key-finding">
-                <strong>Key Insight:</strong> ROW_NUMBER provides rankings within partitions, revealing which models dominate each model year's market.
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>SQL Skills Demonstrated</h2>
-
-            <h3>Advanced Query Techniques</h3>
-            <ul>
-                <li><strong>Common Table Expressions (CTEs):</strong> Complex multi-step queries with readable code structure</li>
-                <li><strong>Window Functions:</strong> LAG, LEAD, PERCENTILE_CONT, RANK for advanced analytics</li>
-                <li><strong>Aggregation Functions:</strong> AVG, SUM, COUNT with GROUP BY and HAVING clauses</li>
-                <li><strong>JOIN Operations:</strong> INNER, LEFT, and multi-table joins with proper index usage</li>
-                <li><strong>Subqueries:</strong> Correlated and non-correlated subqueries in WHERE and FROM clauses</li>
-                <li><strong>Date Functions:</strong> DATE extraction, YEAR, temporal filtering and grouping</li>
-                <li><strong>CASE Statements:</strong> Complex conditional logic for data categorization</li>
-                <li><strong>NULL Handling:</strong> NULLIF, COALESCE, IS NULL for robust data quality</li>
-            </ul>
-
-            <h3>Database Design & Optimization</h3>
-            <ul>
-                <li><strong>Star Schema:</strong> Dimensional modeling with fact and dimension tables</li>
-                <li><strong>Indexing Strategy:</strong> Single-column and composite indexes on high-cardinality columns</li>
-                <li><strong>Foreign Keys:</strong> Referential integrity with appropriate cascading rules</li>
-                <li><strong>Data Types:</strong> Optimal type selection (INT vs BIGINT, DECIMAL precision, VARCHAR lengths)</li>
-                <li><strong>Query Optimization:</strong> Using EXPLAIN to analyze and optimize query plans</li>
-                <li><strong>Partitioning:</strong> Table partitioning strategy for time-series data</li>
-            </ul>
-
-            <h3>Data Analysis Capabilities</h3>
-            <ul>
-                <li><strong>Statistical Analysis:</strong> Median, percentiles, standard deviation calculations</li>
-                <li><strong>Trend Analysis:</strong> YoY comparisons, moving averages, growth rates</li>
-                <li><strong>Correlation Analysis:</strong> Multi-variable relationships (price vs reliability)</li>
-                <li><strong>Time-Series Analytics:</strong> Daily/monthly aggregations, temporal patterns</li>
-                <li><strong>Segmentation:</strong> Customer/product stratification using CASE statements</li>
-            </ul>
-        </div>
-
-        <div class="section">
-            <h2>Business Applications</h2>
-
-            <h3>For Vehicle Manufacturers</h3>
-            <ul>
-                <li>Identify components with highest failure rates to improve design</li>
-                <li>Benchmark reliability against competitors using maintenance data</li>
-                <li>Optimize warranty coverage based on actual component lifespans</li>
-                <li>Analyze telemetry patterns to detect quality issues early</li>
-            </ul>
-
-            <h3>For Used Car Dealers</h3>
-            <ul>
-                <li>Price inventory competitively using market median analysis</li>
-                <li>Identify undervalued models with low maintenance rates</li>
-                <li>Forecast depreciation curves by model and mileage tier</li>
-                <li>Optimize inventory mix based on reliability premiums</li>
-            </ul>
-
-            <h3>For Fleet Operators</h3>
-            <ul>
-                <li>Schedule preventive maintenance based on component failure patterns</li>
-                <li>Track fuel efficiency trends across vehicle fleet</li>
-                <li>Identify vehicles requiring immediate attention via telemetry</li>
-                <li>Reduce total cost of ownership through data-driven decisions</li>
-            </ul>
-        </div>
-
-        <div class="section">
-            <h2>Technical Challenges & Solutions</h2>
-
-            <h3>Challenge: Query Performance on Large Datasets</h3>
-            <p><strong>Problem:</strong> Queries on millions of telemetry records were initially slow (30+ seconds).</p>
-            <p><strong>Solution:</strong></p>
-            <ul>
-                <li>Added composite index on (vehicle_key, ts) for time-range queries</li>
-                <li>Implemented table partitioning by month for fact_telematics</li>
-                <li>Used covering indexes to avoid table lookups</li>
-                <li>Result: Query time reduced to under 2 seconds</li>
-            </ul>
-
-            <h3>Challenge: NULL Handling in Joins</h3>
-            <p><strong>Problem:</strong> Many maintenance records lacked vehicle_key, causing data loss in INNER JOINs.</p>
-            <p><strong>Solution:</strong></p>
-            <ul>
-                <li>Made vehicle_key nullable in fact tables</li>
-                <li>Added fallback join logic on (make, model, year)</li>
-                <li>Used LEFT JOINs where appropriate to preserve unmatched records</li>
-                <li>Documented join strategy in schema comments</li>
-            </ul>
-
-            <h3>Challenge: Statistical Functions in MySQL</h3>
-            <p><strong>Problem:</strong> MySQL lacks native median/percentile functions in older versions.</p>
-            <p><strong>Solution:</strong></p>
-            <ul>
-                <li>Implemented PERCENTILE_CONT using ROW_NUMBER window functions</li>
-                <li>Created reusable views for common statistical calculations</li>
-                <li>Used subquery approach for compatibility across MySQL versions</li>
-                <li>Documented alternative approaches in query comments</li>
-            </ul>
-
-            <div class="sql-block">
-<span class="sql-comment">-- Median calculation without PERCENTILE_CONT (MySQL 5.7 compatible)</span>
-<span class="sql-keyword">SELECT</span>
-  model_name,
-  <span class="sql-keyword">AVG</span>(price) <span class="sql-keyword">AS</span> median_price
-<span class="sql-keyword">FROM</span> (
-  <span class="sql-keyword">SELECT</span>
-    model_name,
-    price,
-    <span class="sql-keyword">ROW_NUMBER</span>() <span class="sql-keyword">OVER</span> (<span class="sql-keyword">PARTITION BY</span> model_name <span class="sql-keyword">ORDER BY</span> price) <span class="sql-keyword">AS</span> rn,
-    <span class="sql-keyword">COUNT</span>(*) <span class="sql-keyword">OVER</span> (<span class="sql-keyword">PARTITION BY</span> model_name) <span class="sql-keyword">AS</span> cnt
-  <span class="sql-keyword">FROM</span> fact_sales_listings
-) ranked
-<span class="sql-keyword">WHERE</span> rn <span class="sql-keyword">IN</span> (<span class="sql-keyword">FLOOR</span>((cnt + 1) / 2), <span class="sql-keyword">CEIL</span>((cnt + 1) / 2))
-<span class="sql-keyword">GROUP BY</span> model_name;
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>Key Learnings</h2>
-
-            <h3>Database Design Principles</h3>
-            <ul>
-                <li><strong>Normalization vs. Performance:</strong> Learned when to denormalize for query performance (storing make/model in fact tables)</li>
-                <li><strong>Index Strategy:</strong> Understanding trade-offs between query speed and write performance</li>
-                <li><strong>Data Types Matter:</strong> Choosing INT vs BIGINT, DECIMAL precision impacts both storage and performance</li>
-                <li><strong>Foreign Key Flexibility:</strong> Nullable FKs provide flexibility when data quality varies across sources</li>
-            </ul>
-
-            <h3>SQL Best Practices</h3>
-            <ul>
-                <li><strong>CTEs for Readability:</strong> Breaking complex queries into logical steps improves maintainability</li>
-                <li><strong>EXPLAIN is Essential:</strong> Always analyze query execution plans before deploying to production</li>
-                <li><strong>Filter Early:</strong> Apply WHERE clauses before JOINs to reduce intermediate result sets</li>
-                <li><strong>Comment Complex Logic:</strong> Document business rules and assumptions directly in SQL</li>
-            </ul>
-
-            <h3>Real-World Analytics Skills</h3>
-            <ul>
-                <li><strong>Data Quality Awareness:</strong> Always check for NULLs, outliers, and data distribution before aggregating</li>
-                <li><strong>Statistical Rigor:</strong> Use minimum sample sizes (HAVING COUNT >= 30) to ensure meaningful results</li>
-                <li><strong>Business Context:</strong> Every query should answer a specific business question, not just return data</li>
-                <li><strong>Performance Monitoring:</strong> Track query execution time and optimize bottlenecks iteratively</li>
-            </ul>
-        </div>
-
-        <div class="section">
-            <h2>Future Enhancements</h2>
-            <ul>
-                <li><strong>Materialized Views:</strong> Create pre-aggregated summary tables for dashboard queries</li>
-                <li><strong>Stored Procedures:</strong> Package complex analytical queries into reusable procedures</li>
-                <li><strong>Query Optimization:</strong> Implement query result caching for frequently-run reports</li>
-                <li><strong>Advanced Analytics:</strong> Add moving averages, exponential smoothing for trend forecasting</li>
-                <li><strong>Geographic Analysis:</strong> Integrate PostGIS for spatial queries on location data</li>
-                <li><strong>Data Quality Framework:</strong> Build SQL-based data validation and quality scoring system</li>
-            </ul>
-        </div>
-
-        <div class="section" style="text-align: center;">
-            <h2>Project Resources</h2>
-            <div class="btn-group">
-                <a href="https://github.com/JaiGala2122/connected-vehicle-analytics" class="btn" target="_blank">View GitHub Repository</a>
-                <a href="https://github.com/JaiGala2122/connected-vehicle-analytics/blob/main/sql/example_queries.sql" class="btn" target="_blank">View SQL Queries</a>
-            </div>
-        </div>
-        <a href="../../index.html" class="back-link">← Back to Portfolio</a>
-    </div>
-    
+    <a class="back" href="../../index.html">← Back to Portfolio</a>
+  </main>
 </body>
 </html>
-```
